@@ -109,6 +109,36 @@ If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal (and can theref
 Can make this a single simulation calculation if we assume the intramolecular energies between the phase changes are the same...
 
 
+\subsection{Binary Mixture Properties} 
+\subsubsection{Mass Density, Speed of Sound and Dielectric Constant}
+The methods for these calculations are the same for a multicomponent system.
+
+\subsubsection{Activity Coefficient}
+Then the definition of the activity coefficient is:
+\begin{equation}\mu_{i} = \left(\frac{\partial G}{\partial n_{i}}\right)_{T,P,n_{j \neq i}}\end{equation}\\*
+
+Where $n_i$ refers to a molecule of component $i$ and $n_{j \neq i}$ refers to all molecules other than component $i$.\\*
+
+\begin{equation}\mu_{i} = \mu^0_i + k_B T ln\left(x_i \gamma_i\right)\end{equation}\\*
+
+Where $x_i$ is the mole fraction of component $i$ and $\gamma_i$ is the activity coefficient of component $i$. Rearrangement of the previous equation yields:
+\begin{equation}\gamma_i = \frac{exp\left(\frac{\mu_i - \mu^0_i}{k_B T}\right)}{x_i}\end{equation}\\*
+
+\subsubsection{Excess Molar Properties}
+The general definition of an excess molar property can be stated as follows:
+\begin{equation}y^{E} = y^{M} - \sum_{i} x_i y_i\end{equation}\\*
+
+Where $y^E$ is the excess molar quantity, $y^M$ is the mixture quantity, $x_i$ is the mole fraction of component $i$ in the mixture and $y_i$ is the pure solvent quantity. In general, the simplest methods for calculating excess molar properties for binary mixtures will require three simulations. One simulation is run for each pure component and a third will be run for the specific mixture of interest.
+
+\subsubsection{Excess Molar Heat Capcity and Volume}
+Excess molar heat capacities and volume will be calculated using the  methods for the pure quantities in section A in combination with the general method for excess property calculation above.\\*
+
+\subsubsection{Excess Molar Enthalpy}
+Excess molar enthalpy can be calculated using the general relation of molar enthalpy as it relates to Gibbs Free Energy from section A and the generalized method of ecess molar property calculation above or by the following:
+\begin{equation}H^E = \langle E^M \rangle + P V^E - \sum_{i} x_i \langle E_i \rangle\end{equation}\\*
+
+Where $\langle \rangle$ denotes an ensemble average and $V^E$ is calculated using the general method of excess molar properties.\\* 
+
 
 
 
