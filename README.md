@@ -13,9 +13,6 @@ A physical property is defined by a combination of:
 * A `PhysicalProperty` is the physical property that was measured (e.g. mass density, in kg/m3)
 * A `MeasurementMethod` specifying the kind of measurement that was performed (e.g. vibrating tube method for density measurement)
 
-A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
-Please raise an issue if your physical property of interest is not listed!
-
 #### Physical substances
 
 We use the concept of a liquid or gas `Mixture` throughout.
@@ -74,9 +71,11 @@ We use the `simtk.unit` unit system from [OpenMM](http://openmm.org) for units.
 
 #### Measurement methods
 
-```python
+A `MeasurementMethod` subclass has information specific to the particular method used to measure a property (such as experimental uncertainty guidance).
 
-```
+Some examples:
+* `FlowCalorimetry` for `HeatCapacity` or `ExcessMolarEnthalpy`
+* `VibratingTubeMethod` for `MassDensity`
 
 #### Physical property measurements
 
@@ -94,7 +93,12 @@ property = ExcessPartialApparentEnergyProp(substance, thermodynamic_state, value
 The various properties are all subclasses of `PhysicalPropertyMeasurement` and generally follow the `<ePropName/>` ThermoML tag names.
 
 Some examples:
-* `ExcessPartialApparentEnergyProp` - excess partial apparent molar enthalpy
+* `MassDensity` - mass density
+* `ExcessMolarEnthalpy` - excess partial apparent molar enthalpy
+* `HeatCapacity` - molar heat capacity at constant pressure
+
+A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
+Please raise an issue if your physical property of interest is not listed!
 
 ### Physical property datasets
 
@@ -123,6 +127,18 @@ print(dataset.DOIs)
 print(dataset.references)
 ```
 
+### Estimating properties
+
+The `PropertyEstimator` class creates objects that handle property estimation of all of the properties in a dataset for a given set of parameters.
+The implementation will isolate the user from whatever backend (local machine, HPC cluster, XSEDE resources, Amazon EC2) is being used to compute the properties, as well as whether new simulations are being launched and analyzed or existing simulation data is being reweighted.
+Different backends will take different optional arguments, but here is an example that will launch and use 10 worker processes on a cluster:
+```python
+estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
+computed_properties = estimator.computeProperties(dataset, parameters)
+```
+Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameters` is a `SMARTYParameterSet` used to parameterize the physical systems in the dataset.
+
+In future, we will want to use a parallel key/value database like [cassandra](http://cassandra.apache.org) to store simulations, along with a distributed task management system like [celery](http://www.celeryproject.org) with [redis](https://www.google.com/search?client=safari&rls=en&q=redis&ie=UTF-8&oe=UTF-8).
 
 ## API Usage Examples
 
