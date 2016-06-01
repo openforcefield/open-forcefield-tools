@@ -6,12 +6,18 @@ Tools for open forcefield development.
 
 ### Physical property measurements
 
-**Physical property measurements** are measured properties of a substance that provide some information about the physical parameters that define the interactions within the substance.
+[**Physical property measurements**](https://en.wikipedia.org/wiki/Physical_property) are measured properties of a substance that provide some information about the physical parameters that define the interactions within the substance.
 A physical property is defined by a combination of:
-* A `Mixture` specifying the substance (e.g. an 0.8 mole fraction mixture of ethanol and water) that the measurement was performed on
-* A `ThermodynamicState` specifying the thermodynamic conditions (e.g. temperature, pressure) under which the measurement was performed
-* A `PhysicalProperty` is the physical property that was measured (e.g. mass density, in kg/m3)
-* A `MeasurementMethod` specifying the kind of measurement that was performed (e.g. vibrating tube method for density measurement)
+* A `Mixture` specifying the substance that the measurement was performed on
+* A `ThermodynamicState` specifying the thermodynamic conditions under which the measurement was performed
+* A `PhysicalProperty` is the physical property that was measured
+* A `MeasurementMethod` specifying the kind of measurement that was performed
+
+An example of each:
+* `Mixture`: 0.8 mole fraction mixture of ethanol and water
+* `ThermodynamicState`: 298 kelvin, 1 atmosphere
+* `PhysicalProperty`: mass density
+* `MeasurementMethod`: vibrating tube method
 
 #### Physical substances
 
