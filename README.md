@@ -94,10 +94,9 @@ mixture.addComponent('methanol')
 # Define thermodynamic state
 thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperature=298.15*unit.kelvin)
 # Define measurement
-property = ExcessPartialApparentEnergyProp(substance, thermodynamic_state, value=83.3863244*unit.kilojoules_per_mole, uncertainty=0.1220794866*unit.kilojoules_per_mole)
+measurement = ExcessMolarEnthalpy(substance, thermodynamic_state, value=83.3863244*unit.kilojoules_per_mole, uncertainty=0.1220794866*unit.kilojoules_per_mole)
 ```
 The various properties are all subclasses of `PhysicalPropertyMeasurement` and generally follow the `<ePropName/>` ThermoML tag names.
-
 Some examples:
 * `MassDensity` - mass density
 * `ExcessMolarEnthalpy` - excess partial apparent molar enthalpy
@@ -106,9 +105,33 @@ Some examples:
 A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
 Please raise an issue if your physical property of interest is not listed!
 
+Each `PhysicalPropertyMeasurement` has several properties:
+* `.substance` - the `Mixture` for which the measurement was made
+* `.thermodynamic_state` - the `ThermodynamicState`
+* `.value` - the unit-bearing measurement value
+* `.uncertainty` - the standard uncertainty of the measurement
+* `.reference` - the literature reference (if present) for the measurement
+* `.DOI` - the literature reference DOI (if available) for the measurement
+
 ### Physical property datasets
 
 A `PhysicalPropertyDataset` is a collection of `PhysicalPropertyMeasurement` objects that are related in some way.
+```python
+dataset = PhysicalPropertyDataset([measurement1, measurement2])
+```
+The dataset is iterable:
+```python
+dataset = PhysicalPropertyDataset([measurement1, measurement2])
+for measurement in dataset:
+    print measurement.value
+```
+and has accessors to retrieve DOIs and references associated with measurements in the dataset:
+```python
+# Print the DOIs associated with this dataset
+print(dataset.DOIs)
+# Print the references associated with this dataset
+print(dataset.references)
+```
 
 ### ThermoML datasets
 
@@ -127,10 +150,6 @@ You can see which DOIs contribute to the current `ThermoMLDataset` with the conv
 ```python
 thermoml_keys = ['10.1021/acs.jced.5b00365', '10.1021/acs.jced.5b00474']
 dataset = ThermoMLDataset(thermoml_keys)
-# Print the DOIs associated with this dataset
-print(dataset.DOIs)
-# Print the references associated with this dataset
-print(dataset.references)
 ```
 
 ### Estimating properties
@@ -171,3 +190,5 @@ for (computed, measured) in (computed_properties, dataset):
 ```
 
 ### Using the low-level API
+
+TBD
