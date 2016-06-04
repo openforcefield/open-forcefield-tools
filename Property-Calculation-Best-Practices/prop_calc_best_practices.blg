@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: prop_calc_best_practices.aux
+The style file: unsrt.bst
+Database file #1: prop_calc_best_practices.bib
+You've used 5 entries,
+            1791 wiz_defined-function locations,
+            481 strings with 4263 characters,
+and the built_in function-call counts, 1126 in all, are:
+= -- 104
+> -- 20
+< -- 0
++ -- 10
+- -- 5
+* -- 96
+:= -- 178
+add.period$ -- 15
+call.type$ -- 5
+change.case$ -- 5
+chr.to.int$ -- 0
+cite$ -- 5
+duplicate$ -- 45
+empty$ -- 125
+format.name$ -- 5
+if$ -- 249
+int.to.chr$ -- 0
+int.to.str$ -- 5
+missing$ -- 5
+newline$ -- 28
+num.names$ -- 5
+pop$ -- 5
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 15
+stack$ -- 0
+substring$ -- 117
+swap$ -- 5
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 10
+width$ -- 6
+write$ -- 57

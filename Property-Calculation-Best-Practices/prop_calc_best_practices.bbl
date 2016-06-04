@@ -1,0 +1,34 @@
+\begin{thebibliography}{1}
+
+\bibitem{comp}
+Dadarlat et~al.
+\newblock Insights into protein compressibility from molecular dynamics
+  simulations.
+\newblock {\em The Journal of Physical Chemistry B}, 105(3):715--724, 12 2000.
+
+\bibitem{sos}
+Rolf Lustig.
+\newblock Direct molecular nvt simulation of the isobaric heat capacity, speed
+  of sound and joule-thomson coefficient.
+\newblock {\em Molecular Simulation}, 37(6):457--465, 5 2011.
+
+\bibitem{hvap}
+Wang et~al.
+\newblock Application of molecular dynamincs simulations in molecular property
+  prediction. 1. density and heat of vaporization.
+\newblock {\em Journal of Chemical Theory and Computation}, 7(7):2151--2165, 5
+  2011.
+
+\bibitem{dielec}
+C.J. Fennell.
+\newblock Simple liquid models with corrected dielectric constants.
+\newblock {\em The Journal of Physical Chemistry B}, 116(23):6936--6944, 3
+  2012.
+
+\bibitem{hexcess}
+Dai et~al.
+\newblock Enthalpies of mixing predicted using molecular dynamics simulations
+  and opls force field.
+\newblock {\em Fluid Phase Equilibria}, 289(2):156--165, 3 2010.
+
+\end{thebibliography}
