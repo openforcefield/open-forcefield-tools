@@ -163,6 +163,29 @@ computed_properties = estimator.computeProperties(dataset, parameters)
 ```
 Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameters` is a `SMARTYParameterSet` used to parameterize the physical systems in the dataset.
 
+`PropertyEstimator.computeProperties(...)` returns a list of `ComputedPhysicalProperty` objects that provide access to several pieces of information:
+* `property.value` - the computed property value, with appropriate units
+* `property.uncertainty` - the statistical uncertainty in the computed property
+* `property.parameters` - a reference to the parameter set used to compute this property
+* `property.property` - a reference to the corresponding `PhysicalPropertyMeasurement` this property was computed for
+
+This API can be extended in the future to provide access to the simulation data used to estimate the property, such as
+```python
+# Attach to my compute and storage resources
+estimator = PropertyEstimator(...)
+# Estimate some properties
+computed_properties = estimator.computeProperties(dataset, parameters)
+# Get statistics about simulation data that went into each property
+for property in computed_properties:
+   # Get statistics about simulation data that was reweighted to estimate this property
+   for simulation in property.simulations:
+      print('The simulation was %.3f ns long' % (simulation.length / unit.nanoseconds))
+      print('The simulation was run at %.1f K and %.1f atm' % (simulation.thermodynamic_state.temperature / unit.kelvin, simulation.thermodynamic_state.pressure / unit.atmospheres))
+      # Get the ParameterSet that was used for this simulation
+      parameters = simulation.parameters
+      # what else do you want...?
+```
+
 In future, we will want to use a parallel key/value database like [cassandra](http://cassandra.apache.org) to store simulations, along with a distributed task management system like [celery](http://www.celeryproject.org) with [redis](https://www.google.com/search?client=safari&rls=en&q=redis&ie=UTF-8&oe=UTF-8).
 
 ## API Usage Examples
