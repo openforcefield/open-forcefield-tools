@@ -6,6 +6,12 @@ Dadarlat et~al.
   simulations.
 \newblock {\em The Journal of Physical Chemistry B}, 105(3):715--724, 12 2000.
 
+\bibitem{horn}
+Horn et~al.
+\newblock Development of an improved four-site water model for biomolecular
+  simulations: Tip4p-ew.
+\newblock {\em Journal of Chemical Physics}, 120(20):9665--9678, 5 2004.
+
 \bibitem{sos}
 Rolf Lustig.
 \newblock Direct molecular nvt simulation of the isobaric heat capacity, speed

@@ -22,6 +22,7 @@ Definitions
 \item $G$: Gibbs Free Energy (free enthalpy)
 \item $A$: Helmholtz Free Energy
 \item $\mu$: Chemical potential
+\item $D$: Total dipole moment
 \item $u$: reduced energy
 \item $f$: reduced free energy
 \end{itemize}
@@ -168,7 +169,7 @@ We replace the average with the esemble estimate (calculated either directly, or
 %MRS: I changed a lot of the lower case p's for pressure to upper case P's to use more standard symbols -- you should review and correct the rest.
 \begin{equation} \rho \approx \frac{M}{\frac{G_{P + \Delta P} - G_{P-\Delta P}}{2\Delta P}} \end{equation}
 This can be calculated from the reduced free energy $f$ if desired by simply substituting:
-\begin{equation} \rho \approx \frac{\beta M}{\frac{f_{p + \Delta p} - f_{p-\Delta p}}{2\Delta p}} \end{equation}
+\begin{equation} \rho \approx \frac{\beta M}{\frac{f_{P + \Delta P} - f_{P-\Delta P}}{2\Delta P}} \end{equation}
 
 \subsection{Isothermal Compressibility}
  The definition of isothermal compressibility is:
@@ -184,8 +185,7 @@ Or by the finite differences evaluation of:
 
 
 \subsection{Molar Enthalpy}
- Section on relation of enthalpy to Gibbs free energy (should we need it).
- The enthalpy, $H$, can be found from the Gibbs free energy, $G$, by the Gibbs-Helmholtz relation: 
+Section on relation of enthalpy to Gibbs free energy (should we need it). This is not an experimental quantity, but will be helpful in calculating related properties of interest. The enthalpy, $H$, can be found from the Gibbs free energy, $G$, by the Gibbs-Helmholtz relation: 
 
 \begin{equation}H=-T^2 \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial T}\right)_{P,N}\end{equation}
 
@@ -197,50 +197,63 @@ Or by the finite differences evaluation of:
  Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$. Substituting these values into the enthalpy equation gives:
 
 %MRS: usually, you should just use \left( instead of \big(, since it will choose the correct size for you! 
-\begin{equation}H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{T, P,N} \end{equation}
+\begin{equation}H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{P,N} \end{equation}
 %MRS: I like this equation more, as it's hard to take finite differences of $G$ (as discussed above).  Then you can eliminate the last few lines.
 
 %MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantites (like the enthalpy of mixing, and the heat capacity).
-
- Applying the quotient rule to the partial derivative yields
-
-
-\begin{equation}H = \frac{T}{k_B} \left(\frac{\partial G}{\partial \beta}\right)_{P, N} - \frac{G}{k_B}\left(\frac{\partial T}{\partial \beta}\right)_{P, N} = \frac{1}{T k_B} \left(\frac{\partial G}{\partial \beta}\right) - \frac{G}{T^2 k_B} \left(\frac{\partial T}{\partial \beta}\right)\end{equation}
-
-
- Recall that $\left(\frac{\partial T}{\partial \beta}\right)_{P, N} = -k_B T^2$, which allows the enthalpy to be simplified to:
-
-
-\begin{equation} H = \beta \left(\frac{\partial G}{\partial \beta}\right)_{P, N} + G\end{equation}
-
-
- The derivative can be estimated using a central difference numerical method utilizing Gibbs free energies reweighted to different temperatures.
-
-\begin{equation} \left( \frac{\partial G}{\partial \beta} \right)_{P,N} \approx \frac{G_{\beta + \Delta \beta} - G_{\beta -\Delta \beta}}{2\Delta \beta} \end{equation}
-
 \subsection{Heat Capacity}
  The definition of the isobaric heat capacity is:
-\begin{equation}C_P =\left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
+\begin{equation}C_P = \left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
 %MRS: probably easier to take df/dbeta, and then take the temperature derivaive, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
-\begin{equation}C_P =  -k_B \beta^3 \left(\frac{\partial^2 G}{\partial \beta^2}\right)_{P,N}\end{equation}\\*
+\begin{equation}C_P =  \frac{\partial \left(\frac{\partial f}{\partial \beta}\right)}{\partial T}_{P,N}\end{equation}
+\begin{equation}C_P = k_B \beta^2 \frac{\partial^2 f}{\partial \beta^2}\end{equation}
 
+This could be computed by finite differences approach or analytical derivation using MBAR\\*
 
- Finite difference approach? See section on Molar Enthalpy\\*
+The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn}.
+\begin{equation}C_P = \frac{\langle H^2 \rangle - \langle H \rangle^2}{N k_B \langle T \rangle^2}\end{equation}\\*
 
- The form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
+The form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
 
 \subsection{Speed of Sound}
-%MRS: did you lose the square root?
  The definition of the speed of sound is\cite{sos}:
-\begin{equation}c^2 = \sqrt{\left(\frac{\partial P}{\partial \rho}\right)_{S}} = -\frac{V^2}{M}\left(\frac{\partial P}{\partial V}\right)_{S}\end{equation}
+\begin{equation}c^2 = \left(\frac{\partial P}{\partial \rho}\right)_{S} = -\frac{V^2}{M}\left(\frac{\partial P}{\partial V}\right)_{S}\end{equation}
 
 %MRS: I'd make the derivation more explicit, breakin down (dP/dV)_S -> in terms of the triple product rule, and then expressing it a a function of explicit deriatives, so it's clear what evaluations would be needed. 
 \begin{equation}c^2 = \frac{V^2}{\beta M}\left[\frac{\left(\frac{\gamma_V}{k_B}\right)^2}{\frac{C_V}{k_B}} + \frac{\beta}{V \kappa_T}\right]\end{equation}\\*
 
  Where:\\*
-\begin{equation}\gamma_V = \left(\frac{\partial P}{\partial T}\right)_{V} = \frac{C_V}{T \left(\frac{\partial S}{\partial P}\right)_{V}}\end{equation}\\*
+\begin{equation}\gamma_V = \left(\frac{\partial P}{\partial T}\right)_{V}\end{equation}\\*
 
  $\gamma_V$ is known as the isochoric pressure coefficient. $\kappa_T$ is the same isothermal compressibility from section A.1.3\\*
+
+%BCM: Did this derivation myself, pretty sure it's right
+An alternate derivation, applying the triple product rule to $\left(\frac{\partial P}{\partial V}\right)_{S}$ yields the following.
+
+\begin{equation}\left(\frac{\partial P}{\partial V}\right)_{S} = \frac{\left(\frac{\partial S}{\partial V}\right)_{P}}{\left(\frac{\partial S}{\partial P}\right)_{V}}\end{equation}\\*
+
+\begin{equation}\left(\frac{\partial S}{\partial V}\right)_{P} = \left(\frac{\partial S}{\partial T}\right)_{P} \left(\frac{\partial T}{\partial V}\right)_{P} = \frac{C_P}{T} \left(\frac{\partial T}{\partial V}\right)_{P} = \frac{C_P}{T V \alpha}\end{equation}\\*
+
+Where $\alpha = \frac{1}{V} \left(\frac{\partial V}{\partial T}\right)_{P} = \left(\frac{\partial lnV}{\partial T}\right)_{P}$ is the coefficient of thermal expansion. The second term is our triple product rule $\left(\frac{\partial S}{\partial P}\right)_{V}$ can be expressed as follows.
+
+\begin{equation}\left(\frac{\partial S}{\partial P}\right)_{V} = \left(\frac{\partial S}{\partial T}\right)_{V} \left(\frac{\partial T}{\partial P}\right)_{V} = \frac{C_V}{T} \left(\frac{\partial T}{\partial P}\right)_{V} = \frac{C_V}{T \gamma_V}\end{equation}\\* 
+
+Thus our derivation yields:
+\begin{equation}\left(\frac{\partial P}{\partial V}\right)_{S} = \frac{C_P \gamma_V}{C_V V \alpha}\end{equation}\\*
+
+Horn et al set out several ways for calculating $\alpha$\cite{horn}.
+
+\subsubsection{Analytical derivative of density with respect to temperature}
+\begin{equation}\alpha = -\frac{dln\langle \rho \rangle}{dT}\end{equation}
+
+\subsubsection{Numerical derivative of densitt over range of T of interest}
+Same finite differnces approach on $\rho$ can be used as was shown for isothermal compressibility.
+
+\subsubsection{Using the enthalpy-volume fluctuation formula}
+\begin{equation}\alpha = \frac{\langle VH \rangle - \langle V \rangle \langle H \rangle}{k_B \langle T \rangle^2 \langle V \rangle}\end{equation}\\*
+
+Finite differences approximations and/or analytical derivation can also be used to calculate $\gamma_V$.
+%BCM: Any ideas for better ways to calculate this?
 
 
 \subsection{Enthalpy of Vaporization}
@@ -252,10 +265,27 @@ Or by the finite differences evaluation of:
  The definition of the enthalpy of vaporization is\cite{hvap}:
 \begin{equation}\Delta H_{vap} = H_{gas} - H_{liq} = E_{gas} - E_{liq} + P(V_{gas} - V_{liq})\end{equation}\\*
 
- If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal 
-%MRS: the gas being ideal means the kinetic energy terms cancel, not that they can be neglected. The intramolecular interactions are assumed to be nelected.
-(and can therefore neglect kinetic energy terms):
+If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal (and therefore kinetic energy terms cancel):
 \begin{equation}\Delta H_{vap} = E_{gas, potential} - E_{liq, potential} + R T\end{equation}\\*
+
+An alternate, but similar, method is recommended by Horn et al \cite{horn}.
+\begin{equation}\Delta H_{vap} = -\frac{E_{liq, potential}}{N} + R T - P V_{liq} + C\end{equation}\\*
+
+In the above equation $C$ is a correction factor for vibrational energies, polarizability, non-ideality of the gas and pressure. It can be calculated as follows.
+\begin{equation}C_{vib} = C_{vib,intra} + C_{vib,inter} = \left(E_{vib,QM,gas,intra} - E_{vib,QM,liq,intra}\right) + \left(E_{vib,QM,liq,inter} - E_{vib,CM,liq,inter}\right)\end{equation}\\*
+
+The $QM$ and $CM$ subscripts stand for quantum and classical mechanics, resectively. 
+\begin{equation}C_{pol} = \frac{N}{2} \frac{\left(d_{gas} - d_{liq}\right)^2}{\alpha_{p,gas}}\end{equation}\\*
+
+Where $d_i$ is the dipole moment of a molecule in phase $i$ and $\alpha_{p,gas}$ is the mean polarizability of a molecule in the gas phase.
+
+\begin{equation}C_{ni} = P_{vap} \left(B - T \frac{dB}{dT}\right)\end{equation}\\*
+
+Where $B$ is the second virial coefficient.
+
+\begin{equation}C_x = \int_{P_{ext}}^{P_{vap}} \left[V\left(P_{ext}\right)\left[1 - \left(P - P_{ext}\right) \kappa_T\right] - T V \alpha\right] dP\end{equation}\\*
+
+Where $P_{ext}$ in the external pressure and $V\left(P_{ext}\right)$ is the volume at $P_{ext}$. 
 
 %MRS: made a complete sentence (plus added some detail)
 This is frequently done as a single simulation calculation by assuming
@@ -268,10 +298,8 @@ something with structural rearrangement between gas and liquid phases.
 %MRS: I'm not as much an expert on this: you should follow up.  Also,
 %probably use something other than $M$ as the dipole.
 \subsubsection{Dielectric Constant}
- This equation was provided by a literature reference authored by CJ Fennell\cite{dielec}. Below, $\epsilon(0)$ is the zero frequency dielectric constant, $V$ is the system volume and $M$ is the total system dipole moment. 
-\begin{equation} \epsilon(0) = 1 + \frac{4 \pi}{3 k_B T \langle V \rangle}(\langle M^2 \rangle - \langle M \rangle^2) \end{equation}
-
-
+ This equation was provided by a literature reference authored by CJ Fennell\cite{dielec}. Below, $\epsilon(0)$ is the zero frequency dielectric constant, $V$ is the system volume and $D$ is the total system dipole moment. 
+\begin{equation} \epsilon(0) = 1 + \frac{4 \pi}{3 k_B T \langle V \rangle}(\langle D^2 \rangle - \langle D \rangle^2) \end{equation}
 
 \section{Binary Mixture Properties} 
 \subsection{Mass Density, Speed of Sound and Dielectric Constant}
