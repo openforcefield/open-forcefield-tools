@@ -171,19 +171,6 @@ We replace the average with the esemble estimate (calculated either directly, or
 This can be calculated from the reduced free energy $f$ if desired by simply substituting:
 \begin{equation} \rho \approx \frac{\beta M}{\frac{f_{P + \Delta P} - f_{P-\Delta P}}{2\Delta P}} \end{equation}
 
-\subsection{Isothermal Compressibility}
- The definition of isothermal compressibility is:
-\begin{equation}\kappa_T = -\frac{1}{V} \left(\frac{\partial V}{\partial P}\right)_T \end{equation}
-\subsubsection{First Derivative}
-Thus, it can be estimated by the finite difference of $\langle V \rangle$
-\begin{equation}\kappa_T = -\frac{1}{2V(T,P)^2} \left(\langle V(P+\Delta P,T)\rangle - \langle V(P-\Delta P)\right\rangle) \end{equation}
-Or by the finite differences evaluation of:
-\begin{equation}\kappa_T = -\frac{\left(\frac{\partial^2 G}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial G}{\partial P}\right)_{T, N}}\end{equation}\\*
-
- $\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
-\begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{VT}}\end{equation}\\*
-
-
 \subsection{Molar Enthalpy}
 Section on relation of enthalpy to Gibbs free energy (should we need it). This is not an experimental quantity, but will be helpful in calculating related properties of interest. The enthalpy, $H$, can be found from the Gibbs free energy, $G$, by the Gibbs-Helmholtz relation: 
 
@@ -214,6 +201,18 @@ The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn}.
 \begin{equation}C_P = \frac{\langle H^2 \rangle - \langle H \rangle^2}{N k_B \langle T \rangle^2}\end{equation}\\*
 
 The form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
+
+\subsection{Isothermal Compressibility}
+ The definition of isothermal compressibility is:
+\begin{equation}\kappa_T = -\frac{1}{V} \left(\frac{\partial V}{\partial P}\right)_T \end{equation}
+\subsubsection{First Derivative}
+Thus, it can be estimated by the finite difference of $\langle V \rangle$
+\begin{equation}\kappa_T = -\frac{1}{2V(T,P)^2} \left(\langle V(P+\Delta P,T)\rangle - \langle V(P-\Delta P)\right\rangle) \end{equation}
+Or by the finite differences evaluation of:
+\begin{equation}\kappa_T = -\frac{\left(\frac{\partial^2 G}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial G}{\partial P}\right)_{T, N}}\end{equation}\\*
+
+ $\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
+\begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{VT}}\end{equation}\\*
 
 \subsection{Speed of Sound}
  The definition of the speed of sound is\cite{sos}:
@@ -262,7 +261,7 @@ Finite differences approximations and/or analytical derivation can also be used 
 %these are corrections involving phase changes, but there are a few
 %others you should check out.
 
- The definition of the enthalpy of vaporization is\cite{hvap}:
+The definition of the enthalpy of vaporization is\cite{hvap}:
 \begin{equation}\Delta H_{vap} = H_{gas} - H_{liq} = E_{gas} - E_{liq} + P(V_{gas} - V_{liq})\end{equation}\\*
 
 If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal (and therefore kinetic energy terms cancel):
@@ -293,6 +292,12 @@ the average intramolecular energies remains constant during the phase
 change, which is rigorously correct for something like a rigid water
 molecule (intramolecular energies are zero), but less true for
 something with structural rearrangement between gas and liquid phases. 
+
+As discussed by myself and MRS, we have decided to not initially begin the parametrization process using enthalpy of vaporization data. While force field parametrization is commonly done using said property we have ample reason to not follow classical practice. First of all, the enthalpy data is usually not collected at standard temperature and pressure, but at the saturation conditions of the liquid being vaporized \cite{chickos}.  This would require corrections to be made to get the property at STP (the process will be explained below) using fitted equations for heat capacity. Not only is this inconvenient, but it adds an unknown complexity to correcting uncertainties in the experimental data. Often times the uncertainties of these "experimental" enthalpies are unrecorded because they are estimated from fitted Antoine equation coefficients \cite{chickos}. 
+
+An additional issue is the necessity of having to use gas phase simulation data in order to validate a parametrization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parametrization. If the parametrization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental heat of vaporization in order to get a value at STP using the following equation.
+\begin{equation}\Delta H_{vap}(T) = \Delta H_{vap}^{ref} + \int_{T_{ref}}^T \left(C_{P, gas} - C_{P, liq}\right) dT \end{equation}\\*
+    
 
 %MRS: Moved this section down, derivation and details were unlike.
 %MRS: I'm not as much an expert on this: you should follow up.  Also,
