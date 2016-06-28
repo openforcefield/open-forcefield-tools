@@ -85,7 +85,7 @@ Some examples:
 
 #### Physical property measurements
 
-A `PhysicalPropertyMeasurement` is a combination of `Mixture`, `ThermodynamicState`, and a unit-bearing measured property `value` and `uncertainty`:
+A `MeasuredPhysicalProperty` is a combination of `Mixture`, `ThermodynamicState`, and a unit-bearing measured property `value` and `uncertainty`:
 ```python
 # Define mixture
 mixture = Mixture()
@@ -96,7 +96,7 @@ thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperat
 # Define measurement
 measurement = ExcessMolarEnthalpy(substance, thermodynamic_state, value=83.3863244*unit.kilojoules_per_mole, uncertainty=0.1220794866*unit.kilojoules_per_mole)
 ```
-The various properties are all subclasses of `PhysicalPropertyMeasurement` and generally follow the `<ePropName/>` ThermoML tag names.
+The various properties are all subclasses of `MeasuredPhysicalProperty` and generally follow the `<ePropName/>` ThermoML tag names.
 Some examples:
 * `MassDensity` - mass density
 * `ExcessMolarEnthalpy` - excess partial apparent molar enthalpy
@@ -105,7 +105,7 @@ Some examples:
 A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
 Please raise an issue if your physical property of interest is not listed!
 
-Each `PhysicalPropertyMeasurement` has several properties:
+Each `MeasuredPhysicalProperty` has several properties:
 * `.substance` - the `Mixture` for which the measurement was made
 * `.thermodynamic_state` - the `ThermodynamicState`
 * `.value` - the unit-bearing measurement value
@@ -113,9 +113,11 @@ Each `PhysicalPropertyMeasurement` has several properties:
 * `.reference` - the literature reference (if present) for the measurement
 * `.DOI` - the literature reference DOI (if available) for the measurement
 
+The value, uncertainty, reference, and DOI do not necessarily need to be defined for a dataset in order for property calculations to be performed.
+
 ### Physical property datasets
 
-A `PhysicalPropertyDataset` is a collection of `PhysicalPropertyMeasurement` objects that are related in some way.
+A `PhysicalPropertyDataset` is a collection of `MeasuredPhysicalProperty` objects that are related in some way.
 ```python
 dataset = PhysicalPropertyDataset([measurement1, measurement2])
 ```
@@ -154,20 +156,20 @@ dataset = ThermoMLDataset(thermoml_keys)
 
 ### Estimating properties
 
-The `PropertyEstimator` class creates objects that handle property estimation of all of the properties in a dataset for a given set of parameters.
+The `PropertyEstimator` class creates objects that handle property estimation of all of the properties in a dataset, given a set or sets of parameters.
 The implementation will isolate the user from whatever backend (local machine, HPC cluster, XSEDE resources, Amazon EC2) is being used to compute the properties, as well as whether new simulations are being launched and analyzed or existing simulation data is being reweighted.
 Different backends will take different optional arguments, but here is an example that will launch and use 10 worker processes on a cluster:
 ```python
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
-computed_properties = estimator.computeProperties(dataset, parameters)
+computed_properties = estimator.computeProperties(dataset, parameter_sets)
 ```
-Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameters` is a `SMARTYParameterSet` used to parameterize the physical systems in the dataset.
+Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameter_sets` is a list containing `SMIRFFParameterSet` objects used to parameterize the physical systems in the dataset. This can be a single parameter set or multiple (usually related) parameter sets.
 
 `PropertyEstimator.computeProperties(...)` returns a list of `ComputedPhysicalProperty` objects that provide access to several pieces of information:
 * `property.value` - the computed property value, with appropriate units
 * `property.uncertainty` - the statistical uncertainty in the computed property
 * `property.parameters` - a reference to the parameter set used to compute this property
-* `property.property` - a reference to the corresponding `PhysicalPropertyMeasurement` this property was computed for
+* `property.property` - a reference to the corresponding `MeasuredPhysicalProperty` this property was computed for
 
 This API can be extended in the future to provide access to the simulation data used to estimate the property, such as
 ```python
@@ -193,7 +195,7 @@ In future, we will want to use a parallel key/value database like [cassandra](ht
 ### Using the high-level API
 
 In this example, datasets are retrieved from the ThermoML and filtered to retain certain properties.
-The corresponding properties for a given parameter set filename are then computed for a SMARTY parameter set and printed.
+The corresponding properties for a given parameter set filename are then computed for a SMIRFF parameter set and printed.
 ```python
 # Define the input datasets from ThermoML
 thermoml_keys = ['10.1016/j.jct.2005.03.012', ...]
@@ -202,10 +204,10 @@ dataset = ThermoMLDataset(thermoml_keys)
 dataset.filter(ePropName='Excess molar enthalpy (molar enthalpy of mixing), kJ/mol') # filter to retain only this property name
 dataset.filter(VariableType='eTemperature', min=280*unit.kelvin, max=350*kelvin) # retain only measurements with `eTemperature` in specified range
 # Load an initial parameter set
-parameters = SMARTYParameterSet('smarty-initial.xml')
+parameter_set = [ SMIRFFParameterSet('smarty-initial.xml') ]
 # Compute physical properties for these measurements
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
-computed_properties = estimator.computeProperties(dataset, parameters)
+computed_properties = estimator.computeProperties(dataset, parameter_set)
 # Write out statistics about errors in computed properties
 for (computed, measured) in (computed_properties, dataset):
    property_unit = measured.value.unit
