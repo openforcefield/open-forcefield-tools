@@ -163,7 +163,7 @@ Different backends will take different optional arguments, but here is an exampl
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
 computed_properties = estimator.computeProperties(dataset, parameters)
 ```
-Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameters` is a `SMARTYParameterSet` used to parameterize the physical systems in the dataset.
+Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameters` is a `SMIRFFParameterSet` used to parameterize the physical systems in the dataset.
 
 `PropertyEstimator.computeProperties(...)` returns a list of `ComputedPhysicalProperty` objects that provide access to several pieces of information:
 * `property.value` - the computed property value, with appropriate units
@@ -195,7 +195,7 @@ In future, we will want to use a parallel key/value database like [cassandra](ht
 ### Using the high-level API
 
 In this example, datasets are retrieved from the ThermoML and filtered to retain certain properties.
-The corresponding properties for a given parameter set filename are then computed for a SMARTY parameter set and printed.
+The corresponding properties for a given parameter set filename are then computed for a SMIRFF parameter set and printed.
 ```python
 # Define the input datasets from ThermoML
 thermoml_keys = ['10.1016/j.jct.2005.03.012', ...]
@@ -204,7 +204,7 @@ dataset = ThermoMLDataset(thermoml_keys)
 dataset.filter(ePropName='Excess molar enthalpy (molar enthalpy of mixing), kJ/mol') # filter to retain only this property name
 dataset.filter(VariableType='eTemperature', min=280*unit.kelvin, max=350*kelvin) # retain only measurements with `eTemperature` in specified range
 # Load an initial parameter set
-parameters = SMARTYParameterSet('smarty-initial.xml')
+parameters = SMIRFFParameterSet('smarty-initial.xml')
 # Compute physical properties for these measurements
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
 computed_properties = estimator.computeProperties(dataset, parameters)
