@@ -85,7 +85,7 @@ Some examples:
 
 #### Physical property measurements
 
-A `PhysicalPropertyMeasurement` is a combination of `Mixture`, `ThermodynamicState`, and a unit-bearing measured property `value` and `uncertainty`:
+A `MeasuredPhysicalProperty` is a combination of `Mixture`, `ThermodynamicState`, and a unit-bearing measured property `value` and `uncertainty`:
 ```python
 # Define mixture
 mixture = Mixture()
@@ -96,7 +96,7 @@ thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperat
 # Define measurement
 measurement = ExcessMolarEnthalpy(substance, thermodynamic_state, value=83.3863244*unit.kilojoules_per_mole, uncertainty=0.1220794866*unit.kilojoules_per_mole)
 ```
-The various properties are all subclasses of `PhysicalPropertyMeasurement` and generally follow the `<ePropName/>` ThermoML tag names.
+The various properties are all subclasses of `MeasuredPhysicalProperty` and generally follow the `<ePropName/>` ThermoML tag names.
 Some examples:
 * `MassDensity` - mass density
 * `ExcessMolarEnthalpy` - excess partial apparent molar enthalpy
@@ -105,7 +105,7 @@ Some examples:
 A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
 Please raise an issue if your physical property of interest is not listed!
 
-Each `PhysicalPropertyMeasurement` has several properties:
+Each `MeasuredPhysicalProperty` has several properties:
 * `.substance` - the `Mixture` for which the measurement was made
 * `.thermodynamic_state` - the `ThermodynamicState`
 * `.value` - the unit-bearing measurement value
@@ -115,7 +115,7 @@ Each `PhysicalPropertyMeasurement` has several properties:
 
 ### Physical property datasets
 
-A `PhysicalPropertyDataset` is a collection of `PhysicalPropertyMeasurement` objects that are related in some way.
+A `PhysicalPropertyDataset` is a collection of `MeasuredPhysicalProperty` objects that are related in some way.
 ```python
 dataset = PhysicalPropertyDataset([measurement1, measurement2])
 ```
@@ -167,7 +167,7 @@ Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameters` is 
 * `property.value` - the computed property value, with appropriate units
 * `property.uncertainty` - the statistical uncertainty in the computed property
 * `property.parameters` - a reference to the parameter set used to compute this property
-* `property.property` - a reference to the corresponding `PhysicalPropertyMeasurement` this property was computed for
+* `property.property` - a reference to the corresponding `MeasuredPhysicalProperty` this property was computed for
 
 This API can be extended in the future to provide access to the simulation data used to estimate the property, such as
 ```python
