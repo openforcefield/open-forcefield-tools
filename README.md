@@ -113,6 +113,8 @@ Each `MeasuredPhysicalProperty` has several properties:
 * `.reference` - the literature reference (if present) for the measurement
 * `.DOI` - the literature reference DOI (if available) for the measurement
 
+The value, uncertainty, reference, and DOI do not necessarily need to be defined for a dataset in order for property calculations to be performed.
+
 ### Physical property datasets
 
 A `PhysicalPropertyDataset` is a collection of `MeasuredPhysicalProperty` objects that are related in some way.
