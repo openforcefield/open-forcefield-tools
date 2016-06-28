@@ -156,14 +156,14 @@ dataset = ThermoMLDataset(thermoml_keys)
 
 ### Estimating properties
 
-The `PropertyEstimator` class creates objects that handle property estimation of all of the properties in a dataset for a given set of parameters.
+The `PropertyEstimator` class creates objects that handle property estimation of all of the properties in a dataset, given a set or sets of parameters.
 The implementation will isolate the user from whatever backend (local machine, HPC cluster, XSEDE resources, Amazon EC2) is being used to compute the properties, as well as whether new simulations are being launched and analyzed or existing simulation data is being reweighted.
 Different backends will take different optional arguments, but here is an example that will launch and use 10 worker processes on a cluster:
 ```python
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
-computed_properties = estimator.computeProperties(dataset, parameters)
+computed_properties = estimator.computeProperties(dataset, parameter_sets)
 ```
-Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameters` is a `SMIRFFParameterSet` used to parameterize the physical systems in the dataset.
+Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameter_sets` is a list containing `SMIRFFParameterSet` objects used to parameterize the physical systems in the dataset. This can be a single parameter set or multiple (usually related) parameter sets.
 
 `PropertyEstimator.computeProperties(...)` returns a list of `ComputedPhysicalProperty` objects that provide access to several pieces of information:
 * `property.value` - the computed property value, with appropriate units
@@ -204,10 +204,10 @@ dataset = ThermoMLDataset(thermoml_keys)
 dataset.filter(ePropName='Excess molar enthalpy (molar enthalpy of mixing), kJ/mol') # filter to retain only this property name
 dataset.filter(VariableType='eTemperature', min=280*unit.kelvin, max=350*kelvin) # retain only measurements with `eTemperature` in specified range
 # Load an initial parameter set
-parameters = SMIRFFParameterSet('smarty-initial.xml')
+parameter_set = [ SMIRFFParameterSet('smarty-initial.xml') ]
 # Compute physical properties for these measurements
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
-computed_properties = estimator.computeProperties(dataset, parameters)
+computed_properties = estimator.computeProperties(dataset, parameter_set)
 # Write out statistics about errors in computed properties
 for (computed, measured) in (computed_properties, dataset):
    property_unit = measured.value.unit
