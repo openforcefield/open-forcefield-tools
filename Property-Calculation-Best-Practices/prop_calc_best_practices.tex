@@ -202,6 +202,16 @@ The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn}.
 
 The form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
 
+Horn et al suggest a number of vibrational corrections be applied to the calculation of $C_P$ due to a number of approximations made during the simulation of the liquid \cite{horn}. The following terms were added as a correction.
+
+\begin{equation}\left(\frac{\partial E_{vib,l}}{\partial T}\right)_{P} = \left(\frac{\partial E_{vib,l,intra}^{QM}}{\partial T}\right)_{P} + \left(\frac{\partial E_{vib,l,inter}^{QM}}{\partial T}\right)_{P} - \left(\frac{\partial E_{vib,l,inter}^{CM}}{\partial T}\right)_{P}\end{equation}\\*
+
+Where:
+\begin{equation}\left(\frac{\partial E_{vib}^{CM}}{\partial T}\right)_{P} = k_B n_{vib}\end{equation}\\*
+\begin{equation}\left(\frac{\partial E_{vib}^{QM}}{\partial T}\right)_{P} = \sum_{i=1}^{n_{vib}} \left(\frac{h^2 v_{i}^2 e^{\frac{h v_{i}}{k_B T}}}{k_B T^2 \left(e^{\frac{h v_{i}}{k_B T}} - 1\right)^2}\right)\end{equation}\\*
+
+Above, $n_{vib}$ is the number of vibrational modes, $h$ is Planck's constant and $v_i$ is the vibrational frequency of mode $i$.
+
 \subsection{Isothermal Compressibility}
  The definition of isothermal compressibility is:
 \begin{equation}\kappa_T = -\frac{1}{V} \left(\frac{\partial V}{\partial P}\right)_T \end{equation}
