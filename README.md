@@ -137,7 +137,9 @@ print(dataset.references)
 
 ### ThermoML datasets
 
-Direct access to the [NIST ThermoML Archive](http://trc.nist.gov/ThermoML.html) is supported for defining physical property measurements in the IUPAC-standard [ThermoML](http://trc.nist.gov/ThermoMLRecommendations.pdf) format, a format for specifying thermodynamic properties in XML format.
+Here, we use `ThermoMLDataset` objects to access datasets stored in the IUPAC-standard [ThermoML](http://trc.nist.gov/ThermoMLRecommendations.pdf) format, a format for specifying thermodynamic properties in XML format. Essentially, `ThermoMLDataset` provides access to ThermoML format datasets.
+ 
+Many datasets from ThermoML itself are of interest, so direct access to the [NIST ThermoML Archive](http://trc.nist.gov/ThermoML.html) is supported for obtaining physical property measurements in this format.
 
 For example, to retrieve [this ThermoML dataset](http://trc.boulder.nist.gov/ThermoML/10.1016/j.jct.2005.03.012) that accompanies [this paper](http://www.sciencedirect.com/science/article/pii/S0021961405000741), we can simply use the DOI `10.1016/j.jct.2005.03.012` as a key for creating a `PhysicalPropertyDataset` subclassed object from the ThermoML Archive:
 ```python
