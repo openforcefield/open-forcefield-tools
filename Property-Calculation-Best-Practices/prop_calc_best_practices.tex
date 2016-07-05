@@ -35,27 +35,39 @@ quantites is about $10^{-12}$, far lower than any thermodynamics
 experiment.
 
 However, in a molecular simulation, these quantites are not
-necessarily constant. For example, in a $NVT$ simulation, $U$ is
-allowed to vary.  For a long enough simulation (assuming ergodicity,
+necessarily constant. For example, in an $NVT$ equilibrium simulation, $U$ is
+allowed to vary. For a long enough simulation (assuming ergodicity,
 which can pretty much always be assumed with correct simulations and
 simple fluids), then the ensemble average value of $U$ = $\langle U
 \rangle$ will be constant, and in the limit of large simulations/long
 time will converge to the macroscopic value $U$; at least, the
 macroscopic value of that given model, though perhaps not the $U$ for
-the real system..  In an $NVT$ simulation, clearly $V$ is constant.
-In a NPT simulation, however, $V$ is a variable, and we must estimate
-what the macroscopic value would be with the ensemble estimate
+the real system. In an $NVT$ simulation, clearly $V$ is constant.
+In an $NPT$ simulation, however, $V$ is a variable, and we must estimate
+what the macroscopic value would be with the ensemble average
 $\langle V \rangle$.
 
-The quantities $T$, $P$, and $\mu$ are {\em always} constants in both
-simulation in experiment.  There are a number of quantities that can
+The quantities $T$, $P$, and $\mu$ are typically constant during the
+equilibrium simulations and experiments of interest here. 
+There are a number of quantities that can
 be used to ESTIMATE these constants. For example, $\langle
 \frac{1}{3Nk_B}\sum_i m_i |v_i|^2\rangle$, where $m$ is the mass of each
 particle and $|v_i|$ is the magnitude of the velocity of each
-particle, is an estimator of $T$, and it's average will be equal to
+particle, is an estimate of $T$, and it's average will be equal to
 the temperature. But it is not the temperature. This quantity
 fluctuates, but the tempature remains constant; otherwise the
 simulation could not be at constant temperature.
+
+To even say that some environmental variable, such as $T$ or $P$ is held 
+constant is not entirely correct. What this means is that such quantities 
+are controlled by an external force in order to hold them at a certain
+value. In the case of temperature, a thermostat is used. Recalling some
+basics of chemical engineering controller design, we know that no controller
+is perfect. Corrections from feedback cannot be made instantanteously, hence 
+there is some variation in the simulation temperature reported. 
+A thermostat constantly modifies the velocities of the particles
+in simulation in order to achieve the distribution of kinetic energies that 
+would be expected for a simulation at the temperature specified.
 
 Ensemble averages of some quantity $X$ ($\langle X \rangle$) are
 assumed to be averages over the appropriate Boltzmann weighting,
@@ -66,7 +78,7 @@ note that in the limit of very large systems, $\langle X \rangle_{NPT}
 
 Ensemble averages can be computed by one of two ways. First, they can
 be computed directly, by running a simulation that produces samples
-with the desired Boltzmann distribution.  In that case ensemble
+with the desired Boltzmann distribution.  In that case ensemble 
 averages can be computed as simple averages, $\langle V \rangle =
 \frac{1}{N}\sum_i V_i$, where the sum is over all observations.
 Uncertainties can be estimated in a number of different ways, but
@@ -82,8 +94,8 @@ the canonical (NVT) ensemble, $u = \beta U + \beta PV$ in the
 isobaric-isothermal (NPT) ensemble, and $u = \beta U - \beta N\mu$ in
 the grand canonical ensemble (similar potentials can be defined in
 other ensembles). We then define $f = \int e^{-u} dx$, where the
-integral is over all of the DOF of the system ($x$ for NVT, $x,V$ for
-NPT, and $x,N$ for.  For NPT, we then have $f = \beta G$, and for NVT
+integral is over all of the DOF of the system ($x$ for $NVT$, $x,V$ for
+$NPT$, and $x,N$ for $\mu VT$.  For $NPT$, we then have $f = \beta G$, and for $NVT$
 we have $f = \beta A$, while for $\mu V T$ we have $f = -\beta \langle
 P \rangle V$.
 
@@ -111,7 +123,7 @@ simply pooling all the samples from $k$ individual simulations.
 The formula for calculating ensemble averages in a distribution $p_i(x)$
 from samples from the mixture distribution is:
 \begin{equation}
-\langle X \rangle_i = \sum_{n=1}^N X(x_n) \frac{p_i(x_n)}{\sum{k=1}^{N_k} p_k(x_n)}
+\langle X \rangle_i = \sum_{n=1}^N X(x_n) \frac{p_i(x_n)}{\sum_{k=1}^{N_k} p_k(x_n)}
 \end{equation}
 In the case of Boltzmann averages, then $p_i(x) = e^{f_i-u_i(x)}$, where
 the reduced free energy $f$ is unknown.  Reweighting from the mixture
@@ -154,7 +166,7 @@ significant error.
 \subsection{Density}
 \subsubsection{Direct calculation}
 %MRS: Experimentally, <V> is just the macroscopic V.
- Starting with the equation used to calculate the density experimentally, 
+Starting with the equation used to calculate the density experimentally, 
 \begin{equation} \rho = \frac{M}{V} \end{equation}
 We replace the average with the esemble estimate (calculated either directly, or with reweighting) to obtain: 
 \begin{equation} \rho = \frac{M}{\langle V \rangle} \end{equation}
@@ -171,25 +183,28 @@ We replace the average with the esemble estimate (calculated either directly, or
 This can be calculated from the reduced free energy $f$ if desired by simply substituting:
 \begin{equation} \rho \approx \frac{\beta M}{\frac{f_{P + \Delta P} - f_{P-\Delta P}}{2\Delta P}} \end{equation}
 
+Intuitively, one would imagine that equation 12 would be a worse estimate of density given that the calculations involved have more room for error than direct simulations. That being said, this method should prove invaluable when estimating densities of unsampled states using MBAR. 
+
 \subsection{Molar Enthalpy}
-Section on relation of enthalpy to Gibbs free energy (should we need it). This is not an experimental quantity, but will be helpful in calculating related properties of interest. The enthalpy, $H$, can be found from the Gibbs free energy, $G$, by the Gibbs-Helmholtz relation: 
+This section is on the relation of enthalpy to Gibbs free energy (should we need it). This is not an experimental quantity, but will be helpful in calculating related properties of interest. The enthalpy, $H$, can be found from the Gibbs free energy, $G$, by the Gibbs-Helmholtz relation: 
 
 \begin{equation}H=-T^2 \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial T}\right)_{P,N}\end{equation}
 
- Transforming the derivative in the Gibbs-Helmholtz relation to be in terms of $\beta$ instead of $T$ yields:
+Transforming the derivative in the Gibbs-Helmholtz relation to be in terms of $\beta$ instead of $T$ yields:
 
 \begin{equation}H=-T^2  \frac{\beta^2}{\beta^2}\left(\frac{\partial \big(\frac{G}{T}\big)}{\partial T} \frac{\partial T}{\partial \beta} \frac{\partial \beta}{\partial T}\right)_{P,N}\end{equation}
 
 
- Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$. Substituting these values into the enthalpy equation gives:
+Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$. Substituting these values into the enthalpy equation gives:
 
 %MRS: usually, you should just use \left( instead of \big(, since it will choose the correct size for you! 
 \begin{equation}H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{P,N} \end{equation}
 %MRS: I like this equation more, as it's hard to take finite differences of $G$ (as discussed above).  Then you can eliminate the last few lines.
 
 %MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantites (like the enthalpy of mixing, and the heat capacity).
+
 \subsection{Heat Capacity}
- The definition of the isobaric heat capacity is:
+The definition of the isobaric heat capacity is:
 \begin{equation}C_P = \left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
 %MRS: probably easier to take df/dbeta, and then take the temperature derivaive, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
 \begin{equation}C_P =  \frac{\partial \left(\frac{\partial f}{\partial \beta}\right)}{\partial T}_{P,N}\end{equation}
@@ -213,25 +228,26 @@ Where:
 Above, $n_{vib}$ is the number of vibrational modes, $h$ is Planck's constant and $v_i$ is the vibrational frequency of mode $i$.
 
 \subsection{Isothermal Compressibility}
- The definition of isothermal compressibility is:
+The definition of isothermal compressibility is:
 \begin{equation}\kappa_T = -\frac{1}{V} \left(\frac{\partial V}{\partial P}\right)_T \end{equation}
 \subsubsection{First Derivative}
 Thus, it can be estimated by the finite difference of $\langle V \rangle$
-\begin{equation}\kappa_T = -\frac{1}{2V(T,P)^2} \left(\langle V(P+\Delta P,T)\rangle - \langle V(P-\Delta P)\right\rangle) \end{equation}
+\begin{equation}\kappa_T = -\frac{1}{2V(T,P)^2} \left(\langle V(P+\Delta P,T)\rangle - \langle V(P-\Delta P,T)\right\rangle) \end{equation}
 Or by the finite differences evaluation of:
 \begin{equation}\kappa_T = -\frac{\left(\frac{\partial^2 G}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial G}{\partial P}\right)_{T, N}}\end{equation}\\*
 
- $\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
+$\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
 \begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{VT}}\end{equation}\\*
 
 \subsection{Speed of Sound}
- The definition of the speed of sound is\cite{sos}:
+The definition of the speed of sound is\cite{sos}:
 \begin{equation}c^2 = \left(\frac{\partial P}{\partial \rho}\right)_{S} = -\frac{V^2}{M}\left(\frac{\partial P}{\partial V}\right)_{S}\end{equation}
 
 %MRS: I'd make the derivation more explicit, breakin down (dP/dV)_S -> in terms of the triple product rule, and then expressing it a a function of explicit deriatives, so it's clear what evaluations would be needed. 
+
 \begin{equation}c^2 = \frac{V^2}{\beta M}\left[\frac{\left(\frac{\gamma_V}{k_B}\right)^2}{\frac{C_V}{k_B}} + \frac{\beta}{V \kappa_T}\right]\end{equation}\\*
 
- Where:\\*
+Where:\\*
 \begin{equation}\gamma_V = \left(\frac{\partial P}{\partial T}\right)_{V}\end{equation}\\*
 
  $\gamma_V$ is known as the isochoric pressure coefficient. $\kappa_T$ is the same isothermal compressibility from section A.1.3\\*
@@ -243,27 +259,27 @@ An alternate derivation, applying the triple product rule to $\left(\frac{\parti
 
 \begin{equation}\left(\frac{\partial S}{\partial V}\right)_{P} = \left(\frac{\partial S}{\partial T}\right)_{P} \left(\frac{\partial T}{\partial V}\right)_{P} = \frac{C_P}{T} \left(\frac{\partial T}{\partial V}\right)_{P} = \frac{C_P}{T V \alpha}\end{equation}\\*
 
-Where $\alpha = \frac{1}{V} \left(\frac{\partial V}{\partial T}\right)_{P} = \left(\frac{\partial lnV}{\partial T}\right)_{P}$ is the coefficient of thermal expansion. The second term is our triple product rule $\left(\frac{\partial S}{\partial P}\right)_{V}$ can be expressed as follows.
+Where $\alpha = \frac{1}{V} \left(\frac{\partial V}{\partial T}\right)_{P} = \left(\frac{\partial \ln V}{\partial T}\right)_{P}$ is the coefficient of thermal expansion. The second term is our triple product rule $\left(\frac{\partial S}{\partial P}\right)_{V}$ can be expressed as follows.
 
 \begin{equation}\left(\frac{\partial S}{\partial P}\right)_{V} = \left(\frac{\partial S}{\partial T}\right)_{V} \left(\frac{\partial T}{\partial P}\right)_{V} = \frac{C_V}{T} \left(\frac{\partial T}{\partial P}\right)_{V} = \frac{C_V}{T \gamma_V}\end{equation}\\* 
 
 Thus our derivation yields:
 \begin{equation}\left(\frac{\partial P}{\partial V}\right)_{S} = \frac{C_P \gamma_V}{C_V V \alpha}\end{equation}\\*
 
-Horn et al set out several ways for calculating $\alpha$\cite{horn}.
+Horn et al set out several ways for calculating $\alpha$\cite{horn}:
 
 \subsubsection{Analytical derivative of density with respect to temperature}
-\begin{equation}\alpha = -\frac{dln\langle \rho \rangle}{dT}\end{equation}
+\begin{equation}\alpha = -\frac{d\ln\langle \rho \rangle}{dT}\end{equation}
 
-\subsubsection{Numerical derivative of densitt over range of T of interest}
-Same finite differnces approach on $\rho$ can be used as was shown for isothermal compressibility.
-
+\subsubsection{Numerical derivative of density over range of T of interest}
+The same finite differnces approach as shown for isothermal compressibility can be applied here, thus:
+\begin{equation}\alpha = -\frac{d\ln\langle \rho \rangle}{dT} = -\frac{1}{2\rho(T,P)} \left(\ln \langle \rho(P,T+\Delta T)\rangle - \ln \langle V(P,T-\Delta T)\right\rangle) \end{equation}
 \subsubsection{Using the enthalpy-volume fluctuation formula}
 \begin{equation}\alpha = \frac{\langle VH \rangle - \langle V \rangle \langle H \rangle}{k_B \langle T \rangle^2 \langle V \rangle}\end{equation}\\*
 
-Finite differences approximations and/or analytical derivation can also be used to calculate $\gamma_V$.
+Finite differences approximations and/or analytical derivation can also be used to calculate $\gamma_V$ or by note of the relation:
+\begin{equation}\gamma_V = - \frac{\alpha}{\kappa_T}\end{equation}\\*
 %BCM: Any ideas for better ways to calculate this?
-
 
 \subsection{Enthalpy of Vaporization}
 %MRS: should look at Horne et al (mentioned by Fennell), the original TIP4P-ew
@@ -303,7 +319,7 @@ change, which is rigorously correct for something like a rigid water
 molecule (intramolecular energies are zero), but less true for
 something with structural rearrangement between gas and liquid phases. 
 
-As discussed by myself and MRS, we have decided to not initially begin the parametrization process using enthalpy of vaporization data. While force field parametrization is commonly done using said property we have ample reason to not follow classical practice. First of all, the enthalpy data is usually not collected at standard temperature and pressure, but at the saturation conditions of the liquid being vaporized \cite{chickos}.  This would require corrections to be made to get the property at STP (the process will be explained below) using fitted equations for heat capacity. Not only is this inconvenient, but it adds an unknown complexity to correcting uncertainties in the experimental data. Often times the uncertainties of these "experimental" enthalpies are unrecorded because they are estimated from fitted Antoine equation coefficients \cite{chickos}. 
+As discussed by myself and MRS, we have decided to not initially begin the parametrization process using enthalpy of vaporization data. While force field parametrization is commonly done using said property we have ample reason to not follow classical practice. First of all, the enthalpy data is usually not collected at standard temperature and pressure, but at the saturation conditions of the liquid being vaporized \cite{chickos}.  This would require corrections to be made to get the property at STP (the process will be explained below) using fitted equations for heat capacity. Not only is this inconvenient, but it adds an unknown complexity when adjusting experimental uncertainties due to the added correction. Often times the uncertainties of these "experimental" enthalpies are unrecorded because they are estimated from fitted Antoine equation coefficients \cite{chickos}. 
 
 An additional issue is the necessity of having to use gas phase simulation data in order to validate a parametrization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parametrization. If the parametrization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental heat of vaporization in order to get a value at STP using the following equation.
 \begin{equation}\Delta H_{vap}(T) = \Delta H_{vap}^{ref} + \int_{T_{ref}}^T \left(C_{P, gas} - C_{P, liq}\right) dT \end{equation}\\*
@@ -313,12 +329,12 @@ An additional issue is the necessity of having to use gas phase simulation data 
 %MRS: I'm not as much an expert on this: you should follow up.  Also,
 %probably use something other than $M$ as the dipole.
 \subsubsection{Dielectric Constant}
- This equation was provided by a literature reference authored by CJ Fennell\cite{dielec}. Below, $\epsilon(0)$ is the zero frequency dielectric constant, $V$ is the system volume and $D$ is the total system dipole moment. 
+This equation was provided by a literature reference authored by CJ Fennell\cite{dielec} and is the standard for calculating the dielectric constant. Below, $\epsilon(0)$ is the zero frequency dielectric constant, $V$ is the system volume and $D$ is the total system dipole moment. 
 \begin{equation} \epsilon(0) = 1 + \frac{4 \pi}{3 k_B T \langle V \rangle}(\langle D^2 \rangle - \langle D \rangle^2) \end{equation}
 
 \section{Binary Mixture Properties} 
 \subsection{Mass Density, Speed of Sound and Dielectric Constant}
- The methods for these calculations are the same for a multicomponent system.
+The methods for these calculations are the same for a multicomponent system.
 
 \subsubsection{Activity Coefficient}
 The definition of chemical potential in a pure substance is:
@@ -357,17 +373,17 @@ a only one particle that is allowed to change, this will cancel out
 
 
 \subsubsection{Excess Molar Properties}
- The general definition of an excess molar property can be stated as follows:
+The general definition of an excess molar property can be stated as follows:
 \begin{equation}y^{E} = y^{M} - \sum_{i} x_i y_i\end{equation}\\*
 
- Where $y^E$ is the excess molar quantity, $y^M$ is the mixture quantity, $x_i$ is the mole fraction of component $i$ in the mixture and $y_i$ is the pure solvent quantity. In general, the simplest methods for calculating excess molar properties for binary mixtures will require three simulations. One simulation is run for each pure component and a third will be run for the specific mixture of interest.
+Where $y^E$ is the excess molar quantity, $y^M$ is the mixture quantity, $x_i$ is the mole fraction of component $i$ in the mixture and $y_i$ is the pure solvent quantity. In general, the simplest methods for calculating excess molar properties for binary mixtures will require three simulations. One simulation is run for each pure component and a third will be run for the specific mixture of interest.
 We note that only one set of pure simulations are needed to calculate excess properties at all compositions.
 
 \subsubsection{Excess Molar Heat Capacity and Volume}
- Excess molar heat capacities and volume will be calculated using the  methods for the pure quantities in section $A.1$ in combination with the general method for excess property calculation above.\\*
+Excess molar heat capacities and volume will be calculated using the  methods for the pure quantities in section $A.1$ in combination with the general method for excess property calculation above.\\*
 
 \subsubsection{Excess Molar Enthalpy}
- Excess molar enthalpy can be calculated using the general relation of molar enthalpy as it relates to Gibbs Free Energy from section $A.1$ and the generalized method of ecess molar property calculation above or by the following\cite{hexcess}:
+Excess molar enthalpy can be calculated using the general relation of molar enthalpy as it relates to Gibbs Free Energy from section $A.1$ and the generalized method of ecess molar property calculation above or by the following\cite{hexcess}:
 \begin{equation}H^E = \langle E^M \rangle + P V^E - \sum_{i} x_i \langle E_i \rangle\end{equation}\\*
 
  Where $\langle \rangle$ denotes an ensemble average and $V^E$ is calculated using the general method of excess molar properties.\\* 
