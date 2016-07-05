@@ -1,9 +1,116 @@
+\RequirePackage{fix-cm}
+\RequirePackage[hyphens]{url}
+\RequirePackage[final]{graphicx} % need to show figures in draft mode
+\documentclass[aps,pre,twocolumn,nofootinbib,superscriptaddress,linenumbers,10pt, draft,tightenlines]{revtex4-1}
 
-\documentclass[a4paper,12pt]{article}
-\usepackage[superscript,biblabel]{cite}
 
+% Change to a sans serif font.
+\usepackage{sourcesanspro}
+\renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
+\usepackage[T1]{fontenc}
+%\usepackage[font=sf,justification=justified]{caption}
+\usepackage[font=sf]{floatrow}
+
+% Rework captions to use sans serif font.
+\makeatletter
+\renewcommand\@make@capt@title[2]{%
+ \@ifx@empty\float@link{\@firstofone}{\expandafter\href\expandafter{\float@link}}%
+  {\textbf{#1}}\sf\@caption@fignum@sep#2\quad
+}%
+\makeatother
+
+%\linespread{0.956}
+
+\usepackage{listings} % For code examples
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage{boxedminipage}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage[]{microtype}
+\usepackage[obeyFinal]{todonotes}
+\usepackage{import}
+\usepackage{setspace, siunitx, amsmath,amsfonts, adjustbox,booktabs, cleveref}
+%\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+
+
+% Units
+\DeclareSIUnit\Molar{\textsc{m}}
+
+
+% Comments
+\newcounter{comment}
+\newcommand{\comment}[2][]{%
+% initials of the author (optional) + note in the margin
+\refstepcounter{comment}%
+{%
+\setstretch{0.7}% spacing
+\todo[inline, color={cyan!45},size=\small]{%
+\textbf{\footnotesize [\uppercase{#1}\thecomment]:}~#2}%
+}}
+
+% Start supplementary sections
+
+\newcommand{\beginsupplement}{%
+        \onecolumngrid
+        \setcounter{table}{0}
+        \renewcommand{\thetable}{S\arabic{table}}%
+        \setcounter{figure}{0}
+        \renewcommand{\thefigure}{S\arabic{figure}}%
+     }
+
+\graphicspath{{figures/}}
+\floatsetup[table]{capposition=top}
 \begin{document}
-{\large Best Practices for Property Prediction from Molecular Simulations}
+
+%\documentclass[a4paper,12pt]{article}
+%\usepackage[superscript,biblabel]{cite}
+%\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Best Practices for Property Prediction from Molecular Simulations}
+
+\author{Bryce C. Manubay} 
+\email{email@email.com}
+\affiliation{University of Colorado}
+
+\author{John D. Chodera}
+\email{john.chodera@choderalab.org}
+\affiliation{Computational Biology Program, Sloan Kettering Institute, Memorial Sloan Kettering Cancer Center, New York, NY 10065, United States}
+
+\author{Michael R. Shirts}
+\thanks{Corresponding author}
+\email{michael.shirts@virginia.edu}
+\affiliation{University of Colorado}
+
+% Date
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ABSTRACT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+This document describes a collected set of best practices for computing various physical properties from molecular simulations of liquid mixtures.
+
+\emph{Keywords: best practices; molecular dynamics simulation; physical property computation}
+
+
+\end{abstract}
+\maketitle
+
+\listoftodos
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRELIMINARIES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Preliminaries}
 Definitions
@@ -33,6 +140,8 @@ inability to measure that constant precisly. For a mole of compound
 (about 18 mL for water), the relative uncertainty in any of these
 quantites is about $10^{-12}$, far lower than any thermodynamics
 experiment.
+
+\comment[JDC]{This is a TODO item example.}
 
 However, in a molecular simulation, these quantites are not
 necessarily constant. For example, in a $NVT$ simulation, $U$ is
@@ -184,32 +293,42 @@ Section on relation of enthalpy to Gibbs free energy (should we need it). This i
  Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$. Substituting these values into the enthalpy equation gives:
 
 %MRS: usually, you should just use \left( instead of \big(, since it will choose the correct size for you! 
-\begin{equation}H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{P,N} \end{equation}
+\begin{eqnarray}
+H &=& \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} \nonumber \\
+&=& \frac{\partial f}{\partial \beta}_{P,N} 
+\end{eqnarray}
 %MRS: I like this equation more, as it's hard to take finite differences of $G$ (as discussed above).  Then you can eliminate the last few lines.
 
 %MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantites (like the enthalpy of mixing, and the heat capacity).
 \subsection{Heat Capacity}
- The definition of the isobaric heat capacity is:
-\begin{equation}C_P = \left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
+
+The definition of the isobaric heat capacity is:
+\begin{eqnarray}
+C_P &=& \left( \frac{\partial H}{\partial T}\right)_{P,N} \\
 %MRS: probably easier to take df/dbeta, and then take the temperature derivaive, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
-\begin{equation}C_P =  \frac{\partial \left(\frac{\partial f}{\partial \beta}\right)}{\partial T}_{P,N}\end{equation}
-\begin{equation}C_P = k_B \beta^2 \frac{\partial^2 f}{\partial \beta^2}\end{equation}
+&=&  \frac{\partial \left(\frac{\partial f}{\partial \beta}\right)}{\partial T}_{P,N} \\
+&=& k_B \beta^2 \frac{\partial^2 f}{\partial \beta^2}
+\end{eqnarray}
+This could be computed by finite differences approach or analytical derivation using MBAR.
 
-This could be computed by finite differences approach or analytical derivation using MBAR\\*
+The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn},
+\begin{equation}
+C_P = \frac{\langle H^2 \rangle - \langle H \rangle^2}{N k_B \langle T \rangle^2} .
+\end{equation}
+This form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
 
-The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn}.
-\begin{equation}C_P = \frac{\langle H^2 \rangle - \langle H \rangle^2}{N k_B \langle T \rangle^2}\end{equation}\\*
-
-The form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
-
-Horn et al suggest a number of vibrational corrections be applied to the calculation of $C_P$ due to a number of approximations made during the simulation of the liquid \cite{horn}. The following terms were added as a correction.
-
-\begin{equation}\left(\frac{\partial E_{vib,l}}{\partial T}\right)_{P} = \left(\frac{\partial E_{vib,l,intra}^{QM}}{\partial T}\right)_{P} + \left(\frac{\partial E_{vib,l,inter}^{QM}}{\partial T}\right)_{P} - \left(\frac{\partial E_{vib,l,inter}^{CM}}{\partial T}\right)_{P}\end{equation}\\*
-
-Where:
-\begin{equation}\left(\frac{\partial E_{vib}^{CM}}{\partial T}\right)_{P} = k_B n_{vib}\end{equation}\\*
-\begin{equation}\left(\frac{\partial E_{vib}^{QM}}{\partial T}\right)_{P} = \sum_{i=1}^{n_{vib}} \left(\frac{h^2 v_{i}^2 e^{\frac{h v_{i}}{k_B T}}}{k_B T^2 \left(e^{\frac{h v_{i}}{k_B T}} - 1\right)^2}\right)\end{equation}\\*
-
+Horn et al.\cite{horn} suggest a number of vibrational corrections be applied to the calculation of $C_P$ due to a number of approximations made during the simulation of the liquid \cite{horn}. 
+The following terms were added as a correction:
+\begin{eqnarray}
+\left(\frac{\partial E_{vib,l}}{\partial T}\right)_{P} &=& \left(\frac{\partial E_{vib,l,intra}^{QM}}{\partial T}\right)_{P} + \left(\frac{\partial E_{vib,l,inter}^{QM}}{\partial T}\right)_{P} \nonumber \\
+&& - \left(\frac{\partial E_{vib,l,inter}^{CM}}{\partial T}\right)_{P}
+\end{eqnarray}
+where
+\begin{equation}\left(\frac{\partial E_{vib}^{CM}}{\partial T}\right)_{P} = k_B n_{vib}\end{equation}
+and
+\begin{equation}
+\left(\frac{\partial E_{vib}^{QM}}{\partial T}\right)_{P} = \sum_{i=1}^{n_{vib}} \left(\frac{h^2 v_{i}^2 e^{\frac{h v_{i}}{k_B T}}}{k_B T^2 \left(e^{\frac{h v_{i}}{k_B T}} - 1\right)^2}\right)
+\end{equation}
 Above, $n_{vib}$ is the number of vibrational modes, $h$ is Planck's constant and $v_i$ is the vibrational frequency of mode $i$.
 
 \subsection{Isothermal Compressibility}
@@ -281,7 +400,9 @@ An alternate, but similar, method is recommended by Horn et al \cite{horn}.
 \begin{equation}\Delta H_{vap} = -\frac{E_{liq, potential}}{N} + R T - P V_{liq} + C\end{equation}\\*
 
 In the above equation $C$ is a correction factor for vibrational energies, polarizability, non-ideality of the gas and pressure. It can be calculated as follows.
+\begin{widetext}
 \begin{equation}C_{vib} = C_{vib,intra} + C_{vib,inter} = \left(E_{vib,QM,gas,intra} - E_{vib,QM,liq,intra}\right) + \left(E_{vib,QM,liq,inter} - E_{vib,CM,liq,inter}\right)\end{equation}\\*
+\end{widetext}
 
 The $QM$ and $CM$ subscripts stand for quantum and classical mechanics, resectively. 
 \begin{equation}C_{pol} = \frac{N}{2} \frac{\left(d_{gas} - d_{liq}\right)^2}{\alpha_{p,gas}}\end{equation}\\*
@@ -372,8 +493,11 @@ We note that only one set of pure simulations are needed to calculate excess pro
 
  Where $\langle \rangle$ denotes an ensemble average and $V^E$ is calculated using the general method of excess molar properties.\\* 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BIBLIOGRAPHY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\bibliographystyle{prsty} 
 \bibliography{prop_calc_best_practices}
-\bibliographystyle{unsrt}
 
 \end{document}
