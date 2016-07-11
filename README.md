@@ -45,10 +45,10 @@ state. `phase` can be 'IsolatedMolecule' for simulation properties of
 individual molecules.  `liquid` and `gas` are other possible phases.  ThermoML has additional phase descriptions which may be necessary as different systems are investigated (for example, unit cell size and symmetry group for solids).  At some point, it may need to be turned into an object.
 
 The `ThermodynamicState` object has members:
-`ThermodynamicState.T`: the temperature of the system
-`ThermodynamicState.P`: the pressure of the system
-`ThermodynamicState.composition`: a `Composition` class describing the chemical composition of the system
-`ThermodynamicState.phase`: 
+* `ThermodynamicState.T`: the temperature of the system, a float with simtk units
+* `ThermodynamicState.P`: the pressure of the system, a float with simtk units
+* `ThermodynamicState.composition`: a `Composition` class describing the chemical composition of the system
+* `ThermodynamicState.phase`: the phase, for now a string but will likely be an object eventually.
 
 For membranes, we many need to add members such as surface tension, etc.
 
