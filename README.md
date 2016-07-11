@@ -11,16 +11,21 @@ measured properties of a substance that provide some information about
 the physical parameters that define the interactions within the
 substance.
 
-A physical property is defined by a combination of:
+A `PhysicalProperty` is a object with:
 * A `ThermodynamicState` specifying the thermodynamic conditions under which the measurement was performed
-* A `PhysicalPropertyType` is the type of physical property that was measured. However, we implement it as a subclass of the `PhysicalProperty` class, rather than as a separate data type.
 * A `MeasurementMethod` specifying the kind of measurement that was performed
+* A value with units
+* An uncertainty with units.
 
-An example of each:
-* `ThermodynamicState`: T = 298 kelvin, P = 1 atmosphere, `Composition` = (object defined below), phase = Liquid 
-** A `Composition` object specifying the composition of the object, such as (0.4 mole fraction ethanol, 0.6 mole fraction water)
-* `PhysicalPropertyType`: mass density
-* `MeasurementMethod`: vibrating tube method
+Different physical properties such as Density are subclasses of `PhysicalProperty`
+
+An example:
+
+A `PhysicalProperty` object MassDensity has members:
+* `MassDensity.ThermodynamicState`: T = 298 kelvin, P = 1 atmosphere, `Composition` = (object defined below), phase = Liquid 
+* `MassDensity.MeasurementMethod`: 'Vibrating Tube Method'
+
+The `Composition` object specifying the composition of the object, such as [0.4 mole fraction ethanol, 0.6 mole fraction water].  Exact syntax is defined below.
 
 #### Physical substances
 
