@@ -34,10 +34,10 @@ If this physical property is a computation, we could additionally have a 'Model'
 A `ThermodynamicState` specifies a combination of thermodynamic parameters (e.g. temperature, pressure) at which a measurement is performed, the phase, as well as the composition.
 
 The `ThermodynamicState` object has members:
-* `ThermodynamicState.T`: the temperature of the system, a float with simtk units
-* `ThermodynamicState.P`: the pressure of the system, a float with simtk units
-* `ThermodynamicState.composition`: a `Composition` class describing the chemical composition of the system
-* `ThermodynamicState.phase`: the phase, for now a string but will likely be an object eventually.
+* `.T`: the temperature of the system, a float with simtk units
+* `.P`: the pressure of the system, a float with simtk units
+* `.composition`: a `Composition` class describing the chemical composition of the system
+* `.phase`: the phase, for now a string but will likely be an object eventually.
 
 For interfaces, we many need to add members such as surface tension, etc.
 
