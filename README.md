@@ -10,31 +10,57 @@ Tools for open forcefield development.
 
 A physical property is defined by a combination of:
 * The thermodynamic state the substance that the measurement was performed on, including temperature, pressure, composition, and phase.
-* The type of physical property that was was measured (Density, heat capacity, etc.)
+* The type of physical property that was was measured (mass density, heat capacity, etc.)
 * The experiment that was performed to obtain the measurement.
 
-An example;
+An example:
+
 * The thermodynamic state is 298 kelvin, 1 atmosphere, with a mixture of 0.8 mole fraction ethanol and and 0.2 mole fraction water in liquid phase  
 * The physical property is the mass density.
 * The experiment that was performed was the vibrating tube method
 
-As an API, different physical properties such as Density are subclasses of the `PhysicalProperty` class:
+In the API, different physical properties such as `MassDensity` are subclasses of the `PhysicalProperty` class.
 
-An example:
+A `PhysicalProperty` class has members:
+* `MassDensity.ThermodynamicState`: A `ThermodynamicState` object
+* `MassDensity.MeasurementMethod`: A `MeasurementMethod` object 
 
-A `PhysicalProperty` class `MassDensity` has members:
-* `MassDensity.ThermodynamicState`: T = 298 kelvin, P = 1 atmosphere, `Composition` = (object defined below), phase = Liquid 
-* `MassDensity.MeasurementMethod`: 'Vibrating Tube Method'
+If this physical property is a computation, we could additionally have a 'Model' object, which would include the force field parameters and functional form (will come back to that later).
 
-The `Composition` object specifying the composition of the object, such as [0.4 mole fraction ethanol, 0.6 mole fraction water].  Exact syntax is defined below.
+#### Thermodynamic states
 
-#### Physical substances
+A `ThermodynamicState` specifies a combination of thermodynamic parameters (e.g. temperature, pressure) at which a measurement is performed, the phase, as well as the composition.
+```python
+from simtk import unit
+thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperature=298.15*unit.kelvin, composition=Composition, phase=`liquid`)
+```
+We use the `simtk.unit` unit system from [OpenMM](http://openmm.org) for units. 
+
+**QUESTIONS:**
+* Is it OK to use `simtk.unit` from OpenMM for now, or should we switch to [`pint`](https://pint.readthedocs.io/en/0.7.2/) to make this more portable?
+ 
+For now, `phase` is a string, and can be `None`, as it does not necessarily need to be used if
+carrying out a simulation where there is only one stable equilibrium
+state. `phase` can be 'IsolatedMolecule' for simulation properties of
+individual molecules.  `liquid` and `gas` are other possible phases.  ThermoML has additional phase descriptions which may be necessary as different systems are investigated (for example, unit cell size and symmetry group for solids).  At some point, it may need to be turned into an object.
+
+The `ThermodynamicState` object has members:
+`ThermodynamicState.T`: the temperature of the system
+`ThermodynamicState.P`: the pressure of the system
+`ThermodynamicState.composition`: a `Composition` class describing the chemical composition of the system
+`ThermodynamicState.phase`: 
+
+For membranes, we many need to add members such as surface tension, etc.
+
+The `Composition` object specifies the composition of the system, such as [0.4 mole fraction ethanol, 0.6 mole fraction water].  
 
 We use the concept of a substance's `Composition` throughout, where we
-use an object rather than a specific list of molecule fractions or
+use a class rather than a specific list of molecule fractions or
 composition to have more flexibility in how it is specified.
 
-A simple liquid has only one component in the `Composition`
+The basic method of the `Composition` class is `addComponent()`, which takes an chemical name as an argument, and an optional mole fraction argument.
+
+A simple liquid has only one component in the `Composition`.
 ```python
 liquid = Composition()
 liquid.addComponent('water')
@@ -84,23 +110,6 @@ Or something like that.
 
 * Previously, we used the concept of `Mixture` which was an object describing the system and how it was made.  Now, we use the concept of `Composition` which describes how it is made. 
 
-#### Thermodynamic states
-
-A `ThermodynamicState` specifies a combination of thermodynamic parameters (e.g. temperature, pressure) at which a measurement is performed, the phase, as well as the composition.
-```python
-from simtk import unit
-thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperature=298.15*unit.kelvin, composition=Composition, phase=`liquid`)
-```
-We use the `simtk.unit` unit system from [OpenMM](http://openmm.org) for units. 
-
-**QUESTIONS:**
-* Is it OK to use `simtk.unit` from OpenMM for now, or should we switch to [`pint`](https://pint.readthedocs.io/en/0.7.2/) to make this more portable?
-
-Phase can be `None`, as it does not necessarily need to be used if
-carrying out a simulation where there is only one stable equilibrium
-state.  But we want it there in the case of properties that can
-change.  Phase can be 'IsolatedMolecule' for simulation properties of
-individual molecules.
 
 #### Measurement methods
 
