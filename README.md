@@ -21,7 +21,7 @@ An example:
 
 In the API, different physical properties such as `MassDensity` are subclasses of the `PhysicalProperty` class.
 
-A `PhysicalProperty` class has members:
+A `PhysicalProperty` class has properties:
 * `.ThermodynamicState`: A `ThermodynamicState` object
 * `.MeasurementMethod`: A `MeasurementMethod` object 
 * `.value`: the value, a float with units
@@ -38,7 +38,7 @@ If this physical property is a computation, we could additionally have a 'Model'
 
 A `ThermodynamicState` specifies a combination of thermodynamic parameters (e.g. temperature, pressure) at which a measurement is performed, the phase, as well as the composition.
 
-The `ThermodynamicState` object has members:
+The `ThermodynamicState` class has properties:
 * `.T`: the temperature of the system, a float with simtk units
 * `.P`: the pressure of the system, a float with simtk units
 * `.composition`: a `Composition` class describing the chemical composition of the system
@@ -61,7 +61,7 @@ carrying out a simulation where there is only one stable equilibrium
 state. `phase` can be 'IsolatedMolecule' for simulation properties of
 individual molecules.  `liquid` and `gas` are other possible phases.  ThermoML has additional phase descriptions which may be necessary as different systems are investigated (for example, unit cell size and symmetry group for solids).  At some point, it may need to be turned into an object.
 
-The `Composition` object specifies the composition of the system, such as [0.4 mole fraction ethanol, 0.6 mole fraction water].  
+The `Composition` class specifies the composition of the system, such as [0.4 mole fraction ethanol, 0.6 mole fraction water].  
 
 We use the concept of a substance's `Composition` throughout, where we
 use a class rather than a specific list of molecule fractions or
@@ -118,7 +118,7 @@ liquid = Composition([['phenol'],[0.4]],[['water'],[0.6]])
 ```
 Or something like that.
 
-* Previously, we used the concept of `Mixture` which was an object describing the system and how it was made.  Now, we use the concept of `Composition` which describes how it is made. 
+* Previously, we used the concept of `Mixture` which was an class describing the system and how it was made.  Now, we use the concept of `Composition` which describes how it is made. 
 
 #### Measurement methods
 
@@ -127,7 +127,7 @@ A `MeasurementMethod` subclass has information specific to the particular method
 Some examples:
 * `FlowCalorimetry` for `HeatCapacity` or `ExcessMolarEnthalpy`
 * `VibratingTubeMethod` for `MassDensity`
-* `MolecularSimulation`, where `MolecularSimulation` is an object which contains all the necessary information to generate the physical property given a model (exact enumeration of information TBD). It does not include the parameters for the model.
+* `MolecularSimulation`, where `MolecularSimulation` is an class which contains all the necessary information to generate the physical property given a model (exact enumeration of information TBD). It does not include the parameters for the model.
 
 #### Physical property measurements
 
