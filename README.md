@@ -6,11 +6,6 @@ Tools for open forcefield development.
 
 ### Physical property measurements
 
-[**Physical property measurements**](https://en.wikipedia.org/wiki/Physical_property) are
-measured properties of a substance that provide some information about
-the physical parameters that define the interactions within the
-substance.
-
 [**Physical property measurements**](https://en.wikipedia.org/wiki/Physical_property) are measured properties of a substance that provide some information about the physical parameters that define the interactions within the substance.
 
 A physical property is defined by a combination of:
