@@ -22,20 +22,30 @@ An example:
 In the API, different physical properties such as `MassDensity` are subclasses of the `PhysicalProperty` class.
 
 A `PhysicalProperty` class has members:
-* `MassDensity.ThermodynamicState`: A `ThermodynamicState` object
-* `MassDensity.MeasurementMethod`: A `MeasurementMethod` object 
-* `value`: the value, a float with units
-* `uncertainty`: the statistical uncertainty, a float with units 
+* `.ThermodynamicState`: A `ThermodynamicState` object
+* `.MeasurementMethod`: A `MeasurementMethod` object 
+* `.value`: the value, a float with units
+* `.uncertainty`: the statistical uncertainty, a float with units 
 
 If this physical property is a computation, we could additionally have a 'Model' object, which would include the force field parameters and functional form (will come back to that later).
 
 #### Thermodynamic states
 
 A `ThermodynamicState` specifies a combination of thermodynamic parameters (e.g. temperature, pressure) at which a measurement is performed, the phase, as well as the composition.
+
+The `ThermodynamicState` object has members:
+* `ThermodynamicState.T`: the temperature of the system, a float with simtk units
+* `ThermodynamicState.P`: the pressure of the system, a float with simtk units
+* `ThermodynamicState.composition`: a `Composition` class describing the chemical composition of the system
+* `ThermodynamicState.phase`: the phase, for now a string but will likely be an object eventually.
+
+For interfaces, we many need to add members such as surface tension, etc.
+
 ```python
 from simtk import unit
 thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperature=298.15*unit.kelvin, composition=Composition, phase=`liquid`)
 ```
+
 We use the `simtk.unit` unit system from [OpenMM](http://openmm.org) for units. 
 
 **QUESTIONS:**
@@ -45,14 +55,6 @@ For now, `phase` is a string, and can be `None`, as it does not necessarily need
 carrying out a simulation where there is only one stable equilibrium
 state. `phase` can be 'IsolatedMolecule' for simulation properties of
 individual molecules.  `liquid` and `gas` are other possible phases.  ThermoML has additional phase descriptions which may be necessary as different systems are investigated (for example, unit cell size and symmetry group for solids).  At some point, it may need to be turned into an object.
-
-The `ThermodynamicState` object has members:
-* `ThermodynamicState.T`: the temperature of the system, a float with simtk units
-* `ThermodynamicState.P`: the pressure of the system, a float with simtk units
-* `ThermodynamicState.composition`: a `Composition` class describing the chemical composition of the system
-* `ThermodynamicState.phase`: the phase, for now a string but will likely be an object eventually.
-
-For membranes, we many need to add members such as surface tension, etc.
 
 The `Composition` object specifies the composition of the system, such as [0.4 mole fraction ethanol, 0.6 mole fraction water].  
 
@@ -111,7 +113,6 @@ liquid = Composition([['phenol'],[0.4]],[['water'],[0.6]])
 Or something like that.
 
 * Previously, we used the concept of `Mixture` which was an object describing the system and how it was made.  Now, we use the concept of `Composition` which describes how it is made. 
-
 
 #### Measurement methods
 
