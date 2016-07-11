@@ -26,8 +26,13 @@ A `PhysicalProperty` class has members:
 * `.MeasurementMethod`: A `MeasurementMethod` object 
 * `.value`: the value, a float with units
 * `.uncertainty`: the statistical uncertainty, a float with units 
+* `.reference` - the literature reference (if present) for the measurement
+* `.DOI` - the literature reference DOI (if available) for the measurement
+*. `model` - the model that is used to generate the data (if computation)
 
-If this physical property is a computation, we could additionally have a 'Model' object, which would include the force field parameters and functional form (will come back to that later).
+The value, uncertainty, reference, and DOI do not necessarily need to be defined for a dataset in order for property calculations to be performed.
+ 
+If this physical property is a computation, we could additionally have a 'Model' object, which would include the force field parameters and functional form, but do not need to be defined.
 
 #### Thermodynamic states
 
@@ -91,6 +96,7 @@ ternary_mixture.addComponent('water')
   an extrapolation to larger systems if properly validated.
 
 The infinite dilution of one solute within a solvent or mixture is also specified by setting the `Composition`, where the solute has zero mole fraction:
+
 ```python
 infinite_dilution = Composition()
 infinite_dilution.addComponent('phenol', mole_fraction=0.0) # infinite dilution
@@ -121,13 +127,14 @@ A `MeasurementMethod` subclass has information specific to the particular method
 Some examples:
 * `FlowCalorimetry` for `HeatCapacity` or `ExcessMolarEnthalpy`
 * `VibratingTubeMethod` for `MassDensity`
-* `Simulation`, where `Simulation` is an object which contains all the necessary information to generate the physical property. It does not include the parameters for the model.
+* `MolecularSimulation`, where `MolecularSimulation` is an object which contains all the necessary information to generate the physical property given a model (exact enumeration of information TBD). It does not include the parameters for the model.
 
 #### Physical property measurements
 
 * Note: `MeasuredPhysicalProperty` and `ComputedPhysicalProperty` are being merged together into `PhysicalProperty`
 
-A `PhysicalProperty` is a combination of `ThermodynamicState`, and a unit-bearing measured property `value` and `uncertainty`:
+An example of creating a `Physical Property`:
+
 ```python
 # Define mixture
 mixture = Composition()
@@ -146,16 +153,6 @@ Some examples:
 
 A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
 Please raise an issue if your physical property of interest is not listed!
-
-Each `PhysicalProperty` has several properties:
-* `.thermodynamic_state` - the `ThermodynamicState (including `Composition` object and `phase`)
-* `.value` - the unit-bearing measurement value
-* `.uncertainty` - the standard uncertainty of the measurement
-* `.measurement_method` - the method used for the measurement
-* `.reference` - the literature reference (if present) for the measurement
-* `.DOI` - the literature reference DOI (if available) for the measurement
-
-The value, uncertainty, reference, and DOI do not necessarily need to be defined for a dataset in order for property calculations to be performed.
 
 ### Physical property datasets
 
@@ -197,7 +194,6 @@ You can see which DOIs contribute to the current `ThermoMLDataset` with the conv
 thermoml_keys = ['10.1021/acs.jced.5b00365', '10.1021/acs.jced.5b00474']
 dataset = ThermoMLDataset(thermoml_keys)
 ```
-
 ### Estimating properties
 
 The `PropertyEstimator` class creates objects that handle property estimation of all of the properties specified in a dataset, given a set or sets of parameters.
@@ -207,15 +203,15 @@ Different backends will take different optional arguments, but here is an exampl
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
 computed_properties = estimator.computeProperties(dataset, model_set)
 ```
-Here, `dataset` is a `PropertyDataset` or subclass, and `model_set` is set of a `SMIRFFParameterSet` used to define the physical model of the systems described in the dataset.  There could be one or many. They could differ in force field functional form, or simply parameters.
+Here, `dataset` is a set of `PhysicalProperties`, and `model_set` is set of a `SMIRFFParameterSet` used to define the physical model of the systems described in the dataset.  There could be one or many elements in the `model_set`. They could differ in force field functional form, or simply parameters.
 
-Optionally, this can take a Simulation object that can specify how to do the simulation, but this can also be done by default.
+Optionally, this can take a `MolecularSimulation` object that can specify how to do the simulation, but this can also be done by default.
 
 `PropertyEstimator.computeProperties(...)` returns a list of `PhysicalProperty` objects. As defined previously, they have:
-* `property.value` - the computed property value, with appropriate units
-* `property.uncertainty` - the statistical uncertainty in the computed property
-* `property.measurement_method` - a structure giving the MeasurementMethod (in this case, simulation approach) used to compute this property
-* `property.model` - a reference to the parameters used to generate the model.
+* `.value` - the computed property value, with appropriate units
+* `.uncertainty` - the statistical uncertainty in the computed property
+* `.MeasurementMethod` - a structure giving the MeasurementMethod (in this case, simulation approach) used to compute this property
+* `.Model` - a reference to the parameters used to generate the model. In this case, the model is included, since the properties were generated with the model.
 
 This API can be extended in the future to provide access to the simulation data used to estimate the property, such as
 ```python
