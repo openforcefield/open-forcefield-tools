@@ -24,6 +24,8 @@ In the API, different physical properties such as `MassDensity` are subclasses o
 A `PhysicalProperty` class has members:
 * `MassDensity.ThermodynamicState`: A `ThermodynamicState` object
 * `MassDensity.MeasurementMethod`: A `MeasurementMethod` object 
+* value: the value in simtk units
+* uncertainty: the statistical uncertainty with simtk units 
 
 If this physical property is a computation, we could additionally have a 'Model' object, which would include the force field parameters and functional form (will come back to that later).
 
