@@ -11,13 +11,13 @@ Tools for open forcefield development.
 A physical property is defined by a combination of:
 * The thermodynamic state the substance that the measurement was performed on, including temperature, pressure, composition, and phase.
 * The type of physical property that was was measured (mass density, heat capacity, etc.)
-* The experiment that was performed to obtain the measurement.
+* The experimental approach that was used to obtain the measurement.
 
 An example:
 
 * The thermodynamic state is 298 kelvin, 1 atmosphere, with a mixture of 0.8 mole fraction ethanol and and 0.2 mole fraction water in liquid phase  
 * The physical property is the mass density.
-* The experiment that was performed was the vibrating tube method
+* The method that used performed was the vibrating tube method.
 
 In the API, different physical properties such as `MassDensity` are subclasses of the `PhysicalProperty` class.
 
@@ -122,7 +122,7 @@ Or something like that.
 
 #### Measurement methods
 
-A `MeasurementMethod` subclass has information specific to the particular method used to measure a property (such as experimental uncertainty guidance).
+A `MeasurementMethod` subclass has information specific to the particular method used to measure a property (such as experimental uncertainty guidance).  The `MeasurementMethod` object can potentially closely parallel the [ThermoML](http://trc.nist.gov/ThermoMLRecommendations.pdf) specification, which has significant infrastructure for defining the measurement approach.
 
 Some examples:
 * `FlowCalorimetry` for `HeatCapacity` or `ExcessMolarEnthalpy`
