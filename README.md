@@ -11,17 +11,23 @@ measured properties of a substance that provide some information about
 the physical parameters that define the interactions within the
 substance.
 
-A `PhysicalProperty` is a object with:
-* A `ThermodynamicState` specifying the thermodynamic conditions under which the measurement was performed
-* A `MeasurementMethod` specifying the kind of measurement that was performed
-* A value with units
-* An uncertainty with units.
+[**Physical property measurements**](https://en.wikipedia.org/wiki/Physical_property) are measured properties of a substance that provide some information about the physical parameters that define the interactions within the substance.
 
-Different physical properties such as Density are subclasses of `PhysicalProperty`
+A physical property is defined by a combination of:
+* The thermodynamic state the substance that the measurement was performed on, including temperature, pressure, composition, and phase.
+* The type of physical property that was was measured (Density, heat capacity, etc.)
+* The experiment that was performed to obtain the measurement.
+
+An example;
+* The thermodynamic state is 298 kelvin, 1 atmosphere, with a mixture of 0.8 mole fraction ethanol and and 0.2 mole fraction water in liquid phase  
+* The physical property is the mass density.
+* The experiment that was performed was the vibrating tube method
+
+As an API, different physical properties such as Density are subclasses of the `PhysicalProperty` class:
 
 An example:
 
-A `PhysicalProperty` object MassDensity has members:
+A `PhysicalProperty` class `MassDensity` has members:
 * `MassDensity.ThermodynamicState`: T = 298 kelvin, P = 1 atmosphere, `Composition` = (object defined below), phase = Liquid 
 * `MassDensity.MeasurementMethod`: 'Vibrating Tube Method'
 
