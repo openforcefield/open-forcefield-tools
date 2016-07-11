@@ -53,13 +53,10 @@ thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperat
 
 We use the `simtk.unit` unit system from [OpenMM](http://openmm.org) for units. 
 
-**QUESTIONS:**
-* Is it OK to use `simtk.unit` from OpenMM for now, or should we switch to [`pint`](https://pint.readthedocs.io/en/0.7.2/) to make this more portable?
- 
 For now, `phase` is a string, and can be `None`, as it does not necessarily need to be used if
 carrying out a simulation where there is only one stable equilibrium
 state. `phase` can be 'IsolatedMolecule' for simulation properties of
-individual molecules.  `liquid` and `gas` are other possible phases.  ThermoML has additional phase descriptions which may be necessary as different systems are investigated (for example, unit cell size and symmetry group for solids).  At some point, it may need to be turned into an object.
+individual molecules.  `liquid` and `gas` are other possible phases.  ThermoML has additional phase descriptions which may be necessary as different systems are investigated (for example, unit cell size and symmetry group for solids).  At some point, it may need to be turned into an object, ideally paralleling [ThermoML](http://trc.nist.gov/ThermoMLRecommendations.pdf) definitions.
 
 The `Composition` class specifies the composition of the system, such as [0.4 mole fraction ethanol, 0.6 mole fraction water].  
 
@@ -111,11 +108,6 @@ infinite_dilution.addComponent('phenol', mole_fraction = 'infinite dilution') # 
 infinite_dilution.addComponent('water')  # N-1 water molecules, where N is determined by the simulation.
 ```
 
-* TODO: decide if we want to be able to initialize composition by feeding in a nested array.
-
-```python
-liquid = Composition([['phenol'],[0.4]],[['water'],[0.6]])
-```
 Or something like that.
 
 * Previously, we used the concept of `Mixture` which was an class describing the system and how it was made.  Now, we use the concept of `Composition` which describes how it is made. 
@@ -133,7 +125,7 @@ Some examples:
 
 * Note: `MeasuredPhysicalProperty` and `ComputedPhysicalProperty` are being merged together into `PhysicalProperty`
 
-An example of creating a `Physical Property`:
+An example of creating a `PhysicalProperty`:
 
 ```python
 # Define mixture
@@ -141,7 +133,7 @@ mixture = Composition()
 mixture.addComponent('water', mole_fraction=0.2)
 mixture.addComponent('methanol')
 # Define thermodynamic state
-thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperature=298.15*unit.kelvin,composition=mixture)
+thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperature=298.15*unit.kelvin, composition=mixture)
 # Define measurement
 measurement = ExcessMolarEnthalpy(thermodynamic_state, value=83.3863244*unit.kilojoules_per_mole, uncertainty=0.1220794866*unit.kilojoules_per_mole)
 ```
@@ -196,7 +188,7 @@ dataset = ThermoMLDataset(thermoml_keys)
 ```
 ### Estimating properties
 
-The `PropertyEstimator` class creates objects that handle property estimation of all of the properties specified in a dataset, given a set or sets of parameters.
+The `PropertyEstimator` class creates objects that handle property estimation of all of the properties specified in a dataset, given a set or sets of descriptions of the system.
 The implementation will isolate the user from whatever backend (local machine, HPC cluster, XSEDE resources, Amazon EC2) is being used to compute the properties, as well as whether new simulations are being launched and analyzed or existing simulation data is being reweighted.
 Different backends will take different optional arguments, but here is an example that will launch and use 10 worker processes on a cluster:
 ```python
@@ -205,13 +197,13 @@ computed_properties = estimator.computeProperties(dataset, model_set)
 ```
 Here, `dataset` is a set of `PhysicalProperties`, and `model_set` is set of a `SMIRFFParameterSet` used to define the physical model of the systems described in the dataset.  There could be one or many elements in the `model_set`. They could differ in force field functional form, or simply parameters.
 
-Optionally, this can take a `MolecularSimulation` object that can specify how to do the simulation, but this can also be done by default.
+Optionally, this can take a `MolecularSimulation` object (that can specify how to do the simulation, but this can also be done by default.
 
 `PropertyEstimator.computeProperties(...)` returns a list of `PhysicalProperty` objects. As defined previously, they have:
 * `.value` - the computed property value, with appropriate units
 * `.uncertainty` - the statistical uncertainty in the computed property
-* `.MeasurementMethod` - a structure giving the MeasurementMethod (in this case, simulation approach) used to compute this property
-* `.Model` - a reference to the parameters used to generate the model. In this case, the model is included, since the properties were generated with the model.
+* `.MeasurementMethod` - an object giving the MeasurementMethod (in this case, simulation approach) used to compute this property
+* `.Model` - a reference to the parameters used to generate the model. In this case, the model is included, since the properties were generated with the model. Currently, the models will only differ by parameter set, but later the file formats can be updated to allow them to differ in functional form as well.
 
 This API can be extended in the future to provide access to the simulation data used to estimate the property, such as
 ```python
@@ -225,8 +217,8 @@ for property in computed_properties:
    for simulation in property.simulations:
       print('The simulation was %.3f ns long' % (simulation.length / unit.nanoseconds))
       print('The simulation was run at %.1f K and %.1f atm' % (simulation.thermodynamic_state.temperature / unit.kelvin, simulation.thermodynamic_state.pressure / unit.atmospheres))
-      # Get the ParameterSet that was used for this simulation
-      parameters = simulation.parameters
+      # Get the ModelSet that was used for this simulation
+      parameters = simulation.model
       # what else do you want...?
 ```
 
