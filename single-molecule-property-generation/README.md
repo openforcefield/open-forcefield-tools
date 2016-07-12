@@ -8,10 +8,10 @@ Contains
 
 * generate_single_molecule_properties.py: sample script running bonded_term_list.py and trajectory_parser.py on a specific data set.
 
-* * Bond equilibrium lengths
-* * Bond equilibrium standard deviations
-* * Angle equilibrium angles
-* * Angle equilibrium standard deviations
-* * Torsion Fourier representations (0, 1, 2, 3, 6 + phase angle) (determined by least square fit)
+  * Bond equilibrium lengths
+  * Bond equilibrium standard deviations
+  * Angle equilibrium angles
+  * Angle equilibrium standard deviations
+  * Torsion Fourier representations (0, 1, 2, 3, 6 + phase angle) (determined by least square fit)
 
 and populate the pandas dataframe.
