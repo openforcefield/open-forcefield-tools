@@ -143,18 +143,34 @@ Many datasets from ThermoML itself are of interest, so direct access to the [NIS
 
 For example, to retrieve [this ThermoML dataset](http://trc.boulder.nist.gov/ThermoML/10.1016/j.jct.2005.03.012) that accompanies [this paper](http://www.sciencedirect.com/science/article/pii/S0021961405000741), we can simply use the DOI `10.1016/j.jct.2005.03.012` as a key for creating a `PhysicalPropertyDataset` subclassed object from the ThermoML Archive:
 ```python
-dataset = ThermoMLDataset('10.1016/j.jct.2005.03.012')
+dataset = ThermoMLDataset(keys='10.1016/j.jct.2005.03.012')
 ```
 You can also specify multiple ThermoML Archive keys to create a dataset from multiple ThermoML files:
 ```python
 thermoml_keys = ['10.1021/acs.jced.5b00365', '10.1021/acs.jced.5b00474']
-dataset = ThermoMLDataset(thermoml_keys)
+dataset = ThermoMLDataset(keys=thermoml_keys)
 ```
-You can see which DOIs contribute to the current `ThermoMLDataset` with the convenience functions:
+
+It is also possible to specify ThermoML datasets housed at other locations, such as
 ```python
-thermoml_keys = ['10.1021/acs.jced.5b00365', '10.1021/acs.jced.5b00474']
-dataset = ThermoMLDataset(thermoml_keys)
+dataset = ThermoMLDataset(url='http://openforcefieldgroup.org/thermoml-datasets')
 ```
+or
+```python
+dataset = ThermoMLDataset(url='file:///Users/choderaj/thermoml')
+```
+or
+```python
+dataset = ThermoMLDataset(keys=['10.1021/acs.jced.5b00365', '10.1021/acs.jced.5b00474'], url='http://openforcefieldgroup.org/thermoml-datasets')
+```
+or from ThermoML and a different URL:
+```python
+dataset = ThermoMLDataset(keys=thermoml_keys)
+dataset.retrieve(keys=local_keys, url='http://openforcefieldgroup.org/thermoml-datasets')
+```
+
+You can see which DOIs contribute to the current `ThermoMLDataset` with the convenience functions:
+(example is missing here)
 
 ### Estimating properties
 
