@@ -15,6 +15,8 @@ TODO
 ----
 * Incorporate Ken Kroenlein's suggestion that infinite dilution should be treated differently than zero mole fraction.
   Perhaps addInfiniteDilution or addImpurity?
+* Add methods that construct real System and Topology objects for a specified system size, following the Mobley SolvationToolkit:
+  https://github.com/MobleyLab/SolvationToolkit
 
 """
 #=============================================================================================

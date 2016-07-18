@@ -100,14 +100,22 @@ Some examples:
 * `ExcessMolarEnthalpy` - excess partial apparent molar enthalpy
 * `HeatCapacity` - molar heat capacity at constant pressure
 There are also some examples of measured physical properties we use exclusively for testing against synthetic data:
-* `ValenceMoment` - the `n`th moment (`E[x^n]`) of a specified valence degree of freedom of an isolated molecule.
+* `MeanPotentialEnergy` - mean potential energy of a system
+* `BondMoment` - the `n`th moment (mean `E[x]` if n==1, or central moment `E[(x-E[x])^n]` if n >= 2) of a specified bond of an isolated molecule
+* `AngleMoment` - the `n`th moment (mean `E[x]` if n==1, or central moment `E[(x-E[x])^n]` if n >= 2) of a specified angle of an isolated molecule
+* `TorsionMoment` - the `n`th circular moment (`E[e^{i*n*phi}]`) of a specified torsion of an isolated molecule
 ```python
 molecule = IsolatedMolecule(smiles=smiles)
 thermodynamic_state = ThermodynamicState(temperature=300*unit.kelvin)
-measuerment = ValenceMoment(molecule, thermodynamic_state, value=1.12*unit.angstroms, uncertainty=0.02*unit.angstroms, type='bond', smirks='[#6:1]-[#6:2]')
+mean_potential = MeanPotentialEnergy(molecule, thermodynamic_state, value=124.4*unit.kilojoules_per_mole, uncertainty=14.5*unit.kilojoules_per_mole)
+bond_average = BondMoment(molecule, thermodynamic_state, value=1.12*unit.angstroms, uncertainty=0.02*unit.angstroms, moment=1, smirks='[#6:1]-[#6:2]')
+bond_variance = BondMoment(molecule, thermodynamic_state, value=0.05*unit.angstroms**2, uncertainty=0.02*unit.angstroms**2, moment=2, smirks='[#6:1]-[#6:2]')
+angle_average = AngleMoment(molecule, thermodynamic_state, value=20*unit.degrees, uncertainty=0.05*unit.degrees, moment=1, smirks='[#6:1]-[#6:2]-[#6:3]')
 ```
 **QUESTIONS**
-* In order for `ValenceMoment`` to be useful, we presumably have to specify the atom indices of the atoms that make up the valence bond, angle, or torsion. If we do that, we are *forced* to restrict ourselves to requiring the user specify an `OEMol` object as the substance, since there is no way the numbering is guaranteed otherwise.
+* Is it useful to average over any bonds that match the SMARTS strings? How would you even construct those SMARTS strings algorithmically for the molecules in the set, to avoid matching anything else?
+* Note that we need the first noncentral moment (average), so I had an exception where we don't compute the central moments for `moment == 1`
+* Do we really want the variance (second central moment) instead of the standard deviation?
 
 A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
 Please raise an issue if your physical property of interest is not listed!
