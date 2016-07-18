@@ -89,46 +89,46 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
         AtomList = np.array(p.split('Atom')[1:], dtype=int) # figure out which bond this is: 
                                                             # we assume bond_dist /bond is in the same order.
         if 'BondEquilibriumLength' in p:
-            for i in range(nbonds):
-                if np.array_equal(AtomList, bonds[i]): 
-                    value = np.mean(bond_dist[:,i])
-                    uncertainty = np.std(bond_dist[:,i])/np.sqrt(nsamp)
-                    PropertyDict[p] = [value,uncertainty]
+        	for i in range(nbonds):
+                	if np.array_equal(AtomList, bonds[i]): 
+                   		 value = np.mean(bond_dist[:,i])
+                   		 uncertainty = np.std(bond_dist[:,i])/np.sqrt(nsamp)
+                   		 PropertyDict[p] = [value,uncertainty]
 
         if 'BondEquilibriumLength_std' in p:
-            for i in range(nbonds):
-                if np.array_equal(AtomList, bonds[i]): 
-                    value = np.std(bond_dist[:,i])
-                    uncertainty = np.std(bond_dist[:,i])**2/np.sqrt(nsamp/2)
-                    PropertyDict[p] = [value,uncertainty]
+        	for i in range(nbonds):
+        		if np.array_equal(AtomList, bonds[i]): 
+                		value = np.std(bond_dist[:,i])
+                    		uncertainty = np.std(bond_dist[:,i])**2/np.sqrt(nsamp/2)
+                    		PropertyDict[p] = [value,uncertainty]
 
-	 if 'AngleEquilibriumAngle' in p:
-            for i in range(nangles):
-                if np.array_equal(AtomList, angles[i]): 
-                    value = np.mean(angle_dist[:,i])
-                    uncertainty = np.std(angle_dist[:,i])/np.sqrt(nsamp)
-                    PropertyDict[p] = [value,uncertainty]
+	if 'AngleEquilibriumAngle' in p:
+        	for i in range(nangles):
+                	if np.array_equal(AtomList, angles[i]): 
+                    		value = np.mean(angle_dist[:,i])
+                    		uncertainty = np.std(angle_dist[:,i])/np.sqrt(nsamp)
+                    		PropertyDict[p] = [value,uncertainty]
 
 	if 'AngleEquilibriumAngle_std' in p:
-	    for i in range(nangles):
-	        if np.array_equal(AtomList, angles[i]):
-	            value = np.std(angle_dist[:,i])
-		    uncertainty = np.std(angle_dist[:,i])**2/np.sqrt(nsamp/2)
-		    PropertyDict[p] = [value,uncertainty]
+		for i in range(nangles):
+	        	if np.array_equal(AtomList, angles[i]):
+	            		value = np.std(angle_dist[:,i])
+		    		uncertainty = np.std(angle_dist[:,i])**2/np.sqrt(nsamp/2)
+		    		PropertyDict[p] = [value,uncertainty]
 
 	if 'TorsionEquilibriumAngle' in p:
-            for i in range(ntorsions):
-                if np.array_equal(AtomList, torsions[i]): 
-                    value = np.mean(torsion_dist[:,i])
-                    uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
-                    PropertyDict[p] = [value,uncertainty]
+           	for i in range(ntorsions):
+                	if np.array_equal(AtomList, torsions[i]): 
+                    		value = np.mean(torsion_dist[:,i])
+                    		uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
+                    		PropertyDict[p] = [value,uncertainty]
 
 	if 'TorsionEquilibriumAngle_std' in p:
-	    for i in range(ntorsions):
-	        if np.array_equal(AtomList, torsions[i]):
-	            value = np.std(torsion_dist[:,i])
-		    uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
-		    PropertyDict[p] = [value,uncertainty]
+	    	for i in range(ntorsions):
+	        	if np.array_equal(AtomList, torsions[i]):
+	            		value = np.std(torsion_dist[:,i])
+		    		uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
+		    		PropertyDict[p] = [value,uncertainty]
 
     return PropertyDict
 
@@ -152,14 +152,15 @@ def get_properties_from_trajectory(dataframe, ncfiles):
 
     if 1:
         df = dataframe.set_index('molecule')
-        MoleculeNames = df.molecule.tolist()
+        #MoleculeNames = df.molecule.tolist()
+	MoleculeNames = df.index.tolist()
         properties = df.columns.values.tolist()
 
         for m in MoleculeNames:
             defined_properties  = list()
             for p in properties:
                 if (p is not 'molecule') and ('_std' not in p):
-                    if df.iloc[m][p] != np.nan:
+                    if df.iloc[m][p] != 0:
                         defined_properties.append(p)
                     PropertiesPerMolecule[m] = defined_properties
     else:
