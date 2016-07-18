@@ -23,7 +23,7 @@ An example of each:
 
 #### Physical substances
 
-We use the concept of a liquid or gas `Mixture` throughout.
+We generally use the concept of a liquid or gas `Mixture`, which is a subclass of `Substance`.
 
 A simple liquid has only one component:
 ```python
@@ -52,20 +52,10 @@ infinite_dilution = Mixture()
 infinite_dilution.addComponent('phenol', mole_fraction=0.0) # infinite dilution
 infinite_dilution.addComponent('water')
 ```
-
 **TODO**:
-* Should we instead allow the user to specify one molecule of the solute, as in
-```python
-infinite_dilution = Mixture()
-infinite_dilution.addComponent('phenol', number=1) # one molecule
-infinite_dilution.addComponent('water')
-```
+* Ken Kroenlein suggests we avoid this notation and instead create an explicit way to specify zero-dilution impurities.
 
-**QUESTIONS**:
-* Is the concept of `Mixture` sufficiently general that we don't need further types of substances?
-* Is it OK that we don't specify the total number of molecules in the substance, and only specify the fractional composition? We would have to specify the total number of molecules in the `PropertyCalculator` instead.
-
-For testing, we also make use of `isolatedMolecule` objects that represent a single molecule:
+For testing against synthetic data, we also make use of `isolatedMolecule` objects (also subclasses of `Substance`) that represent a single molecule:
 ```python
 phenol = IsolatedMolecule(iupac='phenol')
 ethane = IsolatedMolecule(smiles='CC')
@@ -93,7 +83,7 @@ Some examples:
 
 #### Physical property measurements
 
-A `MeasuredPhysicalProperty` is a combination of `Mixture`, `ThermodynamicState`, and a unit-bearing measured property `value` and `uncertainty`:
+A `MeasuredPhysicalProperty` is a combination of `Substance`, `ThermodynamicState`, and a unit-bearing measured property `value` and `uncertainty`:
 ```python
 # Define mixture
 mixture = Mixture()
@@ -109,6 +99,15 @@ Some examples:
 * `MassDensity` - mass density
 * `ExcessMolarEnthalpy` - excess partial apparent molar enthalpy
 * `HeatCapacity` - molar heat capacity at constant pressure
+There are also some examples of measured physical properties we use exclusively for testing against synthetic data:
+* `ValenceMoment` - the `n`th moment (`E[x^n]`) of a specified valence degree of freedom of an isolated molecule.
+```python
+molecule = IsolatedMolecule(smiles=smiles)
+thermodynamic_state = ThermodynamicState(temperature=300*unit.kelvin)
+measuerment = ValenceMoment(molecule, thermodynamic_state, value=1.12*unit.angstroms, uncertainty=0.02*unit.angstroms, type='bond', smirks='[#6:1]-[#6:2]')
+```
+**QUESTIONS**
+* In order for `ValenceMoment`` to be useful, we presumably have to specify the atom indices of the atoms that make up the valence bond, angle, or torsion. If we do that, we are *forced* to restrict ourselves to requiring the user specify an `OEMol` object as the substance, since there is no way the numbering is guaranteed otherwise.
 
 A [roadmap of physical properties to be implemented](https://github.com/open-forcefield-group/open-forcefield-tools/wiki/Physical-Properties-for-Calculation) is available.
 Please raise an issue if your physical property of interest is not listed!

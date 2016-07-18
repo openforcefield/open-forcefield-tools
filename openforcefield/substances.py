@@ -57,7 +57,7 @@ class IsolatedMolecule(Substance):
     Specify a molecule using IUPAC
 
     >>> ethane = IsolatedMolecule(iupac='ethane')
-    
+
     """
     def __init__(self, smiles=None, iupac=None):
         """Create an isolated molecule.
@@ -83,7 +83,7 @@ class IsolatedMolecule(Substance):
 #=============================================================================================
 
 class Mixture(Substance):
-    """A liquid mixture.
+    """A liquid or gas mixture.
 
     Examples
     --------
