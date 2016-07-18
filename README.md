@@ -65,6 +65,12 @@ infinite_dilution.addComponent('water')
 * Is the concept of `Mixture` sufficiently general that we don't need further types of substances?
 * Is it OK that we don't specify the total number of molecules in the substance, and only specify the fractional composition? We would have to specify the total number of molecules in the `PropertyCalculator` instead.
 
+For testing, we also make use of `isolatedMolecule` objects that represent a single molecule:
+```python
+phenol = IsolatedMolecule(iupac='phenol')
+ethane = IsolatedMolecule(smiles='CC')
+```
+
 #### Thermodynamic states
 
 A `ThermodynamicState` specifies a combination of thermodynamic parameters (e.g. temperature, pressure) at which a measurement is performed.

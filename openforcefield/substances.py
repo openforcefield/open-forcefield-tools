@@ -13,6 +13,8 @@ Authors
 
 TODO
 ----
+* Incorporate Ken Kroenlein's suggestion that infinite dilution should be treated differently than zero mole fraction.
+  Perhaps addInfiniteDilution or addImpurity?
 
 """
 #=============================================================================================
@@ -35,6 +37,46 @@ class Substance(object):
     """A substance.
     """
     pass
+
+#=============================================================================================
+# ISOLATED MOLECULE
+#=============================================================================================
+
+class IsolatedMolecule(Substance):
+    """An isolated molecule.
+
+    This is used only for testing.
+
+    Examples
+    --------
+
+    Specify a molecule using SMILES
+
+    >>> ethane = IsolatedMolecule(smiles='CC')
+
+    Specify a molecule using IUPAC
+
+    >>> ethane = IsolatedMolecule(iupac='ethane')
+    
+    """
+    def __init__(self, smiles=None, iupac=None):
+        """Create an isolated molecule.
+
+        Parameters
+        ----------
+        smiles : str, optional, default=None
+            An isomeric SMILES string specifying the isolated molecule.
+        iupac : str, optional, default=None
+            The IUPAC name of the isolated molecule.
+
+        One of `smiles` or `iupac` must be specified
+        """
+        if (smiles is None) and (iupac is None):
+            raise Exception("Either 'smiles' or 'iupac' must be specified.")
+        if (smiles is not None) and (iupac is not None):
+            raise Exception("Only one of 'smiles' and 'iupac' can be specified.")
+        self.smiles = smiles
+        self.iupac = iupac
 
 #=============================================================================================
 # MIXTURE

@@ -1,7 +1,11 @@
 from functools import partial
 import os
 
-from openforcefield import Mixture
+from openforcefield import IsolatedMolecule, Mixture
+
+def test_isolated_molecule():
+    ethane = IsolatedMolecule(smiles='CC')
+    ethane = IsolatedMolecule(iupac='ethane')
 
 def test_neat_liquid():
     liquid = Mixture()
