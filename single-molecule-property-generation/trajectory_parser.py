@@ -86,7 +86,7 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
     
     nsamp = np.shape(bond_dist)[0]-1 #WARNING: assumes data points uncorrelated!
     for p in properties:
-        AtomList = np.array(p.split('Atom')[1:], dtype=int) # figure out which bond this is: 
+        AtomList = np.array(p.split(' ')[1:], dtype=int) # figure out which bond this is: 
                                                             # we assume bond_dist /bond is in the same order.
         if 'BondEquilibriumLength' in p:
         	for i in range(nbonds):
@@ -150,72 +150,86 @@ def get_properties_from_trajectory(dataframe, ncfiles):
     # here's code that generate list of properties to calculate for each molecule and 
     # populate PropertiesPerMolecule
 
-    if 1:
-        df = dataframe.set_index('molecule')
-        #MoleculeNames = df.molecule.tolist()
-	MoleculeNames = df.index.tolist()
-        properties = df.columns.values.tolist()
+    #if 0:
+    #    df = dataframe#.set_index('molecule')
+    #    #MoleculeNames = df.molecule.tolist()
+    #	MoleculeNames = df.index.tolist()
+    #    properties = df.columns.values.tolist()
 
-        for m in MoleculeNames:
-            defined_properties  = list()
-            for p in properties:
-                if (p is not 'molecule') and ('_std' not in p):
-                    if df.iloc[m][p] != 0:
-                        defined_properties.append(p)
-                    PropertiesPerMolecule[m] = defined_properties
-    else:
+    #    for m in MoleculeNames:
+    #        defined_properties  = list()
+    #        for p in properties:
+    #            if (p is not 'molecule') and ('_std' not in p):
+    #                if df.iloc[m][p] != 0:
+    #                    defined_properties.append(p)
+    #                PropertiesPerMolecule[m] = defined_properties
 
-        # hard coded properties
-        PropertyNames = list()
+    df = dataframe#.set_index('molecule')
+    #MoleculeNames = df.molecule.tolist()
+    MoleculeNames = df.molecule.tolist()
+    properties = df.columns.values.tolist()
 
-        # bond properties
-        PropertyNames.append('BondEquilibriumLengthAtom1Atom6')
-        PropertyNames.append('BondEquilibriumLengthAtom2Atom6')
-        PropertyNames.append('BondEquilibriumLengthAtom2Atom13')
-        PropertyNames.append('BondEquilibriumLengthAtom2Atom14')
+    for ind, val in enumerate(MoleculeNames):
+        defined_properties  = list()
+        for p in properties:
+            if (p is not 'molecule') and ('_std' not in p):
+                if df.iloc[ind][p] != 0:
+                    defined_properties.append(p)
+                PropertiesPerMolecule[val] = defined_properties
+    #else:
 
-        PropertyNames.append('BondEquilibriumStdAtom1Atom6')
-        PropertyNames.append('BondEquilibriumStdAtom2Atom6')
-        PropertyNames.append('BondEquilibriumStdAtom2Atom13')
-        PropertyNames.append('BondEquilibriumStdAtom2Atom14')
+    #    # hard coded properties
+    #    PropertyNames = list()
 
-        #angle properties
-        PropertyNames.append('AngleEquilibriumAngleAtom1Atom6Atom2')
-        PropertyNames.append('AngleEquilibriumAngleAtom6Atom2Atom13')
-        PropertyNames.append('AngleEquilibriumAngleAtom6Atom2Atom14')
+    #    # bond properties
+    #    PropertyNames.append('BondEquilibriumLengthAtom1Atom6')
+    #    PropertyNames.append('BondEquilibriumLengthAtom2Atom6')
+    #    PropertyNames.append('BondEquilibriumLengthAtom2Atom13')
+    #    PropertyNames.append('BondEquilibriumLengthAtom2Atom14')
 
-        PropertyNames.append('AngleEquilibriumStdAtom1Atom6Atom2')
-        PropertyNames.append('AngleEquilibriumStdAtom6Atom2Atom13')
-        PropertyNames.append('AngleEquilibriumStdAtom6Atom2Atom14')
+    #    PropertyNames.append('BondEquilibriumStdAtom1Atom6')
+    #    PropertyNames.append('BondEquilibriumStdAtom2Atom6')
+    #    PropertyNames.append('BondEquilibriumStdAtom2Atom13')
+    #    PropertyNames.append('BondEquilibriumStdAtom2Atom14')
+
+    #    #angle properties
+    #    PropertyNames.append('AngleEquilibriumAngleAtom1Atom6Atom2')
+    #    PropertyNames.append('AngleEquilibriumAngleAtom6Atom2Atom13')
+    #    PropertyNames.append('AngleEquilibriumAngleAtom6Atom2Atom14')
+
+    #    PropertyNames.append('AngleEquilibriumStdAtom1Atom6Atom2')
+    #    PropertyNames.append('AngleEquilibriumStdAtom6Atom2Atom13')
+    #    PropertyNames.append('AngleEquilibriumStdAtom6Atom2Atom14')
         
-        # torsion properties
-        PropertyNames.append('TorsionFourier1Atom1Atom6Atom2Atom13')
-        PropertyNames.append('TorsionFourier1Atom1Atom6Atom2Atom14')
+    #    # torsion properties
+    #    PropertyNames.append('TorsionFourier1Atom1Atom6Atom2Atom13')
+    #    PropertyNames.append('TorsionFourier1Atom1Atom6Atom2Atom14')
 
-        PropertyNames.append('TorsionFourier2Atom1Atom6Atom2Atom13')
-        PropertyNames.append('TorsionFourier2Atom1Atom6Atom2Atom14')
+    #    PropertyNames.append('TorsionFourier2Atom1Atom6Atom2Atom13')
+    #    PropertyNames.append('TorsionFourier2Atom1Atom6Atom2Atom14')
 
-        PropertyNames.append('TorsionFourier3Atom1Atom6Atom2Atom13')
-        PropertyNames.append('TorsionFourier3Atom1Atom6Atom2Atom14')
+    #    PropertyNames.append('TorsionFourier3Atom1Atom6Atom2Atom13')
+    #    PropertyNames.append('TorsionFourier3Atom1Atom6Atom2Atom14')
 
-        PropertyNames.append('TorsionFourier6Atom1Atom6Atom2Atom13')
-        PropertyNames.append('TorsionFourier6Atom1Atom6Atom2Atom14')
+    #    PropertyNames.append('TorsionFourier6Atom1Atom6Atom2Atom13')
+    #    PropertyNames.append('TorsionFourier6Atom1Atom6Atom2Atom14')
 
-        PropertyNames.append('TorsionFourierPhaseAtom1Atom6Atom2Atom13')
-        PropertyNames.append('TorsionFourierPhaseAtom1Atom6Atom2Atom14')
+    #    PropertyNames.append('TorsionFourierPhaseAtom1Atom6Atom2Atom13')
+    #    PropertyNames.append('TorsionFourierPhaseAtom1Atom6Atom2Atom14')
 
-        PropertiesPerMolecule['AlkEthOH_c581'] = PropertyNames
+    #    PropertiesPerMolecule['AlkEthOH_c581'] = PropertyNames
 
     for fname in ncfiles:
         MoleculeName = fname.split('.')[0]
-
+        
         # extract the xyz coordinate for each frame
         data = netcdf.Dataset(fname)
         xyz = data.variables['coordinates']
 
         # what is the property list for this molecule
         PropertyNames = PropertiesPerMolecule[MoleculeName]
-        # extract the bond/angle/torsion lists
+
+	# extract the bond/angle/torsion lists
         AtomDict = dict() 
         AtomDict['Bond'] = list()
         AtomDict['Angle'] = list()
@@ -223,9 +237,9 @@ def get_properties_from_trajectory(dataframe, ncfiles):
 
         # which properties will we use to construct the bond list
         ReferenceProperties = ['BondEquilibriumLength','AngleEquilibriumAngle','TorsionFourier1']
-        for p in PropertyNames:
-            PropertyName = p.split('Atom')[0]
-            AtomList = np.array(p.split('Atom')[1:],dtype=int)
+	for p in PropertyNames:
+            PropertyName = p.split(' ')[0]
+            AtomList = np.array(p.split(' ')[1:],dtype=int)
             if any(rp in p for rp in ReferenceProperties):
                 if 'Bond' in p:
                     AtomDict['Bond'].append(AtomList)
@@ -233,13 +247,15 @@ def get_properties_from_trajectory(dataframe, ncfiles):
                     AtomDict['Angle'].append(AtomList)
                 if 'Torsion' in p:
                     AtomDict['Torsion'].append(AtomList)
-
+        	
         bond_dist, angle_dist, torsion_dist = computeBondsAnglesTorsions(xyz,
                                                                          AtomDict['Bond'],
                                                                          AtomDict['Angle'],
                                                                          AtomDict['Torsion'])
+		
 
         Properties = calculateBondsAnglesTorsionsStatistics(PropertyNames,
                                                             bond_dist, angle_dist, torsion_dist,
                                                             AtomDict['Bond'], AtomDict['Angle'], AtomDict['Torsion'])
 
+	return bond_dist, angle_dist, torsion_dist, Properties

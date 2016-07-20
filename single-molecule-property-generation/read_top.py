@@ -3,7 +3,7 @@ import numpy as np
 import glob
 import pandas as pd
 
-files = glob.glob('./AlkEthOH_rings_filt1/AlkEthOH_r47*.top')
+files = glob.glob('./amb_tops/AlkEthOH_*.top')
 
 def drop(mylist, m, n):
 	mylist = list(mylist)
@@ -186,17 +186,17 @@ for val in cols2:
 			data2[ind].append(0)
 
 # Clean up clarity of column headers and molecule names
-cols0 = ["BondEquilibriumLength_" + i for i in cols0]
-cols0temp = ["BondEquilibriumLength_std_" + i for i in cols0]
-cols0 = cols0 + cols0temp
+cols0t = ["BondEquilibriumLength " + i for i in cols0]
+cols0temp = ["BondEquilibriumLength_std " + i for i in cols0]
+cols0 = cols0t + cols0temp
 
-cols1 = ["AngleEquilibriumAngle_" + i for i in cols1]
-cols1temp = ["AngleEquilibriumAngle_std_" + i for i in cols1]
-cols1 = cols1 + cols1temp
+cols1t = ["AngleEquilibriumAngle " + i for i in cols1]
+cols1temp = ["AngleEquilibriumAngle_std " + i for i in cols1]
+cols1 = cols1t + cols1temp
 
-cols2 = ["TorsionEquilibriumAngle_" + i for i in cols2]
-cols2temp = ["TorsionEquilibriumAngle_std_" + i for i in cols2]
-cols2 = cols2 + cols2temp
+cols2t = ["TorsionFourier1 " + i for i in cols2]
+cols2temp = ["TorsionFourier1_std " + i for i in cols2]
+cols2 = cols2t + cols2temp
 
 data0 = [i+i for i in data0] 
 data1 = [i+i for i in data1]
@@ -213,7 +213,7 @@ df2['molecule'] = df2.index
 dftemp = pd.merge(df0, df1, how = 'outer', on = 'molecule')
 df = pd.merge(dftemp, df2, how = 'outer', on = 'molecule')
 
-df['molecule'] = df.molecule.map(lambda x: x.replace(' ', '')[23:])
+df['molecule'] = df.molecule.map(lambda x: x.replace(' ', '')[11:])
 df['molecule'] = df.molecule.map(lambda x: x.replace(' ', '')[:-4])
 
 print(df.molecule)

@@ -7,7 +7,7 @@ import pandas as pd
 # don't actually pass in a pandas dataset yet: isn't accessed yet anyway
 df = pd.read_csv('check.csv', sep = ',')
 
-trajectory_parser.get_properties_from_trajectory(df,['AlkEthOH_c581.nc'])  
+d = trajectory_parser.get_properties_from_trajectory(df,['AlkEthOH_c581.nc', 'AlkEthOH_r13.nc', 'AlkEthOH_r48.nc'])  
 
-
-
+print(d)
+	
