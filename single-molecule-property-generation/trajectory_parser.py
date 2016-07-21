@@ -85,7 +85,7 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
     ntorsions = np.shape(torsions)[0]
     
     nsamp = np.shape(bond_dist)[0]-1 #WARNING: assumes data points uncorrelated!
-    for p in properties:
+    for p in properties:        
         AtomList = np.array(p.split(' ')[1:], dtype=int) # figure out which bond this is: 
                                                             # we assume bond_dist /bond is in the same order.
         if 'BondEquilibriumLength' in p:
@@ -116,14 +116,14 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
 		    		uncertainty = np.std(angle_dist[:,i])**2/np.sqrt(nsamp/2)
 		    		PropertyDict[p] = [value,uncertainty]
 
-	if 'TorsionEquilibriumAngle' in p:
+	if 'TorsionFourier1' in p:
            	for i in range(ntorsions):
                 	if np.array_equal(AtomList, torsions[i]): 
                     		value = np.mean(torsion_dist[:,i])
                     		uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
                     		PropertyDict[p] = [value,uncertainty]
 
-	if 'TorsionEquilibriumAngle_std' in p:
+	if 'TorsionFourier1_std' in p:
 	    	for i in range(ntorsions):
 	        	if np.array_equal(AtomList, torsions[i]):
 	            		value = np.std(torsion_dist[:,i])
@@ -150,22 +150,7 @@ def get_properties_from_trajectory(dataframe, ncfiles):
     # here's code that generate list of properties to calculate for each molecule and 
     # populate PropertiesPerMolecule
 
-    #if 0:
-    #    df = dataframe#.set_index('molecule')
-    #    #MoleculeNames = df.molecule.tolist()
-    #	MoleculeNames = df.index.tolist()
-    #    properties = df.columns.values.tolist()
-
-    #    for m in MoleculeNames:
-    #        defined_properties  = list()
-    #        for p in properties:
-    #            if (p is not 'molecule') and ('_std' not in p):
-    #                if df.iloc[m][p] != 0:
-    #                    defined_properties.append(p)
-    #                PropertiesPerMolecule[m] = defined_properties
-
-    df = dataframe#.set_index('molecule')
-    #MoleculeNames = df.molecule.tolist()
+    df = dataframe
     MoleculeNames = df.molecule.tolist()
     properties = df.columns.values.tolist()
 
@@ -176,52 +161,13 @@ def get_properties_from_trajectory(dataframe, ncfiles):
                 if df.iloc[ind][p] != 0:
                     defined_properties.append(p)
                 PropertiesPerMolecule[val] = defined_properties
-    #else:
-
-    #    # hard coded properties
-    #    PropertyNames = list()
-
-    #    # bond properties
-    #    PropertyNames.append('BondEquilibriumLengthAtom1Atom6')
-    #    PropertyNames.append('BondEquilibriumLengthAtom2Atom6')
-    #    PropertyNames.append('BondEquilibriumLengthAtom2Atom13')
-    #    PropertyNames.append('BondEquilibriumLengthAtom2Atom14')
-
-    #    PropertyNames.append('BondEquilibriumStdAtom1Atom6')
-    #    PropertyNames.append('BondEquilibriumStdAtom2Atom6')
-    #    PropertyNames.append('BondEquilibriumStdAtom2Atom13')
-    #    PropertyNames.append('BondEquilibriumStdAtom2Atom14')
-
-    #    #angle properties
-    #    PropertyNames.append('AngleEquilibriumAngleAtom1Atom6Atom2')
-    #    PropertyNames.append('AngleEquilibriumAngleAtom6Atom2Atom13')
-    #    PropertyNames.append('AngleEquilibriumAngleAtom6Atom2Atom14')
-
-    #    PropertyNames.append('AngleEquilibriumStdAtom1Atom6Atom2')
-    #    PropertyNames.append('AngleEquilibriumStdAtom6Atom2Atom13')
-    #    PropertyNames.append('AngleEquilibriumStdAtom6Atom2Atom14')
         
-    #    # torsion properties
-    #    PropertyNames.append('TorsionFourier1Atom1Atom6Atom2Atom13')
-    #    PropertyNames.append('TorsionFourier1Atom1Atom6Atom2Atom14')
-
-    #    PropertyNames.append('TorsionFourier2Atom1Atom6Atom2Atom13')
-    #    PropertyNames.append('TorsionFourier2Atom1Atom6Atom2Atom14')
-
-    #    PropertyNames.append('TorsionFourier3Atom1Atom6Atom2Atom13')
-    #    PropertyNames.append('TorsionFourier3Atom1Atom6Atom2Atom14')
-
-    #    PropertyNames.append('TorsionFourier6Atom1Atom6Atom2Atom13')
-    #    PropertyNames.append('TorsionFourier6Atom1Atom6Atom2Atom14')
-
-    #    PropertyNames.append('TorsionFourierPhaseAtom1Atom6Atom2Atom13')
-    #    PropertyNames.append('TorsionFourierPhaseAtom1Atom6Atom2Atom14')
-
-    #    PropertiesPerMolecule['AlkEthOH_c581'] = PropertyNames
-
+    AtomDict = dict()
+    AtomDict['MolName'] = list()
     for fname in ncfiles:
         MoleculeName = fname.split('.')[0]
-        
+        AtomDict['MolName'].append(MoleculeName)
+         	
         # extract the xyz coordinate for each frame
         data = netcdf.Dataset(fname)
         xyz = data.variables['coordinates']
@@ -230,7 +176,6 @@ def get_properties_from_trajectory(dataframe, ncfiles):
         PropertyNames = PropertiesPerMolecule[MoleculeName]
 
 	# extract the bond/angle/torsion lists
-        AtomDict = dict() 
         AtomDict['Bond'] = list()
         AtomDict['Angle'] = list()
         AtomDict['Torsion'] = list()
@@ -247,7 +192,7 @@ def get_properties_from_trajectory(dataframe, ncfiles):
                     AtomDict['Angle'].append(AtomList)
                 if 'Torsion' in p:
                     AtomDict['Torsion'].append(AtomList)
-        	
+	
         bond_dist, angle_dist, torsion_dist = computeBondsAnglesTorsions(xyz,
                                                                          AtomDict['Bond'],
                                                                          AtomDict['Angle'],
@@ -258,4 +203,4 @@ def get_properties_from_trajectory(dataframe, ncfiles):
                                                             bond_dist, angle_dist, torsion_dist,
                                                             AtomDict['Bond'], AtomDict['Angle'], AtomDict['Torsion'])
 
-	return bond_dist, angle_dist, torsion_dist, Properties
+    return bond_dist, angle_dist, torsion_dist, Properties
