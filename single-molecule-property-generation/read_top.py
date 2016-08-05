@@ -2,7 +2,61 @@ from parmed.amber import *
 import numpy as np
 import glob
 import pandas as pd
+from smarty import *
+from smarty.forcefield_labeler import *
 
+mol_files = glob.glob('./Mol2_files/AlkEthOH_*.mol2')
+molnames = []
+for i in mol_files:
+    molname = i.replace(' ', '')[:-5]
+    molname = molname.replace(' ' ,'')[13:]
+    molnames.append(molname)
+
+OEMols=[]
+for i in mol_files:
+    mol = oechem.OEGraphMol()
+    ifs = oechem.oemolistream(i)
+    flavor = oechem.OEIFlavor_Generic_Default | oechem.OEIFlavor_MOL2_Default | oechem.OEIFlavor_MOL2_Forcefield
+    ifs.SetFlavor(oechem.OEFormat_MOL2, flavor)
+    oechem.OEReadMolecule(ifs, mol)
+    oechem.OETriposAtomNames(mol)
+    OEMols.append(mol)
+
+tops = []
+for i in OEMols:
+    top = generateTopologyFromOEMol(i)
+    tops.append(top)
+
+labeler = ForceField_labeler( get_data_filename('/data/forcefield/Frosst_AlkEtOH.ffxml') )
+
+
+labels = []
+lstt0 = []
+lstt1 = []
+lstt2 = []
+lst00 = []
+lst11 = []
+lst22 = [] 
+for ind, val in enumerate(OEMols):
+    print('Molecule %s') % molnames[ind]
+    label = labeler.labelMolecules([val], verbose = False) 
+    for entry in range(len(label)):
+        for bond in label[entry]['HarmonicBondForce']:
+            lstt0.extend(bond[2])
+	    lst00.append(bond[2])
+	for angle in label[entry]['HarmonicAngleForce']:
+	    lstt1.extend(angle[2])
+	    lst11.append(angle[2])
+	for torsion in label[entry]['PeriodicTorsionForce']:
+	    lstt2.extend(torsion[2])
+	    lst22.append(torsion[2])
+	  # for (atom_indices, pid, smirks) in label[entry][force]:
+		#print [atom_indices, pid, smirks]
+	#	atomstr = ''
+	#	for idx in atom_indices:
+	#	    atomstr += '%6s' % idx 
+		#rint("%s : %s \t smirks %s" % (atomstr, pid, smirks))
+print lst00, lst11, lst22
 files = glob.glob('./amb_tops/AlkEthOH_*.top')
 
 def drop(mylist, m, n):
@@ -47,12 +101,16 @@ for FileName in files:
 lstt0 = [map(str,i) for i in lstt0]
 lst00 = map(str, lst00)
 
+print lstt0
+
 # Join every two entries into space delimited string
 lst0 = []
 for sublst in lstt0:
 	temp  = [i+' '+j for i,j in zip(sublst[::2], sublst[1::2])]
 	lst0.append(temp)
 lst00 = [i+' '+j for i,j in zip(lst00[::2], lst00[1::2])]
+
+print lst00
 
 # Return unique strings from lst00
 cols0 = set()

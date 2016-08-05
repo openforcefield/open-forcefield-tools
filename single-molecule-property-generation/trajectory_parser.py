@@ -3,7 +3,137 @@ import os, sys, getopt
 import numpy as np
 import math
 import netCDF4 as netcdf
+import glob
 import pandas as pd
+import cmath
+import pandas as pd
+from smarty import *
+from smarty.forcefield_labeler import *
+
+def constructDataFrame(mol_files):
+    """ 
+    Construct a pandas dataframe to be populated with computed single molecule properties. Each unique bond, angle and torsion has it's own column for a value
+    and uncertainty.
+
+    inputs: a list of mol2 files from which we determine connectivity using OpenEye Tools and construct the dataframe using Pandas.
+
+    """    
+    
+    molnames = []
+    for i in mol_files:
+        molname = i.replace(' ', '')[:-5]
+        molname = molname.replace(' ' ,'')[13:]
+        molnames.append(molname)
+
+    OEMols=[]
+    for i in mol_files:
+        mol = oechem.OEGraphMol()
+        ifs = oechem.oemolistream(i)
+        flavor = oechem.OEIFlavor_Generic_Default | oechem.OEIFlavor_MOL2_Default | oechem.OEIFlavor_MOL2_Forcefield
+        ifs.SetFlavor(oechem.OEFormat_MOL2, flavor)
+        oechem.OEReadMolecule(ifs, mol)
+        oechem.OETriposAtomNames(mol)
+        OEMols.append(mol)
+
+    labeler = ForceField_labeler( get_data_filename('/data/forcefield/Frosst_AlkEtOH.ffxml') )
+
+    labels = []
+    lst0 = []
+    lst1 = []
+    lst2 = []
+    lst00 = [[] for i in molnames]
+    lst11 = [[] for i in molnames]
+    lst22 = [[] for i in molnames] 
+    
+    for ind, val in enumerate(OEMols):
+        print('Molecule %s') % molnames[ind]
+        label = labeler.labelMolecules([val], verbose = False) 
+    for entry in range(len(label)):
+        for bond in label[entry]['HarmonicBondForce']:
+            lst0.extend([str(bond[0])])
+	    lst00[ind].extend([str(bond[0])])
+	for angle in label[entry]['HarmonicAngleForce']:
+	    lst1.extend([str(angle[0])])
+	    lst11[ind].extend([str(angle[0])])
+	for torsion in label[entry]['PeriodicTorsionForce']:  
+            lst2.extend([str(torsion[0])])
+	    lst22[ind].extend([str(torsion[0])])
+
+    # Return unique strings from lst0
+    cols0 = set()
+    for x in lst0:
+	cols0.add(x)
+    cols0 = list(cols0)
+
+
+    # Generate data lists to populate dataframe
+    data0 = [[] for i in range(len(lst00))]
+    for val in cols0:
+	for ind,item in enumerate(lst00):
+	    if val in item:
+		data0[ind].append(1)
+	    else: 
+		data0[ind].append(0)
+
+    # Return unique strings from lst1
+    cols1 = set()
+    for x in lst1:
+	cols1.add(x)
+    cols1 = list(cols1)
+
+    # Generate data lists to populate frame (1 means val in lst11 was in cols1, 0 means it wasn't)
+    data1 = [[] for i in range(len(lst11))]
+    for val in cols1:
+	for ind,item in enumerate(lst11):
+	    if val in item:
+		data1[ind].append(1)
+	    else: 
+	        data1[ind].append(0)
+
+    # Return unique strings from lst2
+    cols2 = set()
+    for x in lst2:
+	cols2.add(x)
+    cols2 = list(cols2)   
+    
+    # Generate data lists to populate frame (1 means val in lst22 was in cols2, 0 means it wasn't)
+    data2 = [[] for i in range(len(lst22))]
+    for val in cols2:
+	for ind,item in enumerate(lst22):
+	    if val in item:
+		data2[ind].append(1)
+	    else: 
+		data2[ind].append(0)
+
+    # Clean up clarity of column headers and molecule names
+    cols0t = ["BondEquilibriumLength " + i for i in cols0]
+    cols0temp = ["BondEquilibriumLength_std " + i for i in cols0]
+    cols0 = cols0t + cols0temp
+
+    cols1t = ["AngleEquilibriumAngle " + i for i in cols1]
+    cols1temp = ["AngleEquilibriumAngle_std " + i for i in cols1]
+    cols1 = cols1t + cols1temp
+
+    cols2t = ["TorsionFourier1 " + i for i in cols2]
+    cols2temp = ["TorsionFourier1_std " + i for i in cols2]
+    cols2 = cols2t + cols2temp
+
+    data0 = [i+i for i in data0] 
+    data1 = [i+i for i in data1]
+    data2 = [i+i for i in data2]
+
+    # Construct dataframes
+    df0 = pd.DataFrame(data = data0, index = molnames, columns = cols0)
+    df0['molecule'] = df0.index
+    df1 = pd.DataFrame(data = data1, index = molnames, columns = cols1)
+    df1['molecule'] = df1.index
+    df2 = pd.DataFrame(data = data2, index = molnames, columns = cols2)
+    df2['molecule'] = df2.index
+
+    dftemp = pd.merge(df0, df1, how = 'outer', on = 'molecule')
+    df = pd.merge(dftemp, df2, how = 'outer', on = 'molecule')
+
+    return df
 
 def computeBondsAnglesTorsions(xyz, bonds, angles, torsions):
     """ 
@@ -130,13 +260,34 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
 		    		uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
 		    		PropertyDict[p] = [value,uncertainty]
 
+	# Circular distribution alternate for torsion calculation
+
+	if 'TorsionFourier1' in p:
+		for i in range(ntorsions):
+			if np.array_equal(AtomList, torsion[i]):
+			    value = np.array([])
+			    for j in range(nsamp):
+				val = (np.exp(cmath.sqrt(-1)*torsion_dist[:,i]))**j
+				value = np.append(value, val)
+			    value = (1/nsamp)*np.sum(value)
+			    uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
+			    PropertyDict[p] = [value, uncertainty]
+
+	if 'TorsionFourier1_std' in p:
+		for i in range(ntorsions):
+                        if np.array_equal(AtomList, torsions[i]):
+                                value = np.std(torsion_dist[:,i])
+                                uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
+                                PropertyDict[p] = [value,uncertainty]
+
+
     return PropertyDict
 
 
-def get_properties_from_trajectory(dataframe, ncfiles):
+def get_properties_from_trajectory(ncfiles):
 
     """take multiple .nc files with identifier names and a pandas dataframe with property 
-    names for single a tom bonded properties (including the atom numbers) and populate 
+    names for single atom bonded properties (including the atom numbers) and populate 
     those property pandas dataframe.
 
     ARGUMENTS dataframe (pandas object) - name of the pandas object
@@ -149,11 +300,14 @@ def get_properties_from_trajectory(dataframe, ncfiles):
 
     # here's code that generate list of properties to calculate for each molecule and 
     # populate PropertiesPerMolecule
-
-    df = dataframe
+     
+    mol_files = glob.glob('./Mol2_files/AlkEthOH_*.mol2')
+ 
+    df = constructDataFrame(mol_files)
     MoleculeNames = df.molecule.tolist()
     properties = df.columns.values.tolist()
-
+    
+    
     for ind, val in enumerate(MoleculeNames):
         defined_properties  = list()
         for p in properties:
@@ -161,7 +315,10 @@ def get_properties_from_trajectory(dataframe, ncfiles):
                 if df.iloc[ind][p] != 0:
                     defined_properties.append(p)
                 PropertiesPerMolecule[val] = defined_properties
-        
+	print PropertiesPerMolecule
+    
+
+   
     AtomDict = dict()
     AtomDict['MolName'] = list()
     for fname in ncfiles:
@@ -202,5 +359,7 @@ def get_properties_from_trajectory(dataframe, ncfiles):
         Properties = calculateBondsAnglesTorsionsStatistics(PropertyNames,
                                                             bond_dist, angle_dist, torsion_dist,
                                                             AtomDict['Bond'], AtomDict['Angle'], AtomDict['Torsion'])
+
+        #Put properties back in dataframe and return
 
     return bond_dist, angle_dist, torsion_dist, Properties
