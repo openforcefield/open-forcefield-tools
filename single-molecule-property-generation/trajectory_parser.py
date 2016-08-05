@@ -46,18 +46,17 @@ def constructDataFrame(mol_files):
     lst22 = [[] for i in molnames] 
     
     for ind, val in enumerate(OEMols):
-        print('Molecule %s') % molnames[ind]
         label = labeler.labelMolecules([val], verbose = False) 
-    for entry in range(len(label)):
-        for bond in label[entry]['HarmonicBondForce']:
-            lst0.extend([str(bond[0])])
-	    lst00[ind].extend([str(bond[0])])
-	for angle in label[entry]['HarmonicAngleForce']:
-	    lst1.extend([str(angle[0])])
-	    lst11[ind].extend([str(angle[0])])
-	for torsion in label[entry]['PeriodicTorsionForce']:  
-            lst2.extend([str(torsion[0])])
-	    lst22[ind].extend([str(torsion[0])])
+        for entry in range(len(label)):
+            for bond in label[entry]['HarmonicBondForce']:
+                lst0.extend([str(bond[0])])
+	        lst00[ind].extend([str(bond[0])])
+	    for angle in label[entry]['HarmonicAngleForce']:
+	        lst1.extend([str(angle[0])])
+	        lst11[ind].extend([str(angle[0])])
+	    for torsion in label[entry]['PeriodicTorsionForce']:  
+                lst2.extend([str(torsion[0])])
+	        lst22[ind].extend([str(torsion[0])])
 
     # Return unique strings from lst0
     cols0 = set()
@@ -118,7 +117,7 @@ def constructDataFrame(mol_files):
     cols2temp = ["TorsionFourier1_std " + i for i in cols2]
     cols2 = cols2t + cols2temp
 
-    data0 = [i+i for i in data0] 
+    data0 = [i+i for i in data0]
     data1 = [i+i for i in data1]
     data2 = [i+i for i in data2]
 
@@ -158,10 +157,9 @@ def computeBondsAnglesTorsions(xyz, bonds, angles, torsions):
 
     for n in range(niterations):
         xyzn = xyz[n] # coordinates this iteration
-
         bond_vectors = np.zeros([nbonds,3])
-        for i, bond in enumerate(bonds):
-            bond_vectors[i,:] = xyzn[bond[0]-1] - xyzn[bond[1]-1]  # calculate the length of the vector
+	for i, bond in enumerate(bonds):
+	    bond_vectors[i,:] = xyzn[bond[0]-1] - xyzn[bond[1]-1]  # calculate the length of the vector
             bond_dist[n,i] = np.linalg.norm(bond_vectors[i]) # calculate the bond distance
 
         # we COULD reuse the bond vectors and avoid subtractions, but would involve a lot of bookkeeping
@@ -216,8 +214,12 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
     
     nsamp = np.shape(bond_dist)[0]-1 #WARNING: assumes data points uncorrelated!
     for p in properties:        
-        AtomList = np.array(p.split(' ')[1:], dtype=int) # figure out which bond this is: 
-                                                            # we assume bond_dist /bond is in the same order.
+        AtomList = p.split(' ', 1)[1:]  # figure out which bond this is: 
+	AtomList = [i.lstrip('[').rstrip(']') for i in AtomList]  # we assume bond_dist /bond is in the same order.
+	for i in AtomList:
+            AtomList = i.strip().split(',')
+        AtomList = map(int, AtomList) 
+
         if 'BondEquilibriumLength' in p:
         	for i in range(nbonds):
                 	if np.array_equal(AtomList, bonds[i]): 
@@ -264,10 +266,10 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
 
 	if 'TorsionFourier1' in p:
 		for i in range(ntorsions):
-			if np.array_equal(AtomList, torsion[i]):
+			if np.array_equal(AtomList, torsions[i]):
 			    value = np.array([])
 			    for j in range(nsamp):
-				val = (np.exp(cmath.sqrt(-1)*torsion_dist[:,i]))**j
+				val = np.real((np.exp(cmath.sqrt(-1)*torsion_dist[:,i]))**j)
 				value = np.append(value, val)
 			    value = (1/nsamp)*np.sum(value)
 			    uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
@@ -306,17 +308,14 @@ def get_properties_from_trajectory(ncfiles):
     df = constructDataFrame(mol_files)
     MoleculeNames = df.molecule.tolist()
     properties = df.columns.values.tolist()
-    
-    
+ 
     for ind, val in enumerate(MoleculeNames):
         defined_properties  = list()
         for p in properties:
             if (p is not 'molecule') and ('_std' not in p):
                 if df.iloc[ind][p] != 0:
-                    defined_properties.append(p)
+		    defined_properties.append(p)
                 PropertiesPerMolecule[val] = defined_properties
-	print PropertiesPerMolecule
-    
 
    
     AtomDict = dict()
@@ -328,6 +327,7 @@ def get_properties_from_trajectory(ncfiles):
         # extract the xyz coordinate for each frame
         data = netcdf.Dataset(fname)
         xyz = data.variables['coordinates']
+	
 
         # what is the property list for this molecule
         PropertyNames = PropertiesPerMolecule[MoleculeName]
@@ -340,8 +340,12 @@ def get_properties_from_trajectory(ncfiles):
         # which properties will we use to construct the bond list
         ReferenceProperties = ['BondEquilibriumLength','AngleEquilibriumAngle','TorsionFourier1']
 	for p in PropertyNames:
-            PropertyName = p.split(' ')[0]
-            AtomList = np.array(p.split(' ')[1:],dtype=int)
+            PropertyName = p.split(' ', 1)[0]
+            AtomList = p.split(' ', 1)[1:]
+	    AtomList = [i.lstrip('[').rstrip(']') for i in AtomList]
+	    for i in AtomList:
+                AtomList = i.strip().split(',')
+            AtomList = map(int, AtomList) 
             if any(rp in p for rp in ReferenceProperties):
                 if 'Bond' in p:
                     AtomDict['Bond'].append(AtomList)
@@ -349,7 +353,8 @@ def get_properties_from_trajectory(ncfiles):
                     AtomDict['Angle'].append(AtomList)
                 if 'Torsion' in p:
                     AtomDict['Torsion'].append(AtomList)
-	
+         
+
         bond_dist, angle_dist, torsion_dist = computeBondsAnglesTorsions(xyz,
                                                                          AtomDict['Bond'],
                                                                          AtomDict['Angle'],
