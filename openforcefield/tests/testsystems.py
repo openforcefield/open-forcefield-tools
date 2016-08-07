@@ -46,7 +46,7 @@ from io import StringIO
 
 # This is a test forcefield that is not meant for actual use.
 # It just tests various capabilities.
-ffxml_contents = """\
+ffxml_contents = u"""\
 <?xml version="1.0"?>
 
 <SMIRFF>
