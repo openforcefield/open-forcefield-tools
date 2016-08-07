@@ -122,7 +122,7 @@ class PropertyEstimator(object):
         """
         try:
             iterator = iter(parameter_sets)
-        except TypeError, te:
+        except TypeError as e:
             parameter_sets = [ parameter_sets ]
 
         # Attempt to estimate all simulated properties by reweighting

@@ -42,7 +42,7 @@ class TestDataset(PhysicalPropertyDataset):
 # TEST PARAMETER SETS
 #=============================================================================================
 
-from StringIO import StringIO
+from io import StringIO
 
 # This is a test forcefield that is not meant for actual use.
 # It just tests various capabilities.
