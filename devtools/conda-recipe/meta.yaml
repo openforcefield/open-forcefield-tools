@@ -21,6 +21,7 @@ requirements:
     - lxml
     - openmm
     - packmol
+    - smarty
 
 test:
   requires:

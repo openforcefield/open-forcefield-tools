@@ -130,17 +130,10 @@ class MeanPotentialEnergy(PhysicalProperty):
     This is a simulation-derived property of an isolated molecule, and not a real measurable physical property.
 
     """
-    pass
-
-class MeanPotentialEnergy(PhysicalProperty):
-    """Mean potential energy of an isolated molecule
-
-    Warning
-    -------
-    This is a simulation-derived property of an isolated molecule, and not a real measurable physical property.
-
-    """
-    pass
+    def __init__(self, molecule, thermodynamic_state, value, uncertainty):
+        self.thermodynamic_state = thermodynamic_state
+        self.value = value
+        self.uncertainty = uncertainty
 
 class BondMoment(PhysicalProperty):
     """Specified moment of a specified bond length of an isolated molecule
@@ -152,7 +145,10 @@ class BondMoment(PhysicalProperty):
     This is a simulation-derived property of an isolated molecule, and not a real measurable physical property.
 
     """
-    pass
+    def __init__(self, molecule, thermodynamic_state, value, uncertainty, moment, smirks):
+        self.thermodynamic_state = thermodynamic_state
+        self.value = value
+        self.uncertainty = uncertainty
 
 class AngleMoment(PhysicalProperty):
     """Specified moment of a specified angle of an isolated molecule
@@ -164,7 +160,10 @@ class AngleMoment(PhysicalProperty):
     This is a simulation-derived property of an isolated molecule, and not a real measurable physical property.
 
     """
-    pass
+    def __init__(self, molecule, thermodynamic_state, value, uncertainty, moment, smirks):
+        self.thermodynamic_state = thermodynamic_state
+        self.value = value
+        self.uncertainty = uncertainty
 
 class TorsionMoment(PhysicalProperty):
     """Specified circular moment of a specified torsion angle of an isolated molecule
@@ -176,4 +175,7 @@ class TorsionMoment(PhysicalProperty):
     This is a simulation-derived property of an isolated molecule, and not a real measurable physical property.
 
     """
-    pass
+    def __init__(self, molecule, thermodynamic_state, value, uncertainty, moment, smirks):
+        self.thermodynamic_state = thermodynamic_state
+        self.value = value
+        self.uncertainty = uncertainty

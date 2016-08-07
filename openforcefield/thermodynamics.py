@@ -69,8 +69,10 @@ class ThermodynamicState(object):
 
         # Check that units are compatible.
         # These throw a TypeException if this conversion cannot be done.
-        temperature.in_units_of(unit.kelvin)
-        pressure.in_units_of(unit.atmospheres)
+        if self.temperature:
+            temperature.in_units_of(unit.kelvin)
+        if self.pressure:
+            pressure.in_units_of(unit.atmospheres)
 
     def is_compatible_with(self, state):
         """

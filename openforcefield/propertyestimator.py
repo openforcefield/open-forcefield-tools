@@ -102,14 +102,14 @@ class PropertyEstimator(object):
         """
         pass
 
-    def computeProperties(self, dataset, parametersets, target_relative_uncertainty=0.1):
+    def computeProperties(self, dataset, parameter_sets, target_relative_uncertainty=0.1):
         """Compute physical properties for the specified dataset given one or more parameter sets.
 
         Parameters
         ----------
         dataset : PhysicalPropertyDataset
             The dataset for which physical properties are to be computed.
-        parametersets : ParameterSet or iterable of Parameterset
+        parameter_sets : ParameterSet or iterable of Parameterset
             Parameter set(s) for which physical properties are to be computed.
         target_uncertainty : float, optional, default=0.1
             Target computational uncertainty in the computed property, relative to experimental uncertainty.
@@ -120,6 +120,11 @@ class PropertyEstimator(object):
             The computed physical properties.
 
         """
+        try:
+            iterator = iter(parameter_sets)
+        except TypeError, te:
+            parameter_sets = [ parameter_sets ]
+
         # Attempt to estimate all simulated properties by reweighting
         simulations_to_run = list() # list of simulations that need to be rerun
         computed_properties_sets = list()

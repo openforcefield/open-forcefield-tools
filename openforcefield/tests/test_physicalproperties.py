@@ -3,11 +3,13 @@ Tests for PhysicalProperty objects.
 
 """
 
+from simtk import unit
 from openforcefield.thermodynamics import ThermodynamicState
 from openforcefield.substances import IsolatedMolecule
 from openforcefield.physicalproperties import MeanPotentialEnergy, BondMoment, AngleMoment, TorsionMoment
 
 def test_simulation_properties():
+    smiles = 'CCCC'
     molecule = IsolatedMolecule(smiles=smiles)
     thermodynamic_state = ThermodynamicState(temperature=300*unit.kelvin)
     mean_potential = MeanPotentialEnergy(molecule, thermodynamic_state, value=124.4*unit.kilojoules_per_mole, uncertainty=14.5*unit.kilojoules_per_mole)
