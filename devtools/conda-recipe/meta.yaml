@@ -29,8 +29,6 @@ test:
     - nose-timer
   imports:
     - openforcefield
-  commands:
-    - openforcefield
 
 about:
   home: https://github.com/open-forcefield-group/open-forcefield-tools
