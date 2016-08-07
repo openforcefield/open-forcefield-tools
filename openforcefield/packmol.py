@@ -12,6 +12,8 @@ from distutils.spawn import find_executable
 from simtk import unit
 from simtk.openmm import app
 from openeye import oechem
+import string
+import random
 
 PACKMOL_PATH = find_executable("packmol")
 
@@ -62,11 +64,21 @@ def pack_box(molecules, n_copies, tolerance=2.0, box_size=None, mass_density=Non
 
     # Create PDB files for all components
     pdb_filenames = list()
+    pdb_flavor = oechem.OEOFlavor_PDB_CurrentResidues | oechem.OEOFlavor_PDB_ELEMENT | oechem.OEOFlavor_PDB_BONDS | oechem.OEOFlavor_PDB_HETBONDS | oechem.OEOFlavor_PDB_BOTH
     for molecule in molecules:
         tmp_filename = tempfile.mktemp(suffix=".pdb")
         pdb_filenames.append(tmp_filename)
+        # Write PDB file
+        mol_copy = copy.deepcopy(molecule)
         ofs = oechem.oemolostream(tmp_filename)
-        oechem.OEWriteMolecule(ofs, copy.deepcopy(molecule))
+        ofs.SetFlavor(oechem.OEFormat_PDB, pdb_flavor)
+        # Fix residue names
+        residue_name = "".join([random.choice(string.ascii_uppercase) for i in range(3)])
+        for atom in mol_copy.GetAtoms():
+            residue = oechem.OEAtomGetResidue(atom)
+            residue.SetName(residue_name)
+            oechem.OEAtomSetResidue(atom, residue)
+        oechem.OEWriteMolecule(ofs, mol_copy)
         ofs.close()
 
     # Run packmol

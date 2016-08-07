@@ -7,12 +7,16 @@
 """
 Physical properties.
 
+Right now, these classes serve mainly to identify the type of measurement carried out.
+Eventually, they will also hold utility functions for computing physical properties from simulations.
+
 Authors
 -------
 * John D. Chodera <john.chodera@choderalab.org>
 
 TODO
 ----
+* Consider general MapReduce framework for each property's analysis scheme.
 
 """
 #=============================================================================================
@@ -34,29 +38,85 @@ from simtk import openmm, unit
 class PhysicalProperty(object):
     """A physical property
 
+    Properties
+    ----------
+
+
     """
     pass
+
+#=============================================================================================
+# ESTIMATION OF EXPERIMENTAL OBSERVABLES
+#=============================================================================================
+
+class ObservableEstimationStrategy(object):
+    """
+    """
+    def __init__(self, substance, topology, system):
+        """
+        """
+        pass
+
+    def map(self, substance, topology, system, state):
+        """
+        """
+        pass
+
+    def reduce(self, map_result, thermodynamic_state):
+        """
+        """
+        pass
 
 #=============================================================================================
 # THERMOML PHYSICAL PROPERTIES
 #=============================================================================================
 
 class MassDensity(PhysicalProperty):
-    """Mass density
+    """Mass density.
 
     """
+
+    def _computeMass(self, topology):
+        """Compute total mass of the system.
+
+        TODO
+        ----
+        * Use memoization to speed this up?
+        """
+        mass = 0.0 * unit.amu
+        for atom in topology.atoms():
+            mass += atom.element.mass
+
+        return mass
+
+    def computeObservable(self, substance, topology, system, state):
+        """Compute the relevant observable
+
+        """
+        mass = self._computeMass(topology)
+        volume = state.getPeriodicBoxVolume()
+        density = mass/volume
+        return density
+
     pass
 
 class ExcessMolarEnthalpy(PhysicalProperty):
-    """Excess molar ExcessMolarEnthalpy
+    """Excess molar enthalpy.
 
     """
     pass
 
 class HeatCapacity(PhysicalProperty):
-    """
+    """Heat capacity.
 
     """
+    pass
+
+class StaticDielectricConstant(PhysicalProperty):
+    """Static dielectric constant.
+
+    """
+    pass
 
 #=============================================================================================
 # SIMULATION PHYSICAL PROPERTIES OF ISOLATED MOLECULES (USED FOR TESTING ONLY)

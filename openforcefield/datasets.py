@@ -22,8 +22,6 @@ TODO
 
 import copy
 
-from openforcefield.measurements import *
-
 #=============================================================================================
 # DATASET
 #=============================================================================================
@@ -31,7 +29,11 @@ from openforcefield.measurements import *
 class PhysicalPropertyDataset(object):
     """A dataset of physical property measurements.
 
-    This is a Python container-like object.
+    Implements the container API.
+
+    Properties
+    ----------
+
     """
     def __init__(self, dataset=None):
         """Create a physical property dataset.
@@ -42,8 +44,41 @@ class PhysicalPropertyDataset(object):
             If a dataset is specified, it is copied to create a new dataset.
 
         """
+        self._measurements = list()
+
         if dataset is not None:
             for measurement in dataset:
+                self._measurements.append( copy.deepcopy(measurement) )
+
+    def __len__(self):
+        return len(self._measurements)
+
+    def __getitem__(self, doi):
+        """Return all measurements with the given DOI.
+        """
+        measurements = list()
+        for measurement in self._measurements:
+            if measurement.doi == doi:
+                measurements.append(measurement)
+        if len(measurements) == 0:
+            return KeyError("DOI (%s) not found in dataset." % doi)
+        return measurements
+
+    def __delitem__(self, doi):
+        """Delete all items with the given DOI.
+        """
+        measurement = self[doi]
+        self._measurements.remove(measurement)
+
+    def __iter__(self):
+        for measurement in self._measurements:
+            yield measurement
+
+    def __contains__(self, measurement):
+        for measurement2 in self._measurements:
+            if measurement == measurement2:
+                return True
+        return False
 
 #=============================================================================================
 # THERMOML DATASET

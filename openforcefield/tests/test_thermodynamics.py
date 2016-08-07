@@ -2,7 +2,7 @@ from functools import partial
 import os
 
 from simtk import unit
-from openforcefield.thermodynamics import ThermodynamicState, UnitsException
+from openforcefield.thermodynamics import ThermodynamicState
 
 def test_nvt():
     """Creating an NVT ThermodynamicState"""
@@ -16,5 +16,3 @@ def test_npt():
 def test_wrong_units():
     """Creating a ThermodynamicState with incorrect units"""
     nvt = ThermodynamicState(temperature=300*unit.meters)
-
-    
