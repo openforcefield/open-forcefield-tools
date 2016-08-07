@@ -32,7 +32,7 @@ from simtk import openmm, unit
 # COMPUTED PROPERTY RESULT
 #=============================================================================================
 
-class PropertyComputationSimulation(object):
+class Simulation(object):
     """Container for information about a simulation that was run.
 
     Properties
@@ -48,7 +48,10 @@ class PropertyComputationSimulation(object):
 
     """
     def __init__(self):
-        pass
+        self.length = None
+        self.thermodynamic_state = None
+        self.substance = None
+        self.system = None
 
 class ComputedProperty(object):
     """Computed physical property result.

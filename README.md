@@ -41,17 +41,18 @@ binary_mixture.addComponent('methanol') # assumed to be rest of mixture if no mo
 A ternary mixture has three components:
 ```python
 ternary_mixture = Mixture()
-binary_mixture.addComponent('ethanol', mole_fraction=0.2)
-binary_mixture.addComponent('methanol', mole_fraction=0.2)
+ternary_mixture.addComponent('ethanol', mole_fraction=0.2)
+ternary_mixture.addComponent('methanol', mole_fraction=0.2)
 ternary_mixture.addComponent('water')
 ```
 
 The infinite dilution of one solute within a solvent or mixture is also specified as a `Mixture`, where the solute has zero mole fraction:
 ```python
 infinite_dilution = Mixture()
-infinite_dilution.addComponent('phenol', mole_fraction=0.0) # infinite dilution
+infinite_dilution.addComponent('phenol', impurity=True) # infinite dilution
 infinite_dilution.addComponent('water')
 ```
+
 **TODO**:
 * Ken Kroenlein suggests we avoid this notation and instead create an explicit way to specify zero-dilution impurities.
 
@@ -59,6 +60,25 @@ For testing against synthetic data, we also make use of `isolatedMolecule` objec
 ```python
 phenol = IsolatedMolecule(iupac='phenol')
 ethane = IsolatedMolecule(smiles='CC')
+```
+
+You can iterate over the components in a mixture:
+```python
+for component in mixture.components:
+    print (component.iupac_name, component.mole_fraction)
+```
+retrieve a component by name:
+```python
+component = mixture.components['ethanol']
+```
+or get the number of components in a mixture:
+```python
+ncomponents = mixture.ncomponents
+```
+or check if a component is an impurity:
+```python
+if component.impurity == True:
+    ...
 ```
 
 #### Thermodynamic states
@@ -111,6 +131,7 @@ mean_potential = MeanPotentialEnergy(molecule, thermodynamic_state, value=124.4*
 bond_average = BondMoment(molecule, thermodynamic_state, value=1.12*unit.angstroms, uncertainty=0.02*unit.angstroms, moment=1, smirks='[#6:1]-[#6:2]')
 bond_variance = BondMoment(molecule, thermodynamic_state, value=0.05*unit.angstroms**2, uncertainty=0.02*unit.angstroms**2, moment=2, smirks='[#6:1]-[#6:2]')
 angle_average = AngleMoment(molecule, thermodynamic_state, value=20*unit.degrees, uncertainty=0.05*unit.degrees, moment=1, smirks='[#6:1]-[#6:2]-[#6:3]')
+torsion_moment = TorsionMoment(molecule, thermodynamic_state, value=(0.5, 0.3), uncertainty=(0.05, 0.03), moment=1, smirks='[#6:1]-[#6:2]-[#6:3]-[#6:4]')
 ```
 **QUESTIONS**
 * Is it useful to average over any bonds that match the SMARTS strings? How would you even construct those SMARTS strings algorithmically for the molecules in the set, to avoid matching anything else?

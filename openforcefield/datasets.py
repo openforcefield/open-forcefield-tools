@@ -20,6 +20,10 @@ TODO
 # GLOBAL IMPORTS
 #=============================================================================================
 
+import copy
+
+from openforcefield.measurements import *
+
 #=============================================================================================
 # DATASET
 #=============================================================================================
@@ -27,10 +31,19 @@ TODO
 class PhysicalPropertyDataset(object):
     """A dataset of physical property measurements.
 
-    TODO:
-    * Should this subclass list or set?
+    This is a Python container-like object.
     """
-    pass
+    def __init__(self, dataset=None):
+        """Create a physical property dataset.
+
+        Parameters
+        ----------
+        dataset : iterable, optional, default=None
+            If a dataset is specified, it is copied to create a new dataset.
+
+        """
+        if dataset is not None:
+            for measurement in dataset:
 
 #=============================================================================================
 # THERMOML DATASET
