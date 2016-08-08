@@ -461,7 +461,7 @@ equivalently a function of the vector of mole fractions $\vec{x}_i$ instead of s
 For an ideal solution, the chemical potential $\mu_i$ can be related to the pure chemical potential by 
 \begin{equation}\mu_{i}(T,P,\vec{x}_i) = \mu(T,P) + k_B T \ln\left(\gamma_i\right)\end{equation}\\*
 
-By analogy to this form, we can 
+By analogy to this form, we can say 
 \begin{equation}\mu_{i}(T,P,\vec{x}_i) = \mu(T,P) + k_B T \ln\left(x_i \gamma_i\right)\end{equation}\\*
 
 Where $\gamma_i$ is the activity coefficient of component $i$, and is
@@ -480,6 +480,16 @@ assuming that $\Delta \mu(T,P,\vec{x}_i)_{gas} = \Delta
 $\ln x_i$ factor, but it appears that with alchemical simulations with
 a only one particle that is allowed to change, this will cancel out
 (need to follow up).
+
+Several of these alchemical simulation methods for calculating activity coefficients have been pioneered by Andrew Paluch \cite{paluch1}. A method detailing the calculation of infinite dilution activity coefficients $\gamma_i^{inf}$ for binary a mixture follows directly:
+
+\begin{equation}\ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) + \ln\left[\frac{R T}{v_1\left(T,P\right)}\right] - \ln f_2^0\left(T,P\right)\end{equation}\\*
+
+Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at inifinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $v_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:
+
+\begin{equation}\ln f_2^0\left(T,P\right) = \beta\mu_2^{res}\left(T,P\right) + \ln\left[\frac{R T}{v_2\left(T,P\right)}\right]\end{equation}\\*
+
+Paluch et al. use a multistage free energy perturbation approach utilizing MBAR in order to calculate the residual chemical potentials (recall that the chemical potential is the partial molar Gibbs free energy and dimensionless Gibbs free energy differences between multiple states are readily computed with MBAR). The idea is to connect two states of interest. In the case of a pure liquid, connecting a system of pure liquid molecules with $N - 1$ interacting molecules and one fully decoupled molecule to a system of $N$ fully interacting molecules. The coupling/decoupling process is detailed by Paluch et al \cite{paluch0}, but involves a linearly alchemical switching function where LJ and electronic interactions are slowly turned on for the decoupled molecule until they are fully on.     
 
 
 \subsubsection{Excess Molar Properties}
@@ -503,6 +513,6 @@ Excess molar enthalpy can be calculated using the general relation of molar enth
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \bibliographystyle{prsty} 
-\bibliography{prop_calc_best_practices}
+\bibliography{prop_calc_best_practices_JDC}
 
 \end{document}
