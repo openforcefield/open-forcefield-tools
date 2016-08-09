@@ -308,7 +308,9 @@ Transforming the derivative in the Gibbs-Helmholtz relation to be in terms of $\
 Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$. Substituting these values into the enthalpy equation gives:
 
 %MRS: usually, you should just use \left( instead of \big(, since it will choose the correct size for you! 
-\begin{equation}H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{P,N} \end{equation}
+\begin{multline}
+H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} \\ = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{P,N} 
+\end{multline}\\*
 %MRS: I like this equation more, as it's hard to take finite differences of $G$ (as discussed above).  Then you can eliminate the last few lines.
 
 %MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantites (like the enthalpy of mixing, and the heat capacity).
@@ -489,7 +491,7 @@ a only one particle that is allowed to change, this will cancel out
 Several of these alchemical simulation methods for calculating activity coefficients have been pioneered by Andrew Paluch \cite{paluch1}. A method detailing the calculation of infinite dilution activity coefficients $\gamma_i^{inf}$ for binary a mixture follows directly:
 
 \begin{multline}
-\ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) + \ln\left[\frac{R T}{v_1\left(T,P\right)}\right] \\ - \ln f_2^0\left(T,P\right)
+\ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) \\ + \ln\left[\frac{R T}{v_1\left(T,P\right)}\right] - \ln f_2^0\left(T,P\right)
 \end{multline}\\*
 
 Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at inifinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $v_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:

@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: prop_calc_best_practices_JDC.aux
+The style file: prsty.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: prop_calc_best_practices_JDCNotes.bib
+Database file #2: prop_calc_best_practices_JDC.bib
+You've used 10 entries,
+            1909 wiz_defined-function locations,
+            574 strings with 5241 characters,
+and the built_in function-call counts, 1806 in all, are:
+= -- 56
+> -- 60
+< -- 0
++ -- 20
+- -- 10
+* -- 168
+:= -- 225
+add.period$ -- 10
+call.type$ -- 10
+change.case$ -- 0
+chr.to.int$ -- 0
+cite$ -- 10
+duplicate$ -- 100
+empty$ -- 187
+format.name$ -- 20
+if$ -- 409
+int.to.chr$ -- 0
+int.to.str$ -- 10
+missing$ -- 0
+newline$ -- 33
+num.names$ -- 10
+pop$ -- 70
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 125
+stack$ -- 0
+substring$ -- 118
+swap$ -- 70
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 20
+width$ -- 12
+write$ -- 52
