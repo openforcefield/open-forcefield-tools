@@ -36,7 +36,8 @@
 %\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{enumitem}
-
+\usepackage{titlesec}
+\setcounter{secnumdepth}{5}
 
 % Units
 \DeclareSIUnit\Molar{\textsc{m}}
@@ -272,15 +273,18 @@ significant error.
 
 %MRS: I removed noindent -- better to fix formatting by changing the latex definitions, not by adding a bunch of exceptions.
 
-\section{Pure Solvent Properties}
-\subsection{Density}
-\subsubsection{Direct calculation}
+%--------------------------------------------------------------------------------------------------------------------------------
+
+\section{Single Phase Properties}
+\subsection{Pure Solvent Properties}
+\subsubsection{Density}
+\paragraph{Direct calculation}
 %MRS: Experimentally, <V> is just the macroscopic V.
 Starting with the equation used to calculate the density experimentally, 
 \begin{equation} \rho = \frac{M}{V} \end{equation}
 We replace the average with the esemble estimate (calculated either directly, or with reweighting) to obtain: 
 \begin{equation} \rho = \frac{M}{\langle V \rangle} \end{equation}
-\subsubsection{Derivative Estimate}
+\paragraph{Derivative Estimate}
  From the differential definition of the Gibbs free energy $dG = VdP -SdT + \sum_i \mu_i dN_i$ that V can be calculated from the Gibbs free energy as:
 \begin{equation} V = \left( \frac{\partial G}{\partial P} \right)_{T,N} \end{equation}
  The density can therefore be estimated from the Gibbs free energy.
@@ -295,7 +299,9 @@ This can be calculated from the reduced free energy $f$ if desired by simply sub
 
 Intuitively, one would imagine that equation 12 would be a worse estimate of density given that the calculations involved have more room for error than direct simulations. That being said, this method should prove invaluable when estimating densities of unsampled states using MBAR. 
 
-\subsection{Molar Enthalpy}
+%--------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Molar Enthalpy}
 This section is on the relation of enthalpy to Gibbs free energy (should we need it). This is not an experimental quantity, but will be helpful in calculating related properties of interest. The enthalpy, $H$, can be found from the Gibbs free energy, $G$, by the Gibbs-Helmholtz relation: 
 
 \begin{equation}H=-T^2 \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial T}\right)_{P,N}\end{equation}
@@ -315,7 +321,9 @@ H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\par
 
 %MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantites (like the enthalpy of mixing, and the heat capacity).
 
-\subsection{Heat Capacity}
+%------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Heat Capacity}
 The definition of the isobaric heat capacity is:
 \begin{equation}C_P = \left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
 %MRS: probably easier to take df/dbeta, and then take the temperature derivaive, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
@@ -329,22 +337,12 @@ The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn}.
 
 The form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
 
-Horn et al suggest a number of vibrational corrections be applied to the calculation of $C_P$ due to a number of approximations made during the simulation of the liquid \cite{horn}. The following terms were added as a correction.
+%-----------------------------------------------------------------------------------------------------------------------------------
 
-\begin{multline}
-\left(\frac{\partial E_{vib,l}}{\partial T}\right)_{P} = \left(\frac{\partial E_{vib,l,intra}^{QM}}{\partial T}\right)_{P} + \left(\frac{\partial E_{vib,l,inter}^{QM}}{\partial T}\right)_{P} \\ - \left(\frac{\partial E_{vib,l,inter}^{CM}}{\partial T}\right)_{P}
-\end{multline}\\*
-
-Where:
-\begin{equation}\left(\frac{\partial E_{vib}^{CM}}{\partial T}\right)_{P} = k_B n_{vib}\end{equation}\\*
-\begin{equation}\left(\frac{\partial E_{vib}^{QM}}{\partial T}\right)_{P} = \sum_{i=1}^{n_{vib}} \left(\frac{h^2 v_{i}^2 e^{\frac{h v_{i}}{k_B T}}}{k_B T^2 \left(e^{\frac{h v_{i}}{k_B T}} - 1\right)^2}\right)\end{equation}\\*
-
-Above, $n_{vib}$ is the number of vibrational modes, $h$ is Planck's constant and $v_i$ is the vibrational frequency of mode $i$.
-
-\subsection{Isothermal Compressibility}
+\subsubsection{Isothermal Compressibility}
 The definition of isothermal compressibility is:
 \begin{equation}\kappa_T = -\frac{1}{V} \left(\frac{\partial V}{\partial P}\right)_T \end{equation}
-\subsubsection{First Derivative}
+\paragraph{First Derivative}
 Thus, it can be estimated by the finite difference of $\langle V \rangle$
 \begin{equation}\kappa_T = -\frac{1}{2V(T,P)^2} \left(\langle V(P+\Delta P,T)\rangle - \langle V(P-\Delta P,T)\right\rangle) \end{equation}
 Or by the finite differences evaluation of:
@@ -353,7 +351,9 @@ Or by the finite differences evaluation of:
 $\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
 \begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{VT}}\end{equation}\\*
 
-\subsection{Speed of Sound}
+%---------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Speed of Sound}
 The definition of the speed of sound is\cite{sos}:
 \begin{equation}c^2 = \left(\frac{\partial P}{\partial \rho}\right)_{S} = -\frac{V^2}{M}\left(\frac{\partial P}{\partial V}\right)_{S}\end{equation}
 
@@ -382,21 +382,126 @@ Thus our derivation yields:
 
 Horn et al set out several ways for calculating $\alpha$\cite{horn}:
 
-\subsubsection{Analytical derivative of density with respect to temperature}
+\paragraph{Analytical derivative of density with respect to temperature}
 \begin{equation}\alpha = -\frac{d\ln\langle \rho \rangle}{dT}\end{equation}
 
-\subsubsection{Numerical derivative of density over range of T of interest}
+\paragraph{Numerical derivative of density over range of T of interest}
 The same finite differnces approach as shown for isothermal compressibility can be applied here, thus:
 \begin{multline}
 \alpha = -\frac{d\ln\langle \rho \rangle}{dT} = \\ -\frac{1}{2\rho(T,P)} \left(\ln \langle \rho(P,T+\Delta T)\rangle - \ln \langle V(P,T-\Delta T)\right\rangle)\end{multline}
-\subsubsection{Using the enthalpy-volume fluctuation formula}
+\paragraph{Using the enthalpy-volume fluctuation formula}
 \begin{equation}\alpha = \frac{\langle VH \rangle - \langle V \rangle \langle H \rangle}{k_B \langle T \rangle^2 \langle V \rangle}\end{equation}\\*
 
 Finite differences approximations and/or analytical derivation can also be used to calculate $\gamma_V$ or by note of the relation:
 \begin{equation}\gamma_V = - \frac{\alpha}{\kappa_T}\end{equation}\\*
-%BCM: Any ideas for better ways to calculate this?
 
-\subsection{Enthalpy of Vaporization}
+%----------------------------------------------------------------------------------------------------------------------------------------
+
+%MRS: Moved this section down, derivation and details were unlike.
+%MRS: I'm not as much an expert on this: you should follow up.  Also,
+%probably use something other than $M$ as the dipole.
+\subsubsection{Dielectric Constant}
+This equation was provided by a literature reference authored by CJ Fennell\cite{dielec} and is the standard for calculating the dielectric constant. Below, $\epsilon(0)$ is the zero frequency dielectric constant, $V$ is the system volume and $D$ is the total system dipole moment. 
+\begin{equation} \epsilon(0) = 1 + \frac{4 \pi}{3 k_B T \langle V \rangle}(\langle D^2 \rangle - \langle D \rangle^2) \end{equation}
+
+%------------------------------------------------------------------------------------------------------------------------------------------
+
+\subsection{Binary Mixture Properties} 
+\subsubsection{Mass Density, Speed of Sound and Dielectric Constant}
+The methods for these calculations are the same for a multicomponent system.
+
+%-----------------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Activity Coefficient}
+The definition of chemical potential in a pure substance is:
+\begin{equation}\mu(T,P) = \left(\frac{\partial G}{\partial N}\right)_{T,P}\end{equation}
+which is a function of only temperaure and pressure.
+
+Then the definition of the chemical potential $\mu_i$ of compound $i$ in a mixture is:
+\begin{equation}\mu_{i}(T,P,\vec{N}) = \left(\frac{\partial G}{\partial N_{i}}\right)_{T,P,N_{j \neq i}}\end{equation}\\*
+$N_i$ refers to a molecule of component $i$ and $N_{j \neq i}$ refers
+to all molecules other than component $i$, with $\vec{N}$ the vector
+of all component numbers. Since $\mu_i$ is intensive, this is
+equivalently a function of the vector of mole fractions $\vec{x}_i$ instead of simply of $N_i$.\\*
+
+For an ideal solution, the chemical potential $\mu_i$ can be related to the pure chemical potential by 
+\begin{equation}\mu_{i}(T,P,\vec{x}_i) = \mu(T,P) + k_B T \ln\left(\gamma_i\right)\end{equation}\\*
+
+By analogy to this form, we can say 
+\begin{equation}\mu_{i}(T,P,\vec{x}_i) = \mu(T,P) + k_B T \ln\left(x_i \gamma_i\right)\end{equation}\\*
+
+Where $\gamma_i$ is the activity coefficient of component $i$, and is
+a function of $T$,$P$,and $\vec{x}_i$.  Rearrangement of the previous
+equation yields:
+\begin{equation}\gamma_i = \frac{e^{\left(\frac{\mu_i(T,P,\vec{x}_i) - \mu(T,P)}{k_B T}\right)}}{x_i}\end{equation}\\*
+
+Although chemical potentials cannot be directly calculated from
+simulation, chemical potential residuals can. We can calculate the
+difference $\mu_i(T,P,\vec{x}_i) - \mu(T,P)$ by calculating $\Delta
+\mu(T,P)_{liquid} - \Delta \mu(T,P)_{gas}$ using a standard alchemical
+simulation of the pure substance, followed by the calculation of
+$\mu_i(T,P,\vec{x}_i)_{liquid} - \Delta \mu(T,P,\vec{x}_i)_{gas}$, and
+assuming that $\Delta \mu(T,P,\vec{x}_i)_{gas} = \Delta
+\mu(T,P)_{gas}$ (note: there are a few subleties here relating to the
+$\ln x_i$ factor, but it appears that with alchemical simulations with
+a only one particle that is allowed to change, this will cancel out
+(need to follow up).
+
+Several of these alchemical simulation methods for calculating activity coefficients have been pioneered by Andrew Paluch \cite{paluch1}. A method detailing the calculation of infinite dilution activity coefficients $\gamma_i^{inf}$ for binary a mixture follows directly:
+
+\begin{multline}
+\ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) \\ + \ln\left[\frac{R T}{v_1\left(T,P\right)}\right] - \ln f_2^0\left(T,P\right)
+\end{multline}\\*
+
+Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at inifinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $v_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:
+
+\begin{equation}\ln f_2^0\left(T,P\right) = \beta\mu_2^{res}\left(T,P\right) + \ln\left[\frac{R T}{v_2\left(T,P\right)}\right]\end{equation}\\*
+
+Paluch et al. use a multistage free energy perturbation approach utilizing MBAR in order to calculate the residual chemical potentials (recall that the chemical potential is the partial molar Gibbs free energy and dimensionless Gibbs free energy differences between multiple states are readily computed with MBAR). The idea is to connect two states of interest. In the case of a pure liquid, connecting a system of pure liquid molecules with $N - 1$ interacting molecules and one fully decoupled molecule to a system of $N$ fully interacting molecules. The coupling/decoupling process is detailed by Paluch et al \cite{paluch0}, but involves a linear alchemical switching function where LJ and electronic interactions are slowly turned on for the decoupled molecule until they are fully on.     
+
+%-------------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Excess Molar Properties}
+The general definition of an excess molar property can be stated as follows:
+\begin{equation}y^{E} = y^{M} - \sum_{i} x_i y_i\end{equation}\\*
+
+Where $y^E$ is the excess molar quantity, $y^M$ is the mixture quantity, $x_i$ is the mole fraction of component $i$ in the mixture and $y_i$ is the pure solvent quantity. In general, the simplest methods for calculating excess molar properties for binary mixtures will require three simulations. One simulation is run for each pure component and a third will be run for the specific mixture of interest.
+We note that only one set of pure simulations are needed to calculate excess properties at all compositions.
+
+%--------------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Excess Molar Heat Capacity and Volume}
+Excess molar heat capacities and volume will be calculated using the  methods for the pure quantities in section $A.1$ in combination with the general method for excess property calculation above.\\*
+
+%---------------------------------------------------------------------------------------------------------------------------------------
+
+\subsubsection{Excess Molar Enthalpy}
+Excess molar enthalpy can be calculated using the general relation of molar enthalpy as it relates to Gibbs Free Energy from section $A.1$ and the generalized method of ecess molar property calculation above or by the following\cite{hexcess}:
+\begin{equation}H^E = \langle E^M \rangle + P V^E - \sum_{i} x_i \langle E_i \rangle\end{equation}\\*
+ 
+Where $\langle \rangle$ denotes an ensemble average and $V^E$ is calculated using the general method of excess molar properties.\\* 
+
+%--------------------------------------------------------------------------------------------------------------------------------------
+
+\subsection{Suggested Corrections}
+\subsubsection{Heat Capacity}
+Horn et al suggest a number of vibrational corrections be applied to the calculation of $C_P$ due to a number of approximations made during the simulation of the liquid \cite{horn}. The following terms were added as a correction.
+
+\begin{multline}
+\left(\frac{\partial E_{vib,l}}{\partial T}\right)_{P} = \left(\frac{\partial E_{vib,l,intra}^{QM}}{\partial T}\right)_{P} + \left(\frac{\partial E_{vib,l,inter}^{QM}}{\partial T}\right)_{P} \\ - \left(\frac{\partial E_{vib,l,inter}^{CM}}{\partial T}\right)_{P}
+\end{multline}\\*
+
+Where:
+\begin{equation}\left(\frac{\partial E_{vib}^{CM}}{\partial T}\right)_{P} = k_B n_{vib}\end{equation}\\*
+\begin{equation}\left(\frac{\partial E_{vib}^{QM}}{\partial T}\right)_{P} = \sum_{i=1}^{n_{vib}} \left(\frac{h^2 v_{i}^2 e^{\frac{h v_{i}}{k_B T}}}{k_B T^2 \left(e^{\frac{h v_{i}}{k_B T}} - 1\right)^2}\right)\end{equation}\\*
+
+Above, $n_{vib}$ is the number of vibrational modes, $h$ is Planck's constant and $v_i$ is the vibrational frequency of mode $i$.
+
+%-----------------------------------------------------------------------------------------------------------------------------------------
+
+\section{Properties Involving Change of Phase}
+\subsection{Pure Solvent Properties}
+\subsubsection{Enthalpy of Vaporization}
 %MRS: should look at Horne et al (mentioned by Fennell), the original TIP4P-ew
 %water paper, to see some of the corrections one can add. Usually,
 %these are corrections involving phase changes, but there are a few
@@ -408,7 +513,15 @@ The definition of the enthalpy of vaporization is\cite{hvap}:
 If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal (and therefore kinetic energy terms cancel):
 \begin{equation}\Delta H_{vap} = E_{gas, potential} - E_{liq, potential} + R T\end{equation}\\*
 
-An alternate, but similar, method is recommended by Horn et al \cite{horn}.
+%-----------------------------------------------------------------------------------------------------------------------------------------
+
+\subsection{Binary Mixture Properties}
+
+%-----------------------------------------------------------------------------------------------------------------------------------------
+
+\subsection{Suggested Corrections}
+\subsubsection{Enthalpy of Vaporization}
+An alternate, but similar, method for calculating the enthlapy of vaporization is recommended by Horn et al \cite{horn}.
 \begin{equation}\Delta H_{vap} = -\frac{E_{liq, potential}}{N} + R T - P V_{liq} + C\end{equation}\\*
 
 In the above equation $C$ is a correction factor for vibrational energies, polarizability, non-ideality of the gas and pressure. It can be calculated as follows.
@@ -440,82 +553,8 @@ As discussed by myself and MRS, we have decided to not initially begin the param
 
 An additional issue is the necessity of having to use gas phase simulation data in order to validate a parametrization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parametrization. If the parametrization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental heat of vaporization in order to get a value at STP using the following equation.
 \begin{equation}\Delta H_{vap}(T) = \Delta H_{vap}^{ref} + \int_{T_{ref}}^T \left(C_{P, gas} - C_{P, liq}\right) dT \end{equation}\\*
-    
-
-%MRS: Moved this section down, derivation and details were unlike.
-%MRS: I'm not as much an expert on this: you should follow up.  Also,
-%probably use something other than $M$ as the dipole.
-\subsubsection{Dielectric Constant}
-This equation was provided by a literature reference authored by CJ Fennell\cite{dielec} and is the standard for calculating the dielectric constant. Below, $\epsilon(0)$ is the zero frequency dielectric constant, $V$ is the system volume and $D$ is the total system dipole moment. 
-\begin{equation} \epsilon(0) = 1 + \frac{4 \pi}{3 k_B T \langle V \rangle}(\langle D^2 \rangle - \langle D \rangle^2) \end{equation}
-
-\section{Binary Mixture Properties} 
-\subsection{Mass Density, Speed of Sound and Dielectric Constant}
-The methods for these calculations are the same for a multicomponent system.
-
-\subsubsection{Activity Coefficient}
-The definition of chemical potential in a pure substance is:
-\begin{equation}\mu(T,P) = \left(\frac{\partial G}{\partial N}\right)_{T,P}\end{equation}
-which is a function of only temperaure and pressure.
-
-Then the definition of the chemical potential $\mu_i$ of compound $i$ in a mixture is:
-\begin{equation}\mu_{i}(T,P,\vec{N}) = \left(\frac{\partial G}{\partial N_{i}}\right)_{T,P,N_{j \neq i}}\end{equation}\\*
-$N_i$ refers to a molecule of component $i$ and $N_{j \neq i}$ refers
-to all molecules other than component $i$, with $\vec{N}$ the vector
-of all component numbers. Since $\mu_i$ is intensive, this is
-equivalently a function of the vector of mole fractions $\vec{x}_i$ instead of simply of $N_i$.\\*
-
-For an ideal solution, the chemical potential $\mu_i$ can be related to the pure chemical potential by 
-\begin{equation}\mu_{i}(T,P,\vec{x}_i) = \mu(T,P) + k_B T \ln\left(\gamma_i\right)\end{equation}\\*
-
-By analogy to this form, we can say 
-\begin{equation}\mu_{i}(T,P,\vec{x}_i) = \mu(T,P) + k_B T \ln\left(x_i \gamma_i\right)\end{equation}\\*
-
-Where $\gamma_i$ is the activity coefficient of component $i$, and is
-a function of $T$,$P$,and $\vec{x}_i$.  Rearrangement of the previous
-equation yields:
-\begin{equation}\gamma_i = \frac{e^{\left(\frac{\mu_i(T,P,\vec{x}_i) - \mu(T,P)}{k_B T}\right)}}{x_i}\end{equation}\\*
-
-Although chemical potentials cannot be directly calculated from
-simulation, chemical potential differences can. We can calculate the
-difference $\mu_i(T,P,\vec{x}_i) - \mu(T,P)$ by calculating $\Delta
-\mu(T,P)_{liquid} - \Delta \mu(T,P)_{gas}$ using a standard alchemical
-simulation of the pure substance, followed by the calculation of
-$\mu_i(T,P,\vec{x}_i)_{liquid} - \Delta \mu(T,P,\vec{x}_i)_{gas}$, and
-assuming that $\Delta \mu(T,P,\vec{x}_i)_{gas} = \Delta
-\mu(T,P)_{gas}$ (note: there are a few subleties here relating to the
-$\ln x_i$ factor, but it appears that with alchemical simulations with
-a only one particle that is allowed to change, this will cancel out
-(need to follow up).
-
-Several of these alchemical simulation methods for calculating activity coefficients have been pioneered by Andrew Paluch \cite{paluch1}. A method detailing the calculation of infinite dilution activity coefficients $\gamma_i^{inf}$ for binary a mixture follows directly:
-
-\begin{multline}
-\ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) \\ + \ln\left[\frac{R T}{v_1\left(T,P\right)}\right] - \ln f_2^0\left(T,P\right)
-\end{multline}\\*
-
-Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at inifinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $v_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:
-
-\begin{equation}\ln f_2^0\left(T,P\right) = \beta\mu_2^{res}\left(T,P\right) + \ln\left[\frac{R T}{v_2\left(T,P\right)}\right]\end{equation}\\*
-
-Paluch et al. use a multistage free energy perturbation approach utilizing MBAR in order to calculate the residual chemical potentials (recall that the chemical potential is the partial molar Gibbs free energy and dimensionless Gibbs free energy differences between multiple states are readily computed with MBAR). The idea is to connect two states of interest. In the case of a pure liquid, connecting a system of pure liquid molecules with $N - 1$ interacting molecules and one fully decoupled molecule to a system of $N$ fully interacting molecules. The coupling/decoupling process is detailed by Paluch et al \cite{paluch0}, but involves a linearly alchemical switching function where LJ and electronic interactions are slowly turned on for the decoupled molecule until they are fully on.     
 
 
-\subsubsection{Excess Molar Properties}
-The general definition of an excess molar property can be stated as follows:
-\begin{equation}y^{E} = y^{M} - \sum_{i} x_i y_i\end{equation}\\*
-
-Where $y^E$ is the excess molar quantity, $y^M$ is the mixture quantity, $x_i$ is the mole fraction of component $i$ in the mixture and $y_i$ is the pure solvent quantity. In general, the simplest methods for calculating excess molar properties for binary mixtures will require three simulations. One simulation is run for each pure component and a third will be run for the specific mixture of interest.
-We note that only one set of pure simulations are needed to calculate excess properties at all compositions.
-
-\subsubsection{Excess Molar Heat Capacity and Volume}
-Excess molar heat capacities and volume will be calculated using the  methods for the pure quantities in section $A.1$ in combination with the general method for excess property calculation above.\\*
-
-\subsubsection{Excess Molar Enthalpy}
-Excess molar enthalpy can be calculated using the general relation of molar enthalpy as it relates to Gibbs Free Energy from section $A.1$ and the generalized method of ecess molar property calculation above or by the following\cite{hexcess}:
-\begin{equation}H^E = \langle E^M \rangle + P V^E - \sum_{i} x_i \langle E_i \rangle\end{equation}\\*
-
- Where $\langle \rangle$ denotes an ensemble average and $V^E$ is calculated using the general method of excess molar properties.\\* 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY
