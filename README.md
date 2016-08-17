@@ -206,7 +206,16 @@ dataset.retrieve(keys=local_keys, url='http://openforcefieldgroup.org/thermoml-d
 ```
 
 You can see which DOIs contribute to the current `ThermoMLDataset` with the convenience functions:
-(example is missing here)
+```python
+print(dataset.DOIs)
+```
+
+NIST has compiled a JSON frame of corrections to uncertainties.
+These can be used to update or correct data uncertainties and discard outliers using `applyNISTUncertainties()`:
+```python
+# Modify uncertainties according to NIST evaluation
+dataset.applyNISTUncertainties(nist_uncertainties, adjust_uncertainties=True, discard_outliers=True)
+```
 
 ### Estimating properties
 
