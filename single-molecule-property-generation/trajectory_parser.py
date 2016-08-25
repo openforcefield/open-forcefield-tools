@@ -194,7 +194,7 @@ def computeBondsAnglesTorsions(xyz, bonds, angles, torsions):
 
     return bond_dist, angle_dist, torsion_dist
     
-def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, torsion_dist, bonds, angles, torsions):
+def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, torsion_dist, bonds, angles, torsions, torsionbool):
 
     """Inputs:
     properties: A list of property strings we want value for
@@ -221,72 +221,73 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
         AtomList = map(int, AtomList) 
 
         if 'BondEquilibriumLength' in p:
-        	for i in range(nbonds):
-                	if np.array_equal(AtomList, bonds[i]): 
-                   		 value = np.mean(bond_dist[:,i])
-                   		 uncertainty = np.std(bond_dist[:,i])/np.sqrt(nsamp)
-                   		 PropertyDict[p] = [value,uncertainty]
+            for i in range(nbonds):
+                if np.array_equal(AtomList, bonds[i]): 
+                    value = np.mean(bond_dist[:,i])
+                    uncertainty = np.std(bond_dist[:,i])/np.sqrt(nsamp)
+                    PropertyDict[p] = [value,uncertainty]
 
         if 'BondEquilibriumLength_std' in p:
-        	for i in range(nbonds):
-        		if np.array_equal(AtomList, bonds[i]): 
-                		value = np.std(bond_dist[:,i])
-                    		uncertainty = np.std(bond_dist[:,i])**2/np.sqrt(nsamp/2)
-                    		PropertyDict[p] = [value,uncertainty]
+            for i in range(nbonds):
+        	if np.array_equal(AtomList, bonds[i]): 
+                    value = np.std(bond_dist[:,i])
+                    uncertainty = np.std(bond_dist[:,i])**2/np.sqrt(nsamp/2)
+                    PropertyDict[p] = [value,uncertainty]
 
 	if 'AngleEquilibriumAngle' in p:
-        	for i in range(nangles):
-                	if np.array_equal(AtomList, angles[i]): 
-                    		value = np.mean(angle_dist[:,i])
-                    		uncertainty = np.std(angle_dist[:,i])/np.sqrt(nsamp)
-                    		PropertyDict[p] = [value,uncertainty]
+       	    for i in range(nangles):
+                if np.array_equal(AtomList, angles[i]): 
+                    value = np.mean(angle_dist[:,i])
+                    uncertainty = np.std(angle_dist[:,i])/np.sqrt(nsamp)
+                    PropertyDict[p] = [value,uncertainty]
 
 	if 'AngleEquilibriumAngle_std' in p:
-		for i in range(nangles):
-	        	if np.array_equal(AtomList, angles[i]):
-	            		value = np.std(angle_dist[:,i])
-		    		uncertainty = np.std(angle_dist[:,i])**2/np.sqrt(nsamp/2)
-		    		PropertyDict[p] = [value,uncertainty]
+            for i in range(nangles):
+	        if np.array_equal(AtomList, angles[i]):
+	            value = np.std(angle_dist[:,i])
+		    uncertainty = np.std(angle_dist[:,i])**2/np.sqrt(nsamp/2)
+		    PropertyDict[p] = [value,uncertainty]
+        if torsionbool==True:
+	    if 'TorsionFourier1' in p:
+                for i in range(ntorsions):
+                    if np.array_equal(AtomList, torsions[i]): 
+                    	value = np.mean(torsion_dist[:,i])
+                    	uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
+                    	PropertyDict[p] = [value,uncertainty]
 
-	if 'TorsionFourier1' in p:
-           	for i in range(ntorsions):
-                	if np.array_equal(AtomList, torsions[i]): 
-                    		value = np.mean(torsion_dist[:,i])
-                    		uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
-                    		PropertyDict[p] = [value,uncertainty]
-
-	if 'TorsionFourier1_std' in p:
-	    	for i in range(ntorsions):
-	        	if np.array_equal(AtomList, torsions[i]):
-	            		value = np.std(torsion_dist[:,i])
-		    		uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
-		    		PropertyDict[p] = [value,uncertainty]
+	    if 'TorsionFourier1_std' in p:
+	    	    for i in range(ntorsions):
+	                if np.array_equal(AtomList, torsions[i]):
+	            	    value = np.std(torsion_dist[:,i])
+		    	    uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
+		    	    PropertyDict[p] = [value,uncertainty]
 
 	# Circular distribution alternate for torsion calculation
-
-	if 'TorsionFourier1' in p:
+        
+	    if 'TorsionFourier1' in p:
 		for i in range(ntorsions):
-			if np.array_equal(AtomList, torsions[i]):
-			    value = np.array([])
-			    for j in range(nsamp):
-				val = np.real((np.exp(cmath.sqrt(-1)*torsion_dist[:,i]))**j)
-				value = np.append(value, val)
+		    if np.array_equal(AtomList, torsions[i]):
+		        value = np.array([])
+			for j in range(nsamp):
+			    val = np.real((np.exp(cmath.sqrt(-1)*torsion_dist[:,i]))**j)
+			    value = np.append(value, val)
 			    value = (1/nsamp)*np.sum(value)
 			    uncertainty = np.std(torsion_dist[:,i])/np.sqrt(nsamp)
 			    PropertyDict[p] = [value, uncertainty]
 
-	if 'TorsionFourier1_std' in p:
+	    if 'TorsionFourier1_std' in p:
 		for i in range(ntorsions):
-                        if np.array_equal(AtomList, torsions[i]):
-                                value = np.std(torsion_dist[:,i])
-                                uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
-                                PropertyDict[p] = [value,uncertainty]
-
-
+                    if np.array_equal(AtomList, torsions[i]):
+                        value = np.std(torsion_dist[:,i])
+                        uncertainty = np.std(torsion_dist[:,i])**2/np.sqrt(nsamp/2)
+                        PropertyDict[p] = [value,uncertainty]
+	else:
+	    pass
+                 
     return PropertyDict
 
 
-def get_properties_from_trajectory(ncfiles):
+def get_properties_from_trajectory(ncfiles, torsionbool=True):
 
     """take multiple .nc files with identifier names and a pandas dataframe with property 
     names for single atom bonded properties (including the atom numbers) and populate 
@@ -322,7 +323,7 @@ def get_properties_from_trajectory(ncfiles):
     AtomDict['MolName'] = list()
     for fname in ncfiles:
         MoleculeName = fname.split('.')[0]
-        AtomDict['MolName'].append(MoleculeName)
+	AtomDict['MolName'].append(MoleculeName)
          	
         # extract the xyz coordinate for each frame
         data = netcdf.Dataset(fname)
@@ -363,8 +364,9 @@ def get_properties_from_trajectory(ncfiles):
 
         Properties = calculateBondsAnglesTorsionsStatistics(PropertyNames,
                                                             bond_dist, angle_dist, torsion_dist,
-                                                            AtomDict['Bond'], AtomDict['Angle'], AtomDict['Torsion'])
+                                                            AtomDict['Bond'], AtomDict['Angle'], AtomDict['Torsion'], 
+							    torsionbool)
 
         #Put properties back in dataframe and return
 
-    return bond_dist, angle_dist, torsion_dist, Properties
+    return [bond_dist, angle_dist, torsion_dist] #Properties]
