@@ -18,15 +18,15 @@ import sys
 
 np.set_printoptions(threshold=np.inf)
 
-#######################################################################
-# Constants
-########################################################################
+#----------------------------------------------------------------------
+# CONSTANTS
+#----------------------------------------------------------------------
 
 kB = 0.008314462  #Boltzmann constant (Gas constant) in kJ/(mol*K)
 
-#######################################################################
-# Utility Functions
-#######################################################################
+#----------------------------------------------------------------------
+# UTILITY FUNCTIONS
+#----------------------------------------------------------------------
 def constructDataFrame(mol_files):
     """ 
     Construct a pandas dataframe to be populated with computed single molecule properties. Each unique bond, angle and torsion has it's own column for a value
@@ -149,6 +149,7 @@ def constructDataFrame(mol_files):
 
     return df
 
+#------------------------------------------------------------------
 
 def ComputeBondsAnglesTorsions(xyz, bonds, angles, torsions):
     """ 
@@ -207,6 +208,7 @@ def ComputeBondsAnglesTorsions(xyz, bonds, angles, torsions):
 
     return bond_dist, angle_dist, torsion_dist
 
+#------------------------------------------------------------------
 
 def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, torsion_dist, bonds, angles, torsions, torsionbool):
 
@@ -294,6 +296,7 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
                  
     return PropertyDict
 
+#------------------------------------------------------------------
 
 def get_properties_from_trajectory(ncfiles, torsionbool=True):
 
@@ -378,6 +381,7 @@ def get_properties_from_trajectory(ncfiles, torsionbool=True):
 
     return [bond_dist, angle_dist, torsion_dist, Properties]
 
+#------------------------------------------------------------------
 
 def read_col(filename,colname,frames):
     """Reads in columns from .csv outputs of OpenMM StateDataReporter 
@@ -399,6 +403,7 @@ def read_col(filename,colname,frames):
 
     return dat
 
+#------------------------------------------------------------------
 
 def readtraj(ncfiles):
 
@@ -415,6 +420,7 @@ def readtraj(ncfiles):
 
     return data, xyz 
 
+#------------------------------------------------------------------
 
 def get_energy(system, positions):
     """
@@ -438,193 +444,285 @@ def get_energy(system, positions):
     energy = state.getPotentialEnergy() / unit.kilocalories_per_mole
     return energy
 
-#######################################################################
-# Parameters
-#######################################################################
+#------------------------------------------------------------------
 
-K_k = np.array([600, 500, 450, 100, 10]) # angular force constants for sampled states
-N_k = np.array([0, 0, 0, 100, 0]) # no. of samples from each state (it's okay if some are zero)
-K_extra = np.array([550, 300, 250, 60, 0]) # unsampled force constants
-observables = ['angle', 'potential energy']
-ncfiles = ['AlkEthOH_r51.nc']
+def new_param_energy(mol2, traj, smirkss, N_k, params, paramtype):
+    """
+    Return potential energies associated with specified parameter perturbations.
 
-seed = None
+    Parameters
+    ----------
+    mol2: mol2 file associated with molecule of interest used to construct OEMol object
+    traj: trajectory from the simulation ran on the given molecule
+    smirkss: list of smirks strings we wish to apply parameter changes to (Only changing 1 type of string at a time now. All bonds, all angles or all torsions)
+    N_k: numpy array of number of samples per state
+    params: a numpy array of the parameter values we wish to test
+    paramtype: the type of ff param being edited (i.e. force constants [k], equlibrium length [])
+    
+    **CHECK FORCEFIELD PARAMETER TYPES**
 
-seed = 0
-np.random.seed(seed)
+    Returns
+    -------
+    energies: a list of the energies associated with the forcfield parameters used as input
 
-######################################################################
-# System setup
-######################################################################
-# Load simple OEMol
-verbose = False
-# Load one of the provided files
-ifs = oechem.oemolistream(get_data_filename('molecules/AlkEthOH_r51.mol2'))
-mol = oechem.OEMol()
-# This uses parm@frosst atom types, so make sure to use the forcefield-flavor reader
-flavor = oechem.OEIFlavor_Generic_Default | oechem.OEIFlavor_MOL2_Default | oechem.OEIFlavor_MOL2_Forcefield
-ifs.SetFlavor( oechem.OEFormat_MOL2, flavor)
-oechem.OEReadMolecule(ifs, mol )
-# Perceive tripos types
-oechem.OETriposAtomNames(mol)
+    """
+    #-------------------
+    # PARAMETERS
+    #-------------------
+    params = params
+    N_k = N_k
+    ncfiles = traj
+    
 
-#Get positions for use below
-data, xyz = readtraj(['AlkEthOH_r51.nc'])
-xyzn = unit.Quantity(xyz[:], unit.angstroms)
-
-# Load forcefield file
-ffxml = get_data_filename('forcefield/Frosst_AlkEtOH.ffxml')
-ff = ForceField(ffxml)
-
-# Generate a topology
-from smarty.forcefield import generateTopologyFromOEMol
-topology = generateTopologyFromOEMol(mol)
-
-# Create initial system
-system = ff.createSystem(topology, [mol], verbose=verbose)
-
-# Get params for an angle
-params = ff.getParameter(smirks='[a,A:1]-[#6X4:2]-[a,A:3]')
-
-#######################################################################
-# Main
-#######################################################################
-
-# Determine number of simulations
-K = np.size(N_k)
-if np.shape(K_k) != np.shape(N_k): raise "K_k and N_k must have same dimensions"
+    # Determine number of simulations
+    K = np.size(N_k)
+    if np.shape(params) != np.shape(N_k): raise "K_k and N_k must have same dimensions"
 
 
-# Determine max number of samples to be drawn from any state
-N_max = np.max(N_k)
+    # Determine max number of samples to be drawn from any state
+    N_max = np.max(N_k)
 
-# Calculate energies and the sampled angle distribution
-energies = np.zeros([len(K_k),N_max],np.float64)
-for ind,val in enumerate(K_k):
-    temp = np.zeros(N_max,np.float64)
-    params['k'] = str(val)
-    ff.setParameter(params, smirks = '[a,A:1]-[#6X4:2]-[a,A:3]')
-    system = ff.createSystem(topology, [mol], verbose=verbose)
-    for i,a in enumerate(xyzn):  
-        e = np.float(get_energy(system, a))
-        temp[i] = e
-	#b = get_properties_from_trajectory(
-    energies[ind] = temp
+    #-------------
+    # SYSTEM SETUP
+    #-------------
+    verbose = False # suppress echos from OEtoolkit functions
+    ifs = oechem.oemolistream(get_data_filename(mol2))
+    mol = oechem.OEMol()
+    # This uses parm@frosst atom types, so make sure to use the forcefield-flavor reader
+    flavor = oechem.OEIFlavor_Generic_Default | oechem.OEIFlavor_MOL2_Default | oechem.OEIFlavor_MOL2_Forcefield
+    ifs.SetFlavor( oechem.OEFormat_MOL2, flavor)
+    oechem.OEReadMolecule(ifs, mol )
+    # Perceive tripos types
+    oechem.OETriposAtomNames(mol)
 
-energiesnew = np.zeros([len(K_extra),N_max],np.float64)
-for ind,val in enumerate(K_extra):
-    temp = np.zeros(N_max,np.float64)
-    params['k'] = str(val)
-    ff.setParameter(params, smirks = '[a,A:1]-[#6X4:2]-[a,A:3]')
-    system = ff.createSystem(topology, [mol], verbose=verbose)
-    for i,a in enumerate(xyzn):  
-        e = np.float(get_energy(system, a))
-        temp[i] = e
-	#b = get_properties_from_trajectory(
-    energiesnew[ind] = temp
+    # Get positions for use below
+    data, xyz = readtraj(traj)
+    xyzn = unit.Quantity(xyz[:], unit.angstroms)
 
+    # Load forcefield file
+    ffxml = get_data_filename('forcefield/Frosst_AlkEtOH.ffxml')
+    ff = ForceField(ffxml)
 
+    # Generate a topology
+    from smarty.forcefield import generateTopologyFromOEMol
+    topology = generateTopologyFromOEMol(mol)
 
-# here's code that generate list of properties to calculate for each molecule and 
-# populate PropertiesPerMolecule
-PropertiesPerMolecule = dict()    
-mol_files = glob.glob('./Mol2_files/AlkEthOH_*.mol2')
+    #-----------------
+    # MAIN
+    #-----------------
+
+    # Calculate energies 
+    energies = np.zeros([len(smirkss),len(params),N_max],np.float64)
+    for inds,s in enumerate(smirkss):
+        temp0 = np.zeros([len(params),N_max],np.float64)
+        param = ff.getParameter(smirks=s)
+        for ind,val in enumerate(params):
+            temp1 = np.zeros(N_max,np.float64)
+            param[paramtype] = str(val)
+            ff.setParameter(param, smirks = s)
+            system = ff.createSystem(topology, [mol], verbose=verbose)
+            for i,a in enumerate(xyzn):  
+                e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
+                energies[inds,ind,i] = e
+    
+    return energies, xyzn
+
+#------------------------------------------------------------------
+
+def get_small_mol_dict(mol2, traj):
+    """
+    Return dictionary specifying the bond, angle and torsion indices to feed to ComputeBondsAnglesTorsions()
+
+    Parameters
+    ----------
+    mol2: mol2 file associated with molecule of interest used to determine atom labels
+    traj: trajectory from the simulation ran on the given molecule
+     
+    Returns
+    -------
+    AtomDict: a dictionary of the bond, angle and torsion indices for the given molecule
+
+    """
+    PropertiesPerMolecule = dict()    
+    mol_files = glob.glob('./Mol2_files/AlkEthOH_*.mol2')
  
-df = constructDataFrame(mol_files)
-MoleculeNames = df.molecule.tolist()
-properties = df.columns.values.tolist()
+    df = constructDataFrame(mol_files)
+    MoleculeNames = df.molecule.tolist()
+    properties = df.columns.values.tolist()
  
-for ind, val in enumerate(MoleculeNames):
-    defined_properties  = list()
-    for p in properties:
-        if (p is not 'molecule') and ('_std' not in p):
-            if df.iloc[ind][p] != 0:
-		defined_properties.append(p)
-            PropertiesPerMolecule[val] = defined_properties
+    for ind, val in enumerate(MoleculeNames):
+        defined_properties  = list()
+        for p in properties:
+            if (p is not 'molecule') and ('_std' not in p):
+                if df.iloc[ind][p] != 0:
+		    defined_properties.append(p)
+                PropertiesPerMolecule[val] = defined_properties
 
    
-AtomDict = dict()
-AtomDict['MolName'] = list()
-for fname in ncfiles:
-    MoleculeName = fname.split('.')[0]
-    AtomDict['MolName'].append(MoleculeName)
+    AtomDict = dict()
+    AtomDict['MolName'] = list()
+    for fname in traj:
+        MoleculeName = fname.split('.')[0]
+        AtomDict['MolName'].append(MoleculeName)
          	
-    # extract the xyz coordinate for each frame
-    data = netcdf.Dataset(fname)
-    xyz = data.variables['coordinates']
-	
+        
+        # what is the property list for this molecule
+        PropertyNames = PropertiesPerMolecule[MoleculeName]
 
-    # what is the property list for this molecule
-    PropertyNames = PropertiesPerMolecule[MoleculeName]
+        # extract the bond/angle/torsion lists
+        AtomDict['Bond'] = list()
+        AtomDict['Angle'] = list()
+        AtomDict['Torsion'] = list()
 
-    # extract the bond/angle/torsion lists
-    AtomDict['Bond'] = list()
-    AtomDict['Angle'] = list()
-    AtomDict['Torsion'] = list()
+        # which properties will we use to construct the bond list
+        ReferenceProperties = ['BondEquilibriumLength','AngleEquilibriumAngle','TorsionFourier1']
+        for p in PropertyNames:
+            PropertyName = p.split(' ', 1)[0]
+            AtomList = p.split(' ', 1)[1:]
+            AtomList = [i.lstrip('[').rstrip(']') for i in AtomList]
+	    for i in AtomList:
+                AtomList = i.strip().split(',')
+            AtomList = map(int, AtomList) 
+            if any(rp in p for rp in ReferenceProperties):
+                if 'Bond' in p:
+                    AtomDict['Bond'].append(AtomList)
+                if 'Angle' in p:
+                    AtomDict['Angle'].append(AtomList)
+                if 'Torsion' in p:
+                     AtomDict['Torsion'].append(AtomList)
 
-    # which properties will we use to construct the bond list
-    ReferenceProperties = ['BondEquilibriumLength','AngleEquilibriumAngle','TorsionFourier1']
-    for p in PropertyNames:
-        PropertyName = p.split(' ', 1)[0]
-        AtomList = p.split(' ', 1)[1:]
-        AtomList = [i.lstrip('[').rstrip(']') for i in AtomList]
-	for i in AtomList:
-            AtomList = i.strip().split(',')
-        AtomList = map(int, AtomList) 
-        if any(rp in p for rp in ReferenceProperties):
-            if 'Bond' in p:
-                AtomDict['Bond'].append(AtomList)
-            if 'Angle' in p:
-                AtomDict['Angle'].append(AtomList)
-            if 'Torsion' in p:
-                AtomDict['Torsion'].append(AtomList)
+    return AtomDict
+
+#------------------------------------------------------------------
+
+def subsampletimeseries(timeser):
+    """
+    Return a subsampled timeseries based on statistical inefficiency calculations.
+
+    Parameters
+    ----------
+    timeser: the timeseries to be subsampled
+    
+    Returns
+    ---------
+    N_k_sub: new number of samples per timeseries
+    ts_sub: the subsampled timeseries
+    """
+    # Make a copy of the timeseries and make sure is numpy array of floats
+    ts = timeser
+    
+    # initialize array of statistical inefficiencies
+    g = np.zeros(np.size(ts),np.float64)    
+
+
+    for i,t in enumerate(ts):
+        if np.count_nonzero(t)==0:
+	    g[i] = np.float(1.)
+        else:
+            g[i] = timeseries.statisticalInefficiency(t)
+  
+    N_k_sub = np.array([len(timeseries.subsampleCorrelatedData(t,g=b)) for t, b in zip(ts,g)])
+    ts_sub = np.array([t[timeseries.subsampleCorrelatedData(t,g=b)] for t, b in zip(ts,g)])
+       
+    return ts_sub, N_k_sub
+
+#------------------------------------------------------------------
+
+# MAIN
+
+#-----------------------------------------------------------------
+# PARAMETERS
+#-----------------------------------------------------------------
+
+mol2 = 'molecules/AlkEthOH_r51.mol2'
+traj = ['AlkEthOH_r51.nc']
+smirkss = ['[a,A:1]-[#6X4:2]-[a,A:3]']
+N_k = np.array([100, 100, 100, 100, 100])
+K = np.size(N_k)
+N_max = np.max(N_k)
+K_k = np.array([600, 500, 160, 100, 10])
+K_extra = np.array([550, 300, 250, 60, 0]) # unsampled force constants
+paramtype = 'k'
+
+# Calculate energies at various parameters of interest
+energies, xyzn = new_param_energy(mol2, traj, smirkss, N_k, K_k, paramtype)
+energiesnew, xyznnew = new_param_energy(mol2, traj, smirkss, N_k, K_extra, paramtype)
+
+# Return AtomDict needed to feed to ComputeBondsAnglesTorsions()
+AtomDict = get_small_mol_dict(mol2, traj)
+
+# Read in coordinate data 
+# Working on functionalizing this whole process of organizing the single molecule property data
+data600, xyz600 = readtraj(['AlkEthOH_r51_k600.nc'])
+xyzn600 = unit.Quantity(xyz600[:], unit.angstroms)
+data500, xyz500 = readtraj(['AlkEthOH_r51_k500.nc'])
+xyzn500 = unit.Quantity(xyz600[:], unit.angstroms)
+data160, xyz160 = readtraj(['AlkEthOH_r51_k160.nc'])
+xyzn160 = unit.Quantity(xyz160[:], unit.angstroms)
+data100, xyz100 = readtraj(['AlkEthOH_r51.nc'])
+xyzn100 = unit.Quantity(xyz600[:], unit.angstroms)
+data10, xyz10 = readtraj(['AlkEthOH_r51_k10.nc'])
+xyzn10 = unit.Quantity(xyz10[:], unit.angstroms)
+
 
 # Compute bond lengths and angles and return array of angles
-a = ComputeBondsAnglesTorsions(xyzn,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
+a600 = ComputeBondsAnglesTorsions(xyzn600,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
+a500 = ComputeBondsAnglesTorsions(xyzn500,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
+a160 = ComputeBondsAnglesTorsions(xyzn160,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
+a100 = ComputeBondsAnglesTorsions(xyzn100,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
+a10 = ComputeBondsAnglesTorsions(xyzn10,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
 
-angles = a[1] # for K_k = 100, angles in radians
-numatom = len(a[1][1])
+# Pull out angle data
+angles600 = a600[1]
+angles500 = a500[1]
+angles160 = a160[1]
+angles100 = a100[1]
+angles10 = a10[1]
 
-angtimeser = [angles[:,ind] for ind in range(numatom)]
+# Get number of angles in molecule
+numatom = len(angles600[0])
+
+# Re-organize data into timeseries
+angtimeser600 = [angles600[:,ind] for ind in range(numatom)]
+angtimeser500 = [angles500[:,ind] for ind in range(numatom)]
+angtimeser160 = [angles160[:,ind] for ind in range(numatom)]
+angtimeser100 = [angles100[:,ind] for ind in range(numatom)]
+angtimeser10 = [angles10[:,ind] for ind in range(numatom)]
+
+# Using the angle at index 0 for test case
+angles = np.zeros([K,N_max],np.float64)
+
+angles[0] = angtimeser600[0]
+angles[1] = angtimeser500[0]
+angles[2] = angtimeser160[0]
+angles[3] = angtimeser100[0]
+angles[4] = angtimeser10[0]
+
+
+# Subsample timeseries and return new number of samples per state
+ang_sub, N_kang = subsampletimeseries(angles)
+En_sub, N_kEn = subsampletimeseries(energies[0]) 
+Ennew_sub,N_kEnnew = subsampletimeseries(energiesnew[0])
 
 # Post process energy distributions to find expectation values, analytical uncertainties and bootstrapped uncertainties
 T_from_file = read_col('StateData/data.csv',["Temperature (K)"],100)
-#K = len(energies)
 Temp_k = T_from_file
+T_av = np.average(Temp_k)
+
 nBoots = 100
 
-
-g = np.array([timeseries.statisticalInefficiency(en) for en in energies])
-N_k = np.array([len(timeseries.subsampleCorrelatedData(en,g=b)) for en, b in zip(energies,g)])
-N = N_k.sum()
-E_in = np.array([en[timeseries.subsampleCorrelatedData(en,g=b)] for en, b in zip(energies,g)])
-E_n = np.zeros([N],np.float64)
-for k in range(0,K): E_n[N_k[0:k].sum():N_k[0:k+1].sum()] = E_in[k]
-
-gnew = np.array([timeseries.statisticalInefficiency(en) for en in energiesnew])
-N_knew = np.array([len(timeseries.subsampleCorrelatedData(en,g=b)) for en, b in zip(energiesnew,gnew)])
-Nnew = N_knew.sum()
-E_innew = np.array([en[timeseries.subsampleCorrelatedData(en,g=b)] for en, b in zip(energiesnew,gnew)])
-E_nnew = np.zeros([Nnew],np.float64)
-for k in range(0,K): E_nnew[N_knew[0:k].sum():N_knew[0:k+1].sum()] = E_innew[k]
-
-gang = np.array([timeseries.statisticalInefficiency(ang) for ang in angtimeser])
-N_kang = np.array([len(timeseries.subsampleCorrelatedData(ang,g=b)) for ang, b in zip(angtimeser,gang)])
-Nang = N_kang.sum()
-Ang_in = np.array([ang[timeseries.subsampleCorrelatedData(ang,g=b)] for ang, b in zip(angtimeser,gang)])
-Ang_n = np.zeros([Nang],np.float64)
-for k in range(0,numatom): Ang_n[N_kang[0:k].sum():N_kang[0:k+1].sum()] = Ang_in[k]
-
-beta_k = 1 / (kB*Temp_k)
+beta_k = 1 / (kB*T_av)
+bbeta_k = 1 / (kB*Temp_k)
 
 E_kn = np.zeros([K,N_max],np.float64)
 E_knnew = np.zeros([K,N_max],np.float64)
-Ang_kn = np.zeros([numatom,N_max],np.float64)
+Ang_kn = np.zeros([K,N_max],np.float64)
 
-for k,j in zip(range(K),range(numatom)):
-    E_kn[k,0:N_k[k]] = E_in[k][0:N_k[k]]
-    E_knnew[k,0:N_knew[k]] = E_innew[k][0:N_knew[k]]
-    Ang_kn[j,0:N_knew[j]] = Ang_kn[j][0:N_knew[j]]
+for k in range(K):   
+    E_kn[k,0:N_kEn[k]] = En_sub[k][0:N_kEn[k]]
+    E_knnew[k,0:N_kEnnew[k]] = Ennew_sub[k][0:N_kEnnew[k]]
+    Ang_kn[k,0:N_kang[k]] = ang_sub[k][0:N_kang[k]]
+
 
 #################################################################
 # Compute reduced potentials
@@ -633,60 +731,72 @@ for k,j in zip(range(K),range(numatom)):
 print "--Computing reduced potentials..."
 
 L = np.size(K_k)
-Lnew = np.size(K_extra)
 
-u_kln = np.zeros([K,L,N_max], np.float64)
-E_kn_samp = np.zeros([K,N_max], np.float64)
-u_klnnew = np.zeros([K,Lnew,N_max], np.float64)
-E_kn_sampnew = np.zeros([K,N_max], np.float64)
-Ang_kn_samp = np.zeros([numatom,N_max], np.float64)
+# Initialize matrices for u_kn/observables matrices and expected value/uncertainty matrices
+u_kln = np.zeros([K,sum(N_kang)],np.float64)
+u_kln_dep = np.zeros([K,L,N_max],np.float64)
+E_kn_samp = np.zeros([K,N_max],np.float64)
+u_klnnew = np.zeros([K,sum(N_kang)], np.float64)
+u_klnnew_dep = np.zeros([K,L,N_max],np.float64)
+E_knnew_samp = np.zeros([K,N_max], np.float64)
+Ang_kn_samp = np.zeros([K,sum(N_kang)],np.float64)
+Ang_kln = np.zeros([K,sum(N_kang)],np.float64)
+Ang_kln_dep = np.zeros([K,L,N_max],np.float64)
+
 
 nBoots_work = nBoots + 1
 
 allE_expect = np.zeros([K,nBoots_work], np.float64)
-allAng_expect = np.zeros([numatom,nBoots_work],np.float64)
+allAng_expect = np.zeros([K,nBoots_work],np.float64)
 allE2_expect = np.zeros([K,nBoots_work], np.float64)
 dE_expect = np.zeros([K], np.float64)
 allE_expectnew = np.zeros([K,nBoots_work], np.float64)
 allE2_expectnew = np.zeros([K,nBoots_work], np.float64)
 dE_expectnew = np.zeros([K], np.float64)
-dAng_expect = np.zeros([numatom],np.float64)
+dAng_expect = np.zeros([K],np.float64)
+dAng_expect_unsamp = np.zeros([K],np.float64)
+allAng_expect_unsamp = np.zeros([K,nBoots_work],np.float64)
 
-E_kn = E_in
-E_knnew = E_innew
-
+# Begin bootstrapping loop
 for n in range(nBoots_work):
     if (n > 0):
         print "Bootstrap: %d/%d" % (n,nBoots)
     for k in range(K):
-        if N_k[k] > 0:
+        if N_kEn[k] > 0:
 	    if (n == 0):
-    		booti = np.array(range(N_k[k]))
+    		booti = np.array(range(N_kEn[k]))
 	    else:
-		booti = np.random.randint(N_k[k], size = N_k[k])
- 	    E_kn_samp[k,0:N_k[k]] = E_kn[k][booti]    
-
-        if N_knew[k] > 0:
+		booti = np.random.randint(N_kEn[k], size = N_kEn[k])
+ 	    E_kn_samp[k,0:N_kEn[k]] = E_kn[k,booti]    
+	           
+        if N_kEnnew[k] > 0:
 	    if (n ==0):
-		bootnewi = np.array(range(N_knew[k]))
+		bootnewi = np.array(range(N_kEnnew[k]))
 	    else:
-		bootnewi = np.random.randint(N_knew[k], size = N_knew[k])        
-            E_kn_sampnew[k,0:N_knew[k]] = E_knnew[k][bootnewi]
-    for k in range(numatom):
+		bootnewi = np.random.randint(N_kEnnew[k], size = N_kEnnew[k])        
+            E_knnew_samp[k,0:N_kEnnew[k]] = E_knnew[k,bootnewi]
+	    
+    for k in range(K):
         if N_kang[k] > 0:
             if (n == 0):
 		bootangi = np.array(range(N_kang[k]))
 	    else:
 		bootangi = np.random.randint(N_kang[k],size=N_kang[k])
-	    Ang_kn_samp[k,0:N_kang[k]] = Ang_kn[k][bootangi]
+	    Ang_kn_samp[k,0:N_kang[k]] = Ang_kn[k,bootangi]
+        
+    for k in range(K): 
+        u_kln[k,0:N_kEn[k]] = beta_k * E_kn_samp[k,0:N_kEn[k]]     
+        u_klnnew[k,0:N_kEnnew[k]] = beta_k * E_knnew_samp[k,0:N_kEnnew[k]]
+        Ang_kln[k,0:N_kang[k]] = Ang_kn_samp[k,0:N_kang[k]]
+
+    # For testing deprecated form of u_kn/observable inputs
+    # Determined to not make a difference 
     for k in range(K):
         for l in range(L):
-            u_kln[k,l,0:N_k[k]] = beta_k[l] * E_kn_samp[k,0:N_k[k]] 
-	    u_klnnew[k,l,0:N_knew[k]] = beta_k[l] * E_kn_sampnew[k,0:N_knew[k]]      
-   #for k in range(K):
-       # for l in range(numatom):
-           # ang_k[k,l,0:N_kang[k]] = Ang_kn_samp[k  
-#########################################################################
+            u_kln_dep[k,l,0:N_kEn[k]] = bbeta_k[l] * E_kn_samp[k][0:N_kEn[k]]
+            u_klnnew_dep[k,l,0:N_kEnnew[k]] = bbeta_k[l] * E_knnew_samp[k][0:N_kEnnew[k]]
+            Ang_kln_dep[k,l,0:N_kang[k]] =  Ang_kn_samp[l][0:N_kang[k]]
+############################################################################
 # Initialize MBAR
 ############################################################################
 
@@ -695,7 +805,7 @@ for n in range(nBoots_work):
 	print ""
 	print "Initializing MBAR:"
 	print "--K = number of parameter values with data = %d" % (K)
-	print "--L = number of total parameter values tested = %d" % (L) 
+	print "--L = number of unsampled parameter values tested = %d" % (L) 
 	print "--N = number of Energies per parameter value = %d" % (np.max(N_k))
 
         # Use Adaptive Method (Both Newton-Raphson and Self-Consistent, testing which is better)
@@ -704,10 +814,10 @@ for n in range(nBoots_work):
     else:
 	initial_f_k = mbar.f_k # start from the previous final free energies to speed convergence
 		
-    mbar = pymbar.MBAR(u_kln, N_k, verbose=False, relative_tolerance=1e-12, initial_f_k=initial_f_k)
+    mbar = pymbar.MBAR(u_kln, N_kang, verbose=False, relative_tolerance=1e-12, initial_f_k=initial_f_k)
 
-    #-----------------------------------------------------------------------
-    # Compute Expectations for E_kt and E2_kt as E_expect and E2_expect
+    #------------------------------------------------------------------------
+    # Compute Expectations for energy and angle distributions
     #------------------------------------------------------------------------
 
 
@@ -716,36 +826,45 @@ for n in range(nBoots_work):
     E_kln = u_kln  # not a copy, we are going to write over it, but we don't need it any more.
     E_klnnew = u_klnnew
     for k in range(K):
-        E_kln[:,k,:]*=beta_k[k]**(-1)  # get the 'unreduced' potential -- we can't take differences of reduced potentials because the beta is different.
-	E_klnnew[:,k,:]*=beta_k[k]**(-1)
-    (E_expect, dE_expect) = mbar.computeExpectations(E_kln, state_dependent = True)
-    (E_expectnew, dE_expectnew) = mbar.computeExpectations(E_klnnew, state_dependent = True)
-    (Ang_expect, dAng_expect) = mbar.computeExpectations(Ang_kn_samp,state_dependent=True)
-   #    print Angles_expectnew
+        E_kln[k,:]*=beta_k**(-1)  # get the 'unreduced' potential -- we can't take differences of reduced potentials because the beta is different.
+	E_klnnew[k,:]*=beta_k**(-1)
+    (E_expect, dE_expect) = mbar.computeExpectations(E_kln,state_dependent = True)
+    (E_expectnew, dE_expectnew) = mbar.computeExpectations(E_klnnew,state_dependent = True)
+    (Ang_expect, dAng_expect) = mbar.computeExpectations(Ang_kln,state_dependent = False) 
+
     allE_expect[:,n] = E_expect[:]
     allE_expectnew[:,n] = E_expectnew[:]
     allAng_expect[:,n] = Ang_expect[:]
+    
     # expectations for the differences, which we need for numerical derivatives  
+    # To be used once the energy expectations are fixed
     (DeltaE_expect, dDeltaE_expect) = mbar.computeExpectations(E_kln,output='differences', state_dependent = True)
     (DeltaE_expectnew, dDeltaE_expectnew) = mbar.computeExpectations(E_klnnew,output='differences', state_dependent = True)
 
-    #print "Computing Expectations for E^2..."
-    #(E2_expect, dE2_expect) = mbar.computeExpectations(E_kln**2, state_dependent = True)
-    #allE2_expect[:,n] = E2_expect[:]
+    print "Computing Expectations for E^2..."
+    (E2_expect, dE2_expect) = mbar.computeExpectations(E_kln**2, state_dependent = True)
+    allE2_expect[:,n] = E2_expect[:]
 
-
+    # Re-initializing MBAR with u_kn matrix associated with energies from the unsampled states
+    mbar = pymbar.MBAR(u_klnnew, N_kang, verbose=False, relative_tolerance=1e-12, initial_f_k=initial_f_k)
+    (Ang_expect_unsamp, dAng_expect_unsamp) = mbar.computeExpectations(Ang_kln,state_dependent=False)
+    allAng_expect_unsamp[:,n] = Ang_expect_unsamp[:]
 
 if nBoots > 0:
     dE_boot = np.zeros([K])
     dE_bootnew = np.zeros([K])
-    dAng_boot = np.zeros([numatom])
-    for k,j in zip(range(K),range(numatom)):
+    dAng_boot = np.zeros([K])
+    for k in range(K):
 	dE_boot[k] = np.std(allE_expect[k,1:nBoots_work])
         dE_bootnew[k] = np.std(allE_expectnew[k,1:nBoots_work])
-        dAng_boot[j] = np.std(allAng_expect[j,1:nBoots_work])
-    print "E_expect: %s  dE_Expect: %s  dE_boot: %s" % (E_expect,dE_expect,dE_boot)
-    print "E_expectnew: %s  dE_Expectnew: %s  dE_bootnew: %s" % (E_expectnew,dE_expectnew,dE_bootnew)
-    print "Ang_expect: %s  dAng_Expect: %s  dAng_boot: %s" % (Ang_expect,dAng_expect,dAng_boot)
+        dAng_boot[k] = np.std(allAng_expect[k,1:nBoots_work])
+    print "E_expect: %s  dE_expect: %s  dE_boot: %s" % (E_expect,dE_expect,dE_boot)
+    print "E_expectnew: %s  dE_expectnew: %s  dE_bootnew: %s" % (E_expectnew,dE_expectnew,dE_bootnew)
+    print "Ang_expect: %s  dAng_expect: %s  dAng_boot: %s" % (Ang_expect,dAng_expect,dAng_boot)
+    print "Ang_expect_unsamp: %s  dAng_expect_unsamp: %s" % (Ang_expect_unsamp,dAng_expect_unsamp)
+    print "The mean of the sampled angle series = %s" % ([np.average(A) for A in ang_sub])
+    print "The mean of the energies corresponding to the sampled angle series = %s" % ([np.average(E) for E in En_sub]) 
+    print "The mean of the energies corresponding to the unsampled angle series = %s" % ([np.average(E) for E in Ennew_sub])
 sys.exit()
 
 ########################################################################
