@@ -562,7 +562,7 @@ def get_small_mol_dict(mol2, traj):
     AtomDict = dict()
     AtomDict['MolName'] = list()
     for fname in traj:
-        MoleculeName = fname.split('.')[0]
+        MoleculeName = fname.split('.')[0][5:]
         AtomDict['MolName'].append(MoleculeName)
          	
         
@@ -635,7 +635,7 @@ def subsampletimeseries(timeser):
 #-----------------------------------------------------------------
 
 mol2 = 'molecules/AlkEthOH_r51.mol2'
-traj = ['AlkEthOH_r51.nc']
+traj = ['traj/AlkEthOH_r51.nc']
 smirkss = ['[a,A:1]-[#6X4:2]-[a,A:3]']
 N_k = np.array([100, 100, 100, 100, 100])
 K = np.size(N_k)
@@ -653,17 +653,16 @@ AtomDict = get_small_mol_dict(mol2, traj)
 
 # Read in coordinate data 
 # Working on functionalizing this whole process of organizing the single molecule property data
-data600, xyz600 = readtraj(['AlkEthOH_r51_k600.nc'])
+data600, xyz600 = readtraj(['traj/AlkEthOH_r51_k600.nc'])
 xyzn600 = unit.Quantity(xyz600[:], unit.angstroms)
-data500, xyz500 = readtraj(['AlkEthOH_r51_k500.nc'])
+data500, xyz500 = readtraj(['traj/AlkEthOH_r51_k500.nc'])
 xyzn500 = unit.Quantity(xyz600[:], unit.angstroms)
-data160, xyz160 = readtraj(['AlkEthOH_r51_k160.nc'])
+data160, xyz160 = readtraj(['traj/AlkEthOH_r51_k160.nc'])
 xyzn160 = unit.Quantity(xyz160[:], unit.angstroms)
-data100, xyz100 = readtraj(['AlkEthOH_r51.nc'])
+data100, xyz100 = readtraj(['traj/AlkEthOH_r51.nc'])
 xyzn100 = unit.Quantity(xyz600[:], unit.angstroms)
-data10, xyz10 = readtraj(['AlkEthOH_r51_k10.nc'])
+data10, xyz10 = readtraj(['traj/AlkEthOH_r51_k10.nc'])
 xyzn10 = unit.Quantity(xyz10[:], unit.angstroms)
-
 
 # Compute bond lengths and angles and return array of angles
 a600 = ComputeBondsAnglesTorsions(xyzn600,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
