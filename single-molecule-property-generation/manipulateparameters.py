@@ -1,9 +1,8 @@
 # imports needed
-from smarty import ForceField
+from smarty.forcefield import *
 import openeye
 from openeye import oechem
 import smarty
-from smarty.forcefield_labeler import *
 from smarty.utils import get_data_filename
 from simtk import openmm
 from simtk import unit
@@ -15,6 +14,7 @@ import pymbar
 from pymbar import timeseries
 import glob
 import sys
+from smarty.forcefield import generateTopologyFromOEMol
 
 np.set_printoptions(threshold=np.inf)
 
@@ -50,7 +50,7 @@ def constructDataFrame(mol_files):
         oechem.OETriposAtomNames(mol)
         OEMols.append(mol)
 
-    labeler = ForceField_labeler( get_data_filename('/data/forcefield/Frosst_AlkEtOH.ffxml') )
+    ff = ForceField(get_data_filename('/data/forcefield/Frosst_AlkEtOH.ffxml'))
 
     labels = []
     lst0 = []
@@ -61,15 +61,15 @@ def constructDataFrame(mol_files):
     lst22 = [[] for i in molnames] 
     
     for ind, val in enumerate(OEMols):
-        label = labeler.labelMolecules([val], verbose = False) 
+        label = ff.labelMolecules([val], verbose = False) 
         for entry in range(len(label)):
-            for bond in label[entry]['HarmonicBondForce']:
+            for bond in label[entry]['HarmonicBondGenerator']:
                 lst0.extend([str(bond[0])])
 	        lst00[ind].extend([str(bond[0])])
-	    for angle in label[entry]['HarmonicAngleForce']:
+	    for angle in label[entry]['HarmonicAngleGenerator']:
 	        lst1.extend([str(angle[0])])
 	        lst11[ind].extend([str(angle[0])])
-	    for torsion in label[entry]['PeriodicTorsionForce']:  
+	    for torsion in label[entry]['PeriodicTorsionGenerator']:  
                 lst2.extend([str(torsion[0])])
 	        lst22[ind].extend([str(torsion[0])])
 
