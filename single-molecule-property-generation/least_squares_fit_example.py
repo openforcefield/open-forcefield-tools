@@ -418,7 +418,7 @@ plt.savefig("some figure.png")
 num_bins = 20
 
 plt.figure()
-plt.hist(torsion, num_bins, normed=True)
+plt.hist(torsion, num_bins)
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.savefig('Torsion_likelihood.png')
