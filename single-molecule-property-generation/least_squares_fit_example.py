@@ -1,6 +1,9 @@
 # Ben Coscia
 # Homework 10
 # Part II Question 3
+import matplotlib as mpl
+
+mpl.use('Agg')
 
 import math
 import scipy.optimize as sci
@@ -59,3 +62,5 @@ plt.title('P versus I, R-squared = %s, s = %s' %(R_squared, s))
 plt.xlabel('Solar Radiation (mu E /m^4 s)')
 plt.ylabel('Photosynthesis Rate (mg / m^3 d)')
 plt.show()
+
+plt.savefig("some figure.png")
