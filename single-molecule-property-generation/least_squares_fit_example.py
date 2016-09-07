@@ -329,6 +329,44 @@ def readtraj(ncfiles):
     return data, xyz, time 
 
 #------------------------------------------------------------------
+# Fit the given data to a 5 term fourier series:
+# S_6(x) = (a0/2) + a1*np.sin(2*math.pi*x/P + phi1) + a2*np.sin(4*math.pi*x/P + phi2) + a3*np.sin(6*math.pi*x/P + phi3) + a6*np.sin(12*math.pi*x/P + phi6)
+#   S_6(x)  == Torsion angle in radians
+#   Pm == Maximum Photosynthesis Rate (mg / m^3 d)
+#   I == Solar Radiation (mu E /m^4 s)
+#   Isat == Optimal Solar Radiation (mu E /m^4 s)
+
+# The simplest way to do it is to minimize the sum of the residuals so that is what I am going to do
+# The residual at each point is calculated as (y - f(a0, a1, x))**2
+# for this specific case it will be (P - Pm*(I/Isat)*exp(-(I/Isat) + 1))**2
+
+PmIsat = [100, 10]  # initial guesses at Pm and Isat. Format: [Pm, Isat]
+
+def chi(PmIsat):
+    sum_chi = 0
+    for i in range(0, len(I)):
+        sum_chi += (P[i] - PmIsat[0]*(I[i]/PmIsat[1])*math.exp(-(I[i]/PmIsat[1]) + 1))**2
+    return sum_chi
+
+A = sci.minimize(chi, PmIsat)
+
+
+def goodness_of_fit(P, I, A):
+    St = 0
+    Sr = 0
+    mean = np.mean(P)
+    for i in range(0, len(P)):
+        Sr += (P[i] - A.x[0]*(I[i]/A.x[1])*math.exp(-(I[i]/A.x[1]) + 1))**2
+        St += (P[i] - mean)**2
+    s = math.sqrt(Sr/(len(P) - len(A.x)))
+    R_squared = 1 - (Sr/St)
+    return float(R_squared), s
+
+def plot_fit(A, I):
+    y = np.zeros((len(I)))
+    for i in range(0, len(I)):
+        y[i] = A.x[0]*(I[i]/A.x[1])*math.exp(-(I[i]/A.x[1]) + 1)
+    return y
 
 mol2= 'molecules/AlkEthOH_r51.mol2'
 traj = ['traj/AlkEthOH_r51.nc']
@@ -357,6 +395,8 @@ torsion = np.zeros([1,100],np.float64)
 torsion = torstimeser[0]
 
 
+
+
 R_squared, s = goodness_of_fit(P, I, A)
 P_fit = plot_fit(A, I)
 plt.plot(I, P)
@@ -369,7 +409,7 @@ plt.show()
 plt.savefig("some figure.png")
 
 plt.figure()
-plt.plot(time, torsion)
+plt.plot(time, torsion, 'x')
 plt.xlabel('Time (picoseconds)')
 plt.ylabel('Torsion angle (radians)')
 plt.savefig('Torsion_timeser.png')
