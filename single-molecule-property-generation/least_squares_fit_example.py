@@ -394,16 +394,14 @@ torsion = np.zeros([1,100],np.float64)
 
 torsion = torstimeser[0]
 
-step = 0.1
-bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1)+step,step)
+step = 0.05
+bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1),step)
 
 binplace = np.digitize(torsion, bins)
 
 print binplace
 
 likelihood = (np.bincount(binplace))/100.
-print bins
-print likelihood
 
 
 
@@ -419,7 +417,7 @@ plt.show()
 plt.savefig("some figure.png")
 
 plt.figure()
-plt.hist(torsion, bins)
+plt.hist(torsion, bins, normed=1)
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.savefig('Torsion_likelihood.png')
