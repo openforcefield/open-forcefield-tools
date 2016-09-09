@@ -11,11 +11,11 @@ from smarty import *
 
 #Define what molecule to work on, and a few simulation parameters
 molname = 'AlkEthOH_r51'
-mol_filename =  molname+'.mol2'
+mol_filename = 'Mol2_files/'+molname+'.mol2'
 time_step = 2 #Femtoseconds
 temperature = 300 #kelvin
 friction = 1 # per picosecond
-num_steps = 100000 
+num_steps = 25000000 
 trj_freq = 1000 #steps
 data_freq = 1000 #steps
 
@@ -61,9 +61,9 @@ platform = mm.Platform.getPlatformByName('Reference')
 simulation = app.Simulation(topology, system, integrator)
 simulation.context.setPositions(positions)
 simulation.context.setVelocitiesToTemperature(temperature*kelvin)
-netcdf_reporter = NetCDFReporter('AlkEthOH_r51_k10.nc', trj_freq)
+netcdf_reporter = NetCDFReporter('AlkEthOH_r51_50ns.nc', trj_freq)
 simulation.reporters.append(netcdf_reporter)
-simulation.reporters.append(app.StateDataReporter('data_k10.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
+simulation.reporters.append(app.StateDataReporter('data_50ns.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
 
 print("Starting simulation")
 start = time.clock()

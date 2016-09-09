@@ -280,7 +280,7 @@ def get_small_mol_dict(mol2, traj):
     AtomDict = dict()
     AtomDict['MolName'] = list()
     for fname in traj:
-        MoleculeName = fname.split('.')[0][5:]
+        MoleculeName = fname.split('.')[0][5:17]
         AtomDict['MolName'].append(MoleculeName)
          	
         
@@ -369,7 +369,7 @@ def plot_fit(A, I):
     return y
 
 mol2= 'molecules/AlkEthOH_r51.mol2'
-traj = ['traj/AlkEthOH_r51.nc']
+traj = ['traj/AlkEthOH_r51_50ns.nc']
 
 AtomDict = get_small_mol_dict(mol2, traj)
 
@@ -390,7 +390,7 @@ numatom = len(torsions[0])
 torstimeser = [torsions[:,ind] for ind in range(numatom)]
 
 # Using the angle at index 0 for test case
-torsion = np.zeros([1,100],np.float64)
+#torsion = np.zeros([1,100],np.float64)
 
 torsion = torstimeser[0]
 
