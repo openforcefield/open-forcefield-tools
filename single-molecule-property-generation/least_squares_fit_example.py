@@ -415,7 +415,7 @@ plt.show()
 
 plt.savefig("some figure.png")
 
-num_bins = 50
+num_bins = 100
 
 plt.figure()
 plt.hist(torsion, num_bins)
