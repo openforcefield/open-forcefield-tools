@@ -280,7 +280,7 @@ def get_small_mol_dict(mol2, traj):
     AtomDict = dict()
     AtomDict['MolName'] = list()
     for fname in traj:
-        MoleculeName = fname.split('.')[0][5:17]
+        MoleculeName = fname.split('.')[0][:13]
         AtomDict['MolName'].append(MoleculeName)
          	
         
@@ -368,8 +368,8 @@ def plot_fit(A, I):
         y[i] = A.x[0]*(I[i]/A.x[1])*math.exp(-(I[i]/A.x[1]) + 1)
     return y
 
-mol2= 'molecules/AlkEthOH_r51.mol2'
-traj = ['traj/AlkEthOH_r51_50ns.nc']
+mol2= 'molecules/AlkEthOH_c581.mol2'
+traj = ['AlkEthOH_c581_50ns.nc']
 
 AtomDict = get_small_mol_dict(mol2, traj)
 
@@ -415,10 +415,10 @@ plt.show()
 
 plt.savefig("some figure.png")
 
-num_bins = 20
+num_bins = 50
 
 plt.figure()
 plt.hist(torsion, num_bins)
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
-plt.savefig('Torsion_likelihood.png')
+plt.savefig('Torsion_likelihood_c581.png')
