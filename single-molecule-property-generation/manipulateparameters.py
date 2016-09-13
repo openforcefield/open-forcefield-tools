@@ -15,6 +15,8 @@ from pymbar import timeseries
 import glob
 import sys
 from smarty.forcefield import generateTopologyFromOEMol
+import pdb
+
 
 np.set_printoptions(threshold=np.inf)
 
@@ -680,6 +682,7 @@ ang_sub, N_kang, xyzn_ang_sub, indang  = subsampletimeseries(angles, xyznsampled
 En_sub, N_kEn, xyzn_En_sub, indEn = subsampletimeseries(energies[0], xyznsampled) 
 Ennew_sub, N_kEnnew, xyzn_Ennew_sub, indEnnew = subsampletimeseries(energiesnew[0], xyznsampled)
 
+
 Ang_kn = np.zeros([sum(N_kang)],np.float64)
 count = 0
 for x in ang_sub:
@@ -750,6 +753,8 @@ for inds,s in enumerate(smirkss):
                 count += 1
 
 
+#pdb.set_trace()
+
 # Post process energy distributions to find expectation values, analytical uncertainties and bootstrapped uncertainties
 T_from_file = read_col('StateData/data.csv',["Temperature (K)"],100)
 Temp_k = T_from_file
@@ -789,6 +794,7 @@ dAng_expect = np.zeros([K],np.float64)
 dAng_expect_unsamp = np.zeros([K],np.float64)
 allAng_expect_unsamp = np.zeros([K,nBoots_work],np.float64)
 
+
 # Begin bootstrapping loop
 for n in range(nBoots_work):
     if (n > 0):
@@ -796,32 +802,34 @@ for n in range(nBoots_work):
     for k in range(K):
         if N_kang[k] > 0:
 	    if (n == 0):
-    		booti = np.array(range(sum(N_kang)))
+    		booti = np.array(range(N_kang[k]))
 	    else:
-		booti = np.random.randint(sum(N_kang), size = sum(N_kang))
- 	    E_kn_samp[k,0:sum(N_kang)] = E_kn[k,booti]    
-	           
-        if N_kang[k] > 0:
-	    if (n ==0):
-		bootnewi = np.array(range(sum(N_kang)))
-	    else:
-		bootnewi = np.random.randint(sum(N_kang), size = sum(N_kang))        
-            E_knnew_samp[k,0:sum(N_kang)] = E_knnew[k,bootnewi]
-	    
-    for k in range(K):
-        if N_kang[k] > 0:
-            if (n == 0):
-		bootangi = np.array(range(sum(N_kang)))
-	    else:
-		bootangi = np.random.randint(sum(N_kang), size=sum(N_kang))
-	    Ang_kn_samp[0:sum(N_kang)] = Ang_kn[bootangi]
+		booti = np.random.randint(N_kang[k], size = N_kang[k])
+           
+            E_kn_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = E_kn[:,booti]
+            E_knnew_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = E_knnew[:,booti]
+            Ang_kn_samp[sum(N_kang[0:k]):sum(N_kang[0:k+1])] = Ang_kn[booti] 
+#        if N_kang[k] > 0:
+#	    if (n ==0):
+#		bootnewi = np.array(range(N_kang[k]))
+#	    else:
+#		bootnewi = np.random.randint(N_kang[k], size = N_kang[k])        
+#            if (k==0):
+#                E_knnew_samp[k,0:N_kang[k]] = E_knnew[k,bootnewi]
+#	    else:
+#                E_knnew_samp[k,N_kang[k]:N_kang[k+1]] = E_knnew[k,bootnewi]
+#    for k in range(K):
+#        if N_kang[k] > 0:
+#            if (n == 0):
+#		bootangi = np.array(range(sum(N_kang)))
+#	    else:
+#		bootangi = np.random.randint(sum(N_kang), size=sum(N_kang))
+#	    Ang_kn_samp[0:sum(N_kang)] = Ang_kn[bootangi]
         
     for k in range(K): 
-        u_kn[k,0:sum(N_kang)] = beta_k * E_kn_samp[k,0:sum(N_kang)]     
-        u_knnew[k,0:sum(N_kang)] = beta_k * E_knnew_samp[k,0:sum(N_kang)]
-        
-    Ang2_kn[0:sum(N_kang)] = Ang_kn_samp[0:sum(N_kang)]
-
+        u_kn[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = beta_k * E_kn_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])]     
+        u_knnew[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = beta_k * E_knnew_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])]
+	Ang2_kn[sum(N_kang[0:k]):sum(N_kang[0:k+1])] = Ang_kn_samp[sum(N_kang[0:k]):sum(N_kang[0:k+1])]
 
 ############################################################################
 # Initialize MBAR
@@ -889,7 +897,7 @@ if nBoots > 0:
     print "Ang_expect: %s  dAng_expect: %s  dAng_boot: %s" % (Ang_expect,dAng_expect,dAng_boot)
     print "Ang_expect_unsamp: %s  dAng_expect_unsamp: %s" % (Ang_expect_unsamp,dAng_expect_unsamp)
     print "The mean of the sampled angle series = %s" % ([np.average(A) for A in ang_sub])
-    print "The mean of the energies corresponding to the sampled angle series = %s" % ([np.average(E) for E in En_sub]) 
+    print "The mean of the energies corresponding to the sampled angle series = %s" % ([np.average(E[sum(N_kang[k]):sum([N_kang[k+1]])] for k in range(K)) for E in En_sub]) 
     print "The mean of the energies corresponding to the unsampled angle series = %s" % ([np.average(E) for E in Ennew_sub])
 sys.exit()
 
