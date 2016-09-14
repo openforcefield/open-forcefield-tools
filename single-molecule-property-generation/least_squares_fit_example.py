@@ -368,8 +368,8 @@ def plot_fit(A, I):
         y[i] = A.x[0]*(I[i]/A.x[1])*math.exp(-(I[i]/A.x[1]) + 1)
     return y
 
-mol2= 'molecules/AlkEthOH_r51.mol2'
-traj = ['AlkEthOH_r51_50ns.nc']
+mol2= 'molecules/AlkEthOH_r48.mol2'
+traj = ['AlkEthOH_r48_50ns.nc']
 
 AtomDict = get_small_mol_dict(mol2, traj)
 
@@ -386,14 +386,13 @@ torsions = a[2]
 # Get number of angles in molecule
 numatom = len(torsions[0])
 
-
 # Re-organize data into timeseries
 torstimeser = [torsions[:,ind] for ind in range(numatom)]
 
 # Using the angle at index 0 for test case
 #torsion = np.zeros([1,100],np.float64)
 
-torsion = torstimeser[35]
+torsion = torstimeser[60]
 
 step = 0.05
 bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1)+step,step)
@@ -422,4 +421,4 @@ plt.figure()
 plt.hist(torsion, num_bins)
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
-plt.savefig('Torsion_likelihood_r51_tors35.png')
+plt.savefig('torsion_histograms/r48/Torsion_likelihood_r48_tors60.png')
