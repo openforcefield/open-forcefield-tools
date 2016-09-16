@@ -384,17 +384,18 @@ for ind, val in enumerate(OEMol_r51):
 
 atominds_r51 = [tors[0] for tors in labels_r51[0][0]['PeriodicTorsionGenerator']]
 atominds_r48 = [tors[0] for tors in labels_r48[0][0]['PeriodicTorsionGenerator']]
-print([atominds_r51[2],atominds_r51[1],atominds_r51[0]])
-print([atominds_r48[33],atominds_r48[0],atominds_r48[1]])
-print([AtomDict_r51['Torsion'][1],AtomDict_r51['Torsion'][7],AtomDict_r51['Torsion'][11]])
-print([AtomDict_r48['Torsion'][4],AtomDict_r48['Torsion'][29],AtomDict_r48['Torsion'][12]])
+#print([atominds_r51[2],atominds_r51[1],atominds_r51[0]])
+#print([atominds_r48[33],atominds_r48[0],atominds_r48[1]])
+#print([AtomDict_r51['Torsion'][1],AtomDict_r51['Torsion'][7],AtomDict_r51['Torsion'][11]])
+#print([AtomDict_r48['Torsion'][4],AtomDict_r48['Torsion'][29],AtomDict_r48['Torsion'][12]])
 
 
 data_r48, xyz_r48, time_r48 = readtraj([traj[0]])
 data_r51, xyz_r51, time_r51 = readtraj([traj[1]])
+#print len(xyz_r51)
 
-xyzn_r48 = unit.Quantity(xyz_r48[:], unit.angstroms)
-time_r48 = unit.Quantity(time_r48[:], unit.picoseconds)
+xyzn_r48 = unit.Quantity(xyz_r48[:9238], unit.angstroms)
+time_r48 = unit.Quantity(time_r48[:9238], unit.picoseconds)
 xyzn_r51 = unit.Quantity(xyz_r51[:], unit.angstroms)
 time_r51 = unit.Quantity(time_r51[:], unit.picoseconds)
 
@@ -499,4 +500,6 @@ plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
 plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
+
+print "Done"
 
