@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import openeye
 from openeye import oechem
-import glob 
 from smarty import *
 from smarty.utils import *
 from smarty.forcefield import *
@@ -75,7 +74,7 @@ def constructDataFrame(mol_files):
     molnames = []
     for i in mol_files:
         molname = i.replace(' ', '')[:-5]
-        molname = molname.replace(' ' ,'')[13:]
+        molname = molname.replace(' ' ,'')[-12:]
         molnames.append(molname)
 
     OEMols=[]
@@ -147,7 +146,9 @@ def constructDataFrame(mol_files):
     for x in lst2:
 	cols2.add(x)
     cols2 = list(cols2)   
-    
+   
+
+ 
     # Generate data lists to populate frame (1 means val in lst22 was in cols2, 0 means it wasn't)
     data2 = [[] for i in range(len(lst22))]
     for val in cols2:
@@ -185,7 +186,7 @@ def constructDataFrame(mol_files):
     dftemp = pd.merge(df0, df1, how = 'outer', on = 'molecule')
     df = pd.merge(dftemp, df2, how = 'outer', on = 'molecule')
 
-    return df
+    return df, OEMols, cols2
 
 #------------------------------------------------------------------
 
@@ -262,9 +263,9 @@ def get_small_mol_dict(mol2, traj):
 
     """
     PropertiesPerMolecule = dict()    
-    mol_files = glob.glob('./Mol2_files/AlkEthOH_*.mol2')
+    mol_files = [get_data_filename(i) for i in mol2]
  
-    df = constructDataFrame(mol_files)
+    df, OEMols, cols2 =  constructDataFrame(mol_files)
     MoleculeNames = df.molecule.tolist()
     properties = df.columns.values.tolist()
  
@@ -276,7 +277,6 @@ def get_small_mol_dict(mol2, traj):
 		    defined_properties.append(p)
                 PropertiesPerMolecule[val] = defined_properties
 
-   
     AtomDict = dict()
     AtomDict['MolName'] = list()
     for fname in traj:
@@ -309,7 +309,7 @@ def get_small_mol_dict(mol2, traj):
                 if 'Torsion' in p:
                      AtomDict['Torsion'].append(AtomList)
 
-    return AtomDict
+    return AtomDict, OEMols, cols2
 #------------------------------------------------------------------
 
 def readtraj(ncfiles):
@@ -367,58 +367,95 @@ def plot_fit(A, I):
     for i in range(0, len(I)):
         y[i] = A.x[0]*(I[i]/A.x[1])*math.exp(-(I[i]/A.x[1]) + 1)
     return y
+ff = ForceField(get_data_filename('/data/forcefield/Frosst_AlkEtOH.ffxml'))
+mol2 = ['molecules/AlkEthOH_r48.mol2', 'molecules/AlkEthOH_r51.mol2']
+traj = ['AlkEthOH_r48_50ns.nc', 'AlkEthOH_r51_50ns.nc']
 
-mol2= 'molecules/AlkEthOH_r48.mol2'
-traj = ['AlkEthOH_r48_50ns.nc']
+AtomDict_r48, OEMol_r48, cols2_r48 = get_small_mol_dict([mol2[0]], [traj[0]])
+AtomDict_r51, OEMol_r51, cols2_r51 = get_small_mol_dict([mol2[1]], [traj[1]])
+labels_r48 = []
+for ind, val in enumerate(OEMol_r48):
+    label = ff.labelMolecules([val])
+    labels_r48.append(label)
+labels_r51 = []
+for ind, val in enumerate(OEMol_r51):
+    label = ff.labelMolecules([val])
+    labels_r51.append(label)
 
-AtomDict = get_small_mol_dict(mol2, traj)
+atominds_r51 = [tors[0] for tors in labels_r51[0][0]['PeriodicTorsionGenerator']]
+atominds_r48 = [tors[0] for tors in labels_r48[0][0]['PeriodicTorsionGenerator']]
+print([atominds_r51[2],atominds_r51[1],atominds_r51[0]])
+print([atominds_r48[33],atominds_r48[0],atominds_r48[1]])
+print([AtomDict_r51['Torsion'][1],AtomDict_r51['Torsion'][7],AtomDict_r51['Torsion'][11]])
+print([AtomDict_r48['Torsion'][4],AtomDict_r48['Torsion'][29],AtomDict_r48['Torsion'][12]])
 
-data, xyz, time = readtraj(traj)
-xyzn = unit.Quantity(xyz[:], unit.angstroms)
-time = unit.Quantity(time[:], unit.picoseconds)
+
+data_r48, xyz_r48, time_r48 = readtraj([traj[0]])
+data_r51, xyz_r51, time_r51 = readtraj([traj[1]])
+
+xyzn_r48 = unit.Quantity(xyz_r48[:], unit.angstroms)
+time_r48 = unit.Quantity(time_r48[:], unit.picoseconds)
+xyzn_r51 = unit.Quantity(xyz_r51[:], unit.angstroms)
+time_r51 = unit.Quantity(time_r51[:], unit.picoseconds)
 
 # Compute bond lengths and angles and return array of angles
-a = ComputeBondsAnglesTorsions(xyzn,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])
+a = ComputeBondsAnglesTorsions(xyzn_r48,AtomDict_r48['Bond'],AtomDict_r48['Angle'],AtomDict_r48['Torsion'])
+b = ComputeBondsAnglesTorsions(xyzn_r51,AtomDict_r51['Bond'],AtomDict_r51['Angle'],AtomDict_r51['Torsion'])
 
 # Pull out torsion data
-torsions = a[2]
+torsions_r48 = a[2]
+torsions_r51 = b[2]
 
 # Get number of angles in molecule
-numatom = len(torsions[0])
+numtors_r48 = len(torsions_r48[0])
+numtors_r51 = len(torsions_r51[0])
 
 # Re-organize data into timeseries
-torstimeser = [torsions[:,ind] for ind in range(numatom)]
+torstimeser_r48 = [torsions_r48[:,ind] for ind in range(numtors_r48)]
+torstimeser_r51 = [torsions_r51[:,ind] for ind in range(numtors_r51)]
 
 # Using the angle at index 0 for test case
 #torsion = np.zeros([1,100],np.float64)
+torsion_r48_a = torstimeser_r48[4]
+torsion_r51_a = torstimeser_r51[1]
+torsion_r48_b = torstimeser_r48[29]
+torsion_r51_b = torstimeser_r51[7]
+torsion_r48_c = torstimeser_r48[12]
+torsion_r51_c = torstimeser_r51[11]
 
-torsion = torstimeser[60]
+#step = 0.05
+#bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1)+step,step)
 
-step = 0.05
-bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1)+step,step)
-
-binplace = np.digitize(torsion, bins)
+#binplace = np.digitize(torsion, bins)
 
 
-likelihood = (np.bincount(binplace))/100.
+#likelihood = (np.bincount(binplace))/100.
 
-
-
-R_squared, s = goodness_of_fit(P, I, A)
-P_fit = plot_fit(A, I)
-plt.plot(I, P)
-plt.plot(I, P_fit)
-plt.title('P versus I, R-squared = %s, s = %s' %(R_squared, s))
-plt.xlabel('Solar Radiation (mu E /m^4 s)')
-plt.ylabel('Photosynthesis Rate (mg / m^3 d)')
-plt.show()
-
-plt.savefig("some figure.png")
 
 num_bins = 100
 
 plt.figure()
-plt.hist(torsion, num_bins)
+plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48')
+plt.hist(torsion_r51_a,num_bins,label='AlkEthOh_r51')
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
-plt.savefig('torsion_histograms/r48/Torsion_likelihood_r48_tors60.png')
+plt.title('Torsion [#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
+plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
+
+plt.figure()
+plt.hist(torsion_r48_b,num_bins,label='AlkEthOH_r48')
+plt.hist(torsion_r51_b,num_bins,label='AlkEthOh_r51')
+plt.ylabel('Likelihood that configuration is sampled')
+plt.xlabel('Torsion angle (radians)')
+plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
+plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
+
+plt.figure()
+plt.hist(torsion_r48_c,num_bins,label='AlkEthOH_r48')
+plt.hist(torsion_r51_c,num_bins,label='AlkEthOh_r51')
+plt.ylabel('Likelihood that configuration is sampled')
+plt.xlabel('Torsion angle (radians)')
+plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
+plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
+
+
