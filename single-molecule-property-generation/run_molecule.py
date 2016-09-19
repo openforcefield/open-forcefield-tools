@@ -30,7 +30,7 @@ oechem.OETriposAtomNames(mol)
 # Get positions
 coordinates = mol.GetCoords()
 natoms = len(coordinates)
-positions = np.zeros([natoms,3], np.float32)
+positions = np.zeros([natoms,3], np.float64)
 for index in range(natoms):
     (x,y,z) = coordinates[index]
     positions[index,0] = x
