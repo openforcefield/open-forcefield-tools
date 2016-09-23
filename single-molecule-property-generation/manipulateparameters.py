@@ -18,7 +18,7 @@ from smarty.forcefield import generateTopologyFromOEMol
 import pdb
 
 
-np.set_printoptions(threshold=np.inf)
+#np.set_printoptions(threshold=np.inf)
 
 #----------------------------------------------------------------------
 # CONSTANTS
@@ -33,7 +33,14 @@ def constructDataFrame(mol_files):
     """ 
     Construct a pandas dataframe to be populated with computed single molecule properties. Each unique bond, angle and torsion has it's own column for a value
     and uncertainty.
-    inputs: a list of mol2 files from which we determine connectivity using OpenEye Tools and construct the dataframe using Pandas.
+    
+    Parameters
+    -----------
+    mol_files -  a list of mol2 files from which we determine connectivity using OpenEye Tools and construct the dataframe using Pandas.
+    
+    Returns
+    -----------
+    df - data frame in form molecules x property id that indicates if a specific property exists for a molecule (1 in cell if yes, 0 if no)
     """    
     
     molnames = []
@@ -52,7 +59,7 @@ def constructDataFrame(mol_files):
         oechem.OETriposAtomNames(mol)
         OEMols.append(mol)
 
-    ff = ForceField(get_data_filename('/data/forcefield/Frosst_AlkEtOH.ffxml'))
+    ff = ForceField(get_data_filename('/data/forcefield/smirff99Frosst.ffxml'))
 
     labels = []
     lst0 = []
@@ -61,19 +68,27 @@ def constructDataFrame(mol_files):
     lst00 = [[] for i in molnames]
     lst11 = [[] for i in molnames]
     lst22 = [[] for i in molnames] 
-    
+    lst_0 = [[] for i in molnames]
+    lst_1 = [[] for i in molnames]
+    lst_2 = [[] for i in molnames] 
+  
+
+ 
     for ind, val in enumerate(OEMols):
         label = ff.labelMolecules([val], verbose = False) 
         for entry in range(len(label)):
             for bond in label[entry]['HarmonicBondGenerator']:
                 lst0.extend([str(bond[0])])
 	        lst00[ind].extend([str(bond[0])])
+                lst_0[ind].append([str(bond[0]),str(bond[2])])
 	    for angle in label[entry]['HarmonicAngleGenerator']:
 	        lst1.extend([str(angle[0])])
 	        lst11[ind].extend([str(angle[0])])
+                lst_1[ind].append((str(angle[0]),str(angle[2])))
 	    for torsion in label[entry]['PeriodicTorsionGenerator']:  
                 lst2.extend([str(torsion[0])])
 	        lst22[ind].extend([str(torsion[0])])
+                lst_2[ind].append([str(torsion[0]),str(torsion[2])])
 
     # Return unique strings from lst0
     cols0 = set()
@@ -149,16 +164,22 @@ def constructDataFrame(mol_files):
     dftemp = pd.merge(df0, df1, how = 'outer', on = 'molecule')
     df = pd.merge(dftemp, df2, how = 'outer', on = 'molecule')
 
-    return df
+    return df, lst_0, lst_1, lst_2
 
 #------------------------------------------------------------------
 
 def ComputeBondsAnglesTorsions(xyz, bonds, angles, torsions):
     """ 
     compute a 3 2D arrays of bond lengths for each frame: bond lengths in rows, angle lengths in columns
-    inputs: the xyz files, an array of length-2 arrays.
-    we calculate all three together since the torsions and angles
-    require the bond vectors to be calculated anyway.
+    
+    Parameters 
+    -----------
+    xyz - xyz files, an array of length-2 arrays
+    bonds, angles, torsions - numbered atom indices tuples associated with all unqiue bonds, angles and torsions
+ 
+    Returns
+    ----------
+    bond_dist, angle_dist, torsion_dist - computed bonds, angles and torsions across the provided time series
     """
 
     niterations = xyz.shape[0] # no. of frames
@@ -214,7 +235,9 @@ def ComputeBondsAnglesTorsions(xyz, bonds, angles, torsions):
 
 def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, torsion_dist, bonds, angles, torsions, torsionbool):
 
-    """Inputs:
+    """
+    Parameters
+    -----------
     properties: A list of property strings we want value for
     bond_dist: a Niterations x nbonds list of bond lengths
     angle_dist: a Niterations x nbonds list of angle angles (in radians)
@@ -222,8 +245,11 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
     bonds: a list of bonds (ntorsions x 2)
     angles: a list of angles (ntorsions x 3)
     torsions: a list of torsion atoms (ntorsions x 4)
+    torsionbool: boolean which suppresses torsion statistical analysis if False
 
     # we assume the bond_dist / bonds , angle_dist / angles, torsion_dist / torsion were constucted in the same order.
+
+    PropertyDict - dictionary of average value of bond, angle or torsion across time series with associated uncertainty in mean and uncertainty in uncertainty
     """
     PropertyDict = dict()
     nbonds = np.shape(bonds)[0]
@@ -302,13 +328,23 @@ def calculateBondsAnglesTorsionsStatistics(properties, bond_dist, angle_dist, to
 
 def get_properties_from_trajectory(mol2, ncfiles, torsionbool=True):
 
-    """take multiple .nc files with identifier names and a pandas dataframe with property 
+    """
+    take multiple .nc files with identifier names and a pandas dataframe with property 
     names for single atom bonded properties (including the atom numbers) and populate 
     those property pandas dataframe.
-    ARGUMENTS dataframe (pandas object) - name of the pandas object
-       that contains the properties we want to extract.  ncfile
-       (netcdf file) - a list of trajectories in netcdf format.  Names
-       should correspond to the identifiers in the pandas dataframe.
+    
+    Parameters
+    -----------
+    mol2 - mol2 files used to identify and index molecules  
+    ncfiles -  a list of trajectories in netcdf format. Names should correspond to the identifiers in the pandas dataframe.
+    torsionbool - boolean value passed to computeBondsAnglesTorsionsStatistics() to supress torsion statistics analysis. Default set to True (torsion calculatio                  n not supressed). 
+    
+    Returns
+    ----------
+    bond_dist - calculated bond distribution across trajectory
+    angle_dist - calculated angle distribution across trajectory
+    torsion_dist - calculated torsion distribution across trajectory
+    Properties - dictionary of an average value of bond, angle or torsion across time series with associated uncertainty in mean and uncertainty in uncertainty
     """
 
     PropertiesPerMolecule = dict()
@@ -386,11 +422,18 @@ def get_properties_from_trajectory(mol2, ncfiles, torsionbool=True):
 #------------------------------------------------------------------
 
 def read_col(filename,colname,frames):
-    """Reads in columns from .csv outputs of OpenMM StateDataReporter 
-    ARGUMENTS
-	filename (string) - the path to the folder of the csv
-	colname (string) - the column you wish to extract from the csv
-	frames (integer) - the number of frames you wish to extract		
+    """
+    Reads in columns from .csv outputs of OpenMM StateDataReporter 
+    
+    Parameters
+    -----------
+    filename (string) - the path to the folder of the csv
+    colname (string) - the column you wish to extract from the csv
+    frames (integer) - the number of frames you wish to extract		
+    
+    Returns
+    ----------
+    dat - the pandas column series written as a matrix
     """
 
     print "--Reading %s from %s/..." % (colname,filename)
@@ -408,17 +451,24 @@ def read_col(filename,colname,frames):
 #------------------------------------------------------------------
 
 def readtraj(ncfiles):
-
     """
     Take multiple .nc files and read in coordinates in order to re-valuate energies based on parameter changes
 
-    ARGUMENTS
+    Parameters
+    ----------- 
     ncfiles - a list of trajectories in netcdf format
+
+    Returns
+    ----------
+    data - all of the data contained in the netcdf file
+    xyzn - the coordinates from the netcdf in angstroms
     """
+    
     data = netcdf.Dataset(ncfiles)
     xyz = data.variables['coordinates']
-
-    return data, xyz 
+    xyzn = unit.Quantity(xyz[:], unit.angstroms)
+   
+    return data, xyzn 
 
 #------------------------------------------------------------------
 
@@ -457,10 +507,13 @@ def new_param_energy(mol2, traj, smirkss, N_k, params, paramtype, samps, *coords
     smirkss: list of smirks strings we wish to apply parameter changes to (Only changing 1 type of string at a time now. All bonds, all angles or all torsions)
     N_k: numpy array of number of samples per state
     params: a numpy array of the parameter values we wish to test
-    paramtype: the type of ff param being edited (i.e. force constants [k], equlibrium length [])
+    paramtype: the type of ff param being edited
+        BONDS - k (bond force constant), length (equilibrium bond length) 
+        ANGLES - k (angle force constant), angle (equilibrium bond angle)
+        TORSIONS - k{i} (torsion force constant), idivf{i} (torsional barrier multiplier), periodicity{i} (periodicity of the torsional barrier), phase{i} 
+                   (phase offset of the torsion)
+        NONBONDED - epsilon and rmin_half (where epsilon is the LJ parameter epsilon and rmin_half is half of the LJ parameter rmin)
     samps: samples per energy calculation
-
-    **CHECK FORCEFIELD PARAMETER TYPES**
 
     Returns
     -------
@@ -477,7 +530,7 @@ def new_param_energy(mol2, traj, smirkss, N_k, params, paramtype, samps, *coords
 
     # Determine number of simulations
     K = np.size(N_k)
-    if np.shape(params) != np.shape(N_k): raise "K_k and N_k must have same dimensions"
+    #if np.shape(params) != np.shape(N_k): raise "K_k and N_k must have same dimensions"
 
 
     # Determine max number of samples to be drawn from any state
@@ -503,7 +556,7 @@ def new_param_energy(mol2, traj, smirkss, N_k, params, paramtype, samps, *coords
         xyzn = coords
         
     # Load forcefield file
-    ffxml = get_data_filename('forcefield/Frosst_AlkEtOH.ffxml')
+    ffxml = get_data_filename('forcefield/smirff99Frosst.ffxml')
     ff = ForceField(ffxml)
 
     # Generate a topology
@@ -521,14 +574,16 @@ def new_param_energy(mol2, traj, smirkss, N_k, params, paramtype, samps, *coords
         temp0 = np.zeros([len(params),samps],np.float64)
         param = ff.getParameter(smirks=s)
         for ind,val in enumerate(params):
-            temp1 = np.zeros(samps,np.float64)
-            param[paramtype] = str(val)
-            ff.setParameter(param, smirks = s)
-            system = ff.createSystem(topology, [mol], verbose=verbose)
-            for i,a in enumerate(xyzn):
-                e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
-                energies[inds,ind,i] = e
-    
+            for p in paramtype:
+                temp1 = np.zeros(samps,np.float64)
+                for a,b in zip(val,p):
+                    param[b] = str(a)       
+                ff.setParameter(param, smirks = s)
+                system = ff.createSystem(topology, [mol], verbose=verbose)
+                for i,a in enumerate(xyzn):
+                    e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
+                    energies[inds,ind,i] = e
+   
     return energies, xyzn, system
 
 #------------------------------------------------------------------
@@ -551,9 +606,8 @@ def get_small_mol_dict(mol2, traj):
     mol_files = [] 
     for i in mol2:
         temp = get_data_filename(i)
-        print temp
         mol_files.append(temp)
-    df = constructDataFrame(mol_files)
+    df,lst_0,lst_1,lst_2 = constructDataFrame(mol_files)
     MoleculeNames = df.molecule.tolist()
     properties = df.columns.values.tolist()
 
@@ -598,11 +652,11 @@ def get_small_mol_dict(mol2, traj):
                 if 'Torsion' in p:
                      AtomDict['Torsion'].append(AtomList)
 
-    return AtomDict
+    return AtomDict,lst_0,lst_1,lst_2
 
 #------------------------------------------------------------------
 
-def subsampletimeseries(timeser,xyzn):
+def subsampletimeseries(timeser,xyzn,N_k):
     """
     Return a subsampled timeseries based on statistical inefficiency calculations.
 
@@ -610,6 +664,7 @@ def subsampletimeseries(timeser,xyzn):
     ----------
     timeser: the timeseries to be subsampled
     xyzn: the coordinates associated with each frame of the timeseries to be subsampled
+    N_k: original # of samples in each timeseries
     
     Returns
     ---------
@@ -622,7 +677,7 @@ def subsampletimeseries(timeser,xyzn):
     xyz = xyzn
 
     # initialize array of statistical inefficiencies
-    g = np.zeros(np.size(ts),np.float64)    
+    g = np.zeros(len(ts),np.float64)    
 
 
     for i,t in enumerate(ts):
@@ -631,12 +686,19 @@ def subsampletimeseries(timeser,xyzn):
             print "WARNING FLAG"
         else:
             g[i] = timeseries.statisticalInefficiency(t)
-  
+ 
     N_k_sub = np.array([len(timeseries.subsampleCorrelatedData(t,g=b)) for t, b in zip(ts,g)])
-    ind = np.array([timeseries.subsampleCorrelatedData(t,g=b) for t,b in zip(ts,g)])
-    ts_sub = np.array([t[i] for t,i in zip(ts,ind)])    
-    xyz_sub = np.array([unit.Quantity(c[i], unit.angstroms) for c,i in zip(xyz,ind)])
-   
+    ind = [timeseries.subsampleCorrelatedData(t,g=b) for t,b in zip(ts,g)]
+
+    #xyz_sub = np.array([unit.Quantity(c[i], unit.angstroms) for c,i in zip(xyz,ind)])
+    if (N_k_sub == N_k).all():
+        ts_sub = ts
+        xyz_sub = xyz
+        print "No sub-sampling occurred"
+    else:
+        print "Sub-sampling..." 
+        ts_sub = np.array([t[timeseries.subsampleCorrelatedData(t,g=b)] for t,b in zip(ts,g)])
+        xyz_sub = np.array([c[timeseries.subsampleCorrelatedData(t,g=b)] for c,t,b in zip(xyz,ts,g)])
     return ts_sub, N_k_sub, xyz_sub, ind
 
 #------------------------------------------------------------------
@@ -649,43 +711,72 @@ def subsampletimeseries(timeser,xyzn):
 mol2 = ['molecules/AlkEthOH_r51.mol2']
 mol2en = 'molecules/AlkEthOH_r51.mol2'
 traj = 'traj/AlkEthOH_r51.nc'
-smirkss = ['[a,A:1]-[#6X4:2]-[a,A:3]']
-N_k = np.array([100, 100, 100, 100, 100])
+smirkss = ['[*:1]~[#6X4:2]-[*:3]']
+
+#N_k = np.array([100, 100, 100, 100, 100])
+#N_k = np.array([100,100])
+N_k= np.array([100])
+
 K = np.size(N_k)
 N_max = np.max(N_k)
-K_k = np.array([106, 104, 102, 100, 98])
-K_extra = np.array([96, 99, 103, 105, 108]) # unsampled force constants
-paramtype = 'k'
+
+#K_k = np.array([[106], [104], [102], [100], [98]])
+#K_k = np.array([[104.],[100.]])
+K_k = np.array([[100.]])
+
+#K_extra = np.array([[96], [99], [103], [105], [108]]) # unsampled force constants
+#K_extra = np.array([[107.],[98.]])
+K_extra = np.array([[50.]])
+
+paramtype = [['k']]
 
 # Calculate energies at various parameters of interest
 energies, xyzn, system = new_param_energy(mol2en,traj, smirkss, N_k, K_k, paramtype, N_max)
 energiesnew, xyznnew, systemnew = new_param_energy(mol2en, traj, smirkss, N_k, K_extra, paramtype, N_max)
 
-
 # Return AtomDict needed to feed to ComputeBondsAnglesTorsions()
-AtomDict = get_small_mol_dict(mol2, [traj])
+AtomDict,lst_0,lst_1,lst_2 = get_small_mol_dict(mol2, [traj])
+
 
 # Read in coordinate data 
 # Working on functionalizing this whole process of organizing the single molecule property data
-trajs = ['traj/AlkEthOH_r51_k106.nc','traj/AlkEthOH_r51_k104.nc','traj/AlkEthOH_r51_k102.nc','traj/AlkEthOH_r51.nc','traj/AlkEthOH_r51_k98.nc']
+#trajs = ['traj/AlkEthOH_r51_k106.nc','traj/AlkEthOH_r51_k104.nc','traj/AlkEthOH_r51_k102.nc','traj/AlkEthOH_r51.nc','traj/AlkEthOH_r51_k98.nc']
+#trajs = ['traj/AlkEthOH_r51_k104.nc','traj/AlkEthOH_r51.nc']
+trajs = ['traj/AlkEthOH_r51.nc']
+trajstest = ['traj/AlkEthOH_r51_k50.nc']
 
-
-xyznsampled = np.zeros([K,N_max,12,3],np.float64) 
+xyznsampled = [[] for i in trajs] 
 angles = np.zeros([K,N_max],np.float64)
 for i,x in enumerate(trajs):
     coord = readtraj(x)[1]
-    coord = unit.Quantity(coord[:], unit.angstroms)
-    xyznsampled[i] = coord
+    #coord = unit.Quantity(coord[:], unit.angstroms)
+    xyznsampled[i] = coord   
     ang = ComputeBondsAnglesTorsions(coord,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])[1]# Compute angles and return array of angles
     numatom = len(ang[0]) # get number of unique angles in molecule
     angtimeser = [ang[:,ind] for ind in range(numatom)] # re-organize data into timeseries
     angles[i] = angtimeser[0] # pull out single angle in molecule for test case
 
-# Subsample timeseries and return new number of samples per state
-ang_sub, N_kang, xyzn_ang_sub, indang  = subsampletimeseries(angles, xyznsampled)
-En_sub, N_kEn, xyzn_En_sub, indEn = subsampletimeseries(energies[0], xyznsampled) 
-Ennew_sub, N_kEnnew, xyzn_Ennew_sub, indEnnew = subsampletimeseries(energiesnew[0], xyznsampled)
 
+xyznnewtest = [[] for i in trajstest] 
+anglesnewtest = np.zeros([K,N_max],np.float64)
+for i,x in enumerate(trajstest):
+    coord = readtraj(x)[1]
+    #coord = unit.Quantity(coord[:], unit.angstroms)
+    xyznnewtest[i] = coord   
+    ang = ComputeBondsAnglesTorsions(coord,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])[1]# Compute angles and return array of angles
+    numatom = len(ang[0]) # get number of unique angles in molecule
+    angtimeser = [ang[:,ind] for ind in range(numatom)] # re-organize data into timeseries
+    anglesnewtest[i] = angtimeser[0] # pull out single angle in molecule for test case
+
+print xyznsampled[0][0]   
+print xyznnewtest[0][0]
+
+
+# Subsample timeseries and return new number of samples per state
+ang_sub, N_kang, xyzn_ang_sub, indang  = subsampletimeseries(angles, xyznsampled, N_k)
+En_sub, N_kEn, xyzn_En_sub, indEn = subsampletimeseries(energies[0], xyznsampled, N_k) 
+Ennew_sub, N_kEnnew, xyzn_Ennew_sub, indEnnew = subsampletimeseries(energiesnew[0], xyznsampled, N_k)
+ang_sub_test,N_kang_test,xyzn_ang_test,indangtest = subsampletimeseries(anglesnewtest,xyznnewtest,N_k)
 
 Ang_kn = np.zeros([sum(N_kang)],np.float64)
 count = 0
@@ -693,14 +784,6 @@ for x in ang_sub:
     for y in x:
         Ang_kn[count] = y
         count += 1
-
-
-#count = 0
-#for ind, x in enumerate(xyzn_ang_sub):
-#    for i, z in enumerate(x):
-        #print x
-#        count += 1 
-#        print count 
 
 #--------------------------------------------------------------
 # Re-evaluate potenitals at all subsampled coord and parameters
@@ -716,47 +799,46 @@ oechem.OEReadMolecule(ifs, mol )
 oechem.OETriposAtomNames(mol)
 
 # Load forcefield file
-ffxml = get_data_filename('forcefield/Frosst_AlkEtOH.ffxml')
+ffxml = get_data_filename('forcefield/smirff99Frosst.ffxml')
 ff = ForceField(ffxml)
 
 # Generate a topology
 from smarty.forcefield import generateTopologyFromOEMol
 topology = generateTopologyFromOEMol(mol)
 
-#-----------------
-# MAIN
-#-----------------
-
-# Calculate energies     
+# Re-calculate energies     
 E_kn = np.zeros([len(K_k),sum(N_kang)],np.float64)
 for inds,s in enumerate(smirkss):
     param = ff.getParameter(smirks=s)
     for ind,val in enumerate(K_k):
         count = 0
-        param[paramtype] = str(val)
-        ff.setParameter(param, smirks = s)
-        system = ff.createSystem(topology, [mol], verbose=verbose)  
-        for k_ind, pos in enumerate(xyzn_ang_sub):
-            for i,a in enumerate(pos):
-                e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
-                E_kn[ind,count] = e
-                count += 1
+        for p in paramtype:
+            for a,b in zip(val,p):
+                param[b] = str(a)
+            ff.setParameter(param, smirks = s)
+            system = ff.createSystem(topology, [mol], verbose=verbose)  
+            for k_ind, pos in enumerate(xyzn_ang_sub):
+                for i,a in enumerate(pos):
+                    e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
+                    E_kn[ind,count] = e
+                    count += 1
 
 E_knnew = np.zeros([len(K_extra),sum(N_kang)],np.float64)
 for inds,s in enumerate(smirkss):
     param = ff.getParameter(smirks=s)
     for ind,val in enumerate(K_extra):
         count = 0
-        param[paramtype] = str(val)
-        ff.setParameter(param, smirks = s)
-        system = ff.createSystem(topology, [mol], verbose=verbose)  
-        for k_ind, pos in enumerate(xyzn_ang_sub):
-            for i,a in enumerate(pos):
-                e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
-                E_knnew[ind,count] = e
-                count += 1
+        for p in paramtype:
+            for a,b in zip(val,p):    
+                param[b] = str(a)
+            ff.setParameter(param, smirks = s)
+            system = ff.createSystem(topology, [mol], verbose=verbose)  
+            for k_ind, pos in enumerate(xyzn_ang_sub):
+                for i,a in enumerate(pos):
+                    e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
+                    E_knnew[ind,count] = e
+                    count += 1
 
-#pdb.set_trace()
 
 # Post process energy distributions to find expectation values, analytical uncertainties and bootstrapped uncertainties
 T_from_file = read_col('StateData/data.csv',["Temperature (K)"],100)
@@ -902,6 +984,18 @@ if nBoots > 0:
     print "The mean of the sampled angle series = %s" % ([np.average(A) for A in ang_sub])
     print "The mean of the energies corresponding to the sampled angle series = %s" % ([np.average(E) for E in E_kn]) 
     print "The mean of the energies corresponding to the unsampled angle series = %s" % ([np.average(E) for E in E_knnew])
+
+    # calculate standard deviations away that estimate is from sampled value
+    E_mean_samp = np.array([np.average(E) for E in E_kn])
+    E_mean_unsamp = np.array([np.average(E) for E in E_knnew]) 
+    Ang_mean_samp = np.array([np.average(A) for A in ang_sub])
+    Angnew_mean_test = np.array([np.average(A) for A in ang_sub_test])
+    E_samp_stddevaway = np.array([np.abs(i-j)/u for i,j,u in zip(E_mean_samp,E_expect,dE_boot)])
+    E_unsamp_stddevaway = np.array([np.abs(i-j)/u for i,j,u in zip(E_mean_unsamp,E_expectnew,dE_bootnew)])
+    Ang_samp_stddevaway = np.array([np.abs(i-j)/u for i,j,u in zip(Ang_mean_samp,Ang_expect,dAng_boot)])
+    Ang_test_stddevaway = np.array([np.abs(i-j)/u for i,j,u in zip(Angnew_mean_test,Ang_expect_unsamp,dAng_expect_unsamp)])
+
+    print "Standard deviations away from true sampled observables for E_expect: %s  E_expectnew: %s  Ang_expect: %s Ang_expect_unsamp: %s" % (E_samp_stddevaway,E_unsamp_stddevaway,Ang_samp_stddevaway,Ang_test_stddevaway) 
 sys.exit()
 
 ########################################################################
