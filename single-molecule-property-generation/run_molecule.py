@@ -9,9 +9,10 @@ import numpy as np
 from mdtraj.reporters import NetCDFReporter
 from smarty import *
 import sys
+import numpy as np
 
 #Define what molecule to work on, and a few simulation parameters
-molname = 'AlkEthOH_r51'
+molname = 'AlkEthOH_r48'
 mol_filename = 'Mol2_files/'+molname+'.mol2'
 time_step = 2 #Femtoseconds
 temperature = 300 #kelvin
@@ -48,13 +49,14 @@ params = forcefield.getParameter(smirks='[#1:1]-[#8]')
 params['rmin_half']='0.01'
 params['epsilon']='0.01'
 forcefield.setParameter(params, smirks='[#1:1]-[#8]')
+system = forcefield.createSystem(topology, [mol])
 
-paramlist = [80,90,100,105,108,109,110,113,120,130,140,150,160]
+paramlist = np.arange(1107,1140,1)
 
-param = forcefield.getParameter(smirks='[*:1]~[#6X4:2]-[*:3]')
+param = forcefield.getParameter(smirks='[#8:1]-[#1:2]')
 for i in paramlist:
-    param['angle'] = str(i)
-    forcefield.setParameter(param, smirks='[*:1]~[#6X4:2]-[*:3]')
+    param['k'] = str(i)
+    forcefield.setParameter(param, smirks='[#8:1]-[#1:2]')
     system = forcefield.createSystem(topology, [mol])
 
 
@@ -64,9 +66,9 @@ for i in paramlist:
     simulation = app.Simulation(topology, system, integrator)
     simulation.context.setPositions(positions)
     simulation.context.setVelocitiesToTemperature(temperature*kelvin)
-    netcdf_reporter = NetCDFReporter('traj/AlkEthOH_r51_equilibangle'+str(i)+'.nc', trj_freq)
+    netcdf_reporter = NetCDFReporter('traj/'+molname+'_[#8:1]-[#1:2]_kbond'+str(i)+'.nc', trj_freq)
     simulation.reporters.append(netcdf_reporter)
-    simulation.reporters.append(app.StateDataReporter('StateData/data_r51_equilibangle'+str(i)+'.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
+    simulation.reporters.append(app.StateDataReporter('StateData/data_'+molname+'_[#8:1]-[#1:2]_kbond'+str(i)+'.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
 
     print("Starting simulation")
     start = time.clock()
@@ -76,3 +78,22 @@ for i in paramlist:
     print("Elapsed time %.2f seconds" % (end-start))
     netcdf_reporter.close()
     print("Done!")
+
+#Do simulation
+#integrator = mm.LangevinIntegrator(temperature*kelvin, friction/picoseconds, time_step*femtoseconds)
+#platform = mm.Platform.getPlatformByName('Reference')
+#simulation = app.Simulation(topology, system, integrator)
+#simulation.context.setPositions(positions)
+#simulation.context.setVelocitiesToTemperature(temperature*kelvin)
+#netcdf_reporter = NetCDFReporter('traj/AlkEthOH_r51.nc', trj_freq)
+#simulation.reporters.append(netcdf_reporter)
+#simulation.reporters.append(app.StateDataReporter('StateData/data_r51.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
+
+#print("Starting simulation")
+#start = time.clock()
+#simulation.step(num_steps)
+#end = time.clock()
+
+#print("Elapsed time %.2f seconds" % (end-start))
+#netcdf_reporter.close()
+#print("Done!")
