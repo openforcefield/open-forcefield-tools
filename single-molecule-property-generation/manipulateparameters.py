@@ -709,9 +709,9 @@ def subsampletimeseries(timeser,xyzn,N_k):
 #-----------------------------------------------------------------
 # PARAMETERS
 #-----------------------------------------------------------------
-mol2 = ['molecules/AlkEthOH_r0.mol2']
-mol2en = 'molecules/AlkEthOH_r0.mol2'
-traj = 'traj/AlkEthOH_r0.nc'
+mol2 = ['molecules/AlkEthOH_r48.mol2']
+mol2en = 'molecules/AlkEthOH_r48.mol2'
+traj = 'traj/AlkEthOH_r48.nc'
 smirkss = ['[#8:1]-[#1:2]']
 
 #N_k = np.array([100, 100, 100, 100, 100])
@@ -719,6 +719,8 @@ smirkss = ['[#8:1]-[#1:2]']
 N_k= np.array([100])
 
 K = np.size(N_k)
+print K
+
 N_max = np.max(N_k)
 
 #K_k = np.array([[106], [104], [102], [100], [98]])
@@ -727,7 +729,7 @@ K_k = np.array([[1106.]])
 
 #K_extra = np.array([[96], [99], [103], [105], [108]]) # unsampled force constants
 #K_extra = np.array([[110.],[98.]])
-K_extra = np.array([[1200.]])
+K_extra = np.array([[1050.]])
 
 paramtype = [['k']]
 
@@ -749,46 +751,47 @@ AtomDict,lst_0,lst_1,lst_2 = get_small_mol_dict(mol2, [traj])
 # Working on functionalizing this whole process of organizing the single molecule property data
 #trajs = ['traj/AlkEthOH_r51_k106.nc','traj/AlkEthOH_r51_k104.nc','traj/AlkEthOH_r51_k102.nc','traj/AlkEthOH_r51.nc','traj/AlkEthOH_r51_k98.nc']
 #trajs = ['traj/AlkEthOH_r51_k104.nc','traj/AlkEthOH_r51.nc']
-trajs = ['traj/AlkEthOH_r0.nc']
+trajs = ['traj/AlkEthOH_r48.nc']#,'traj/AlkEthOH_r48_[#8:1]-[#1:2]_kbond1120.nc']
 #trajstest = ['traj/AlkEthOH_r51_k110.nc','traj/AlkEthOH_r51_k98.nc']
-trajstest = ['traj/AlkEthOH_r0_[#8:1]-[#1:2]_kbond1200.nc']
+trajstest = ['traj/AlkEthOH_r48_[#8:1]-[#1:2]_kbond1050.nc']#,'traj/AlkEthOH_r48_[#8:1]-[#1:2]_kbond1150.nc']
 
 xyznsampled = [[] for i in trajs] 
-angles = np.zeros([K,N_max],np.float64)
+A = np.zeros([K,N_max],np.float64)
 for i,x in enumerate(trajs):
     coord = readtraj(x)[1]
     #coord = unit.Quantity(coord[:], unit.angstroms)
     xyznsampled[i] = coord   
-    ang = ComputeBondsAnglesTorsions(coord,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])[0]# Compute angles and return array of angles
-    numatom = len(ang[0]) # get number of unique angles in molecule
-    angtimeser = [ang[:,ind] for ind in range(numatom)] # re-organize data into timeseries
-    angles[i] = angtimeser[11] # pull out single angle in molecule for test case
+    obs = ComputeBondsAnglesTorsions(coord,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])[0]# Compute angles and return array of angles
+    numatom = len(obs[0]) # get number of unique angles in molecule
+    timeser = [obs[:,ind] for ind in range(numatom)] # re-organize data into timeseries
+    A[i] = timeser[11] # pull out single angle in molecule for test case
+
 
 
 xyznnewtest = [[] for i in trajstest] 
-anglesnewtest = np.zeros([K,N_max],np.float64)
+Anewtest = np.zeros([K,N_max],np.float64)
 for i,x in enumerate(trajstest):
     coordtest = readtraj(x)[1]
     #coord = unit.Quantity(coord[:], unit.angstroms)
     xyznnewtest[i] = coordtest   
-    angtest = ComputeBondsAnglesTorsions(coordtest,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])[0]# Compute angles and return array of angles
-    numatomtest = len(angtest[0]) # get number of unique angles in molecule
-    angtimesertest = [angtest[:,ind] for ind in range(numatomtest)] # re-organize data into timeseries
-    anglesnewtest[i] = angtimesertest[11] # pull out single angle in molecule for test case
+    obstest = ComputeBondsAnglesTorsions(coordtest,AtomDict['Bond'],AtomDict['Angle'],AtomDict['Torsion'])[0]# Compute angles and return array of angles
+    numatomtest = len(obstest[0]) # get number of unique angles in molecule
+    timesertest = [obstest[:,ind] for ind in range(numatomtest)] # re-organize data into timeseries
+    Anewtest[i] = timesertest[11] # pull out single angle in molecule for test case
 
 #print anglesnewtest 
 # Subsample timeseries and return new number of samples per state
-ang_sub, N_kang, xyzn_ang_sub, indang  = subsampletimeseries(angles, xyznsampled, N_k)
+A_sub, N_kA, xyzn_A_sub, indA  = subsampletimeseries(A, xyznsampled, N_k)
 En_sub, N_kEn, xyzn_En_sub, indEn = subsampletimeseries(energies[0], xyznsampled, N_k) 
 Ennew_sub, N_kEnnew, xyzn_Ennew_sub, indEnnew = subsampletimeseries(energiesnew[0], xyznsampled, N_k)
-ang_sub_test,N_kang_test,xyzn_ang_test,indangtest = subsampletimeseries(anglesnewtest,xyznnewtest,N_k)
+A_sub_test,N_kA_test,xyzn_A_test,indAtest = subsampletimeseries(Anewtest,xyznnewtest,N_k)
 
 
-Ang_kn = np.zeros([sum(N_kang)],np.float64)
+A_kn = np.zeros([sum(N_kA)],np.float64)
 count = 0
-for x in ang_sub:
+for x in A_sub:
     for y in x:
-        Ang_kn[count] = y
+        A_kn[count] = y
         count += 1
 #--------------------------------------------------------------
 # Re-evaluate potenitals at all subsampled coord and parameters
@@ -811,8 +814,9 @@ ff = ForceField(ffxml)
 from smarty.forcefield import generateTopologyFromOEMol
 topology = generateTopologyFromOEMol(mol)
 
+
 # Re-calculate energies     
-E_kn = np.zeros([len(K_k),sum(N_kang)],np.float64)
+E_kn = np.zeros([len(K_k),sum(N_kA)],np.float64)
 for inds,s in enumerate(smirkss):
     param = ff.getParameter(smirks=s)
     for ind,val in enumerate(K_k):
@@ -822,13 +826,14 @@ for inds,s in enumerate(smirkss):
                 param[b] = str(a)
             ff.setParameter(param, smirks = s)
             system = ff.createSystem(topology, [mol], verbose=verbose)  
-            for k_ind, pos in enumerate(xyzn_ang_sub):
-                for i,a in enumerate(pos):
-                    e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
-                    E_kn[ind,count] = e
-                    count += 1
-
-E_knnew = np.zeros([len(K_extra),sum(N_kang)],np.float64)
+            while count < sum(N_kA):
+                for k_ind, pos in enumerate(xyzn_A_sub):
+                    for i,a in enumerate(pos):
+                        e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
+                        E_kn[ind,count] = e
+                        count += 1 
+                       
+E_knnew = np.zeros([len(K_extra),sum(N_kA)],np.float64)
 for inds,s in enumerate(smirkss):
     param = ff.getParameter(smirks=s)
     for ind,val in enumerate(K_extra):
@@ -838,11 +843,12 @@ for inds,s in enumerate(smirkss):
                 param[b] = str(a)
             ff.setParameter(param, smirks = s)
             system = ff.createSystem(topology, [mol], verbose=verbose)  
-            for k_ind, pos in enumerate(xyzn_ang_sub):
-                for i,a in enumerate(pos):
-                    e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
-                    E_knnew[ind,count] = e
-                    count += 1
+            while count < sum(N_kA):
+                for k_ind, pos in enumerate(xyzn_A_sub):
+                    for i,a in enumerate(pos):
+                        e = np.float(get_energy(system, a)) * 4.184 #(kcal to kJ)
+                        E_knnew[ind,count] = e
+                        count += 1
 
 # Post process energy distributions to find expectation values, analytical uncertainties and bootstrapped uncertainties
 T_from_file = read_col('StateData/data.csv',["Temperature (K)"],100)
@@ -861,41 +867,43 @@ bbeta_k = 1 / (kB*Temp_k)
 print "--Computing reduced potentials..."
 
 # Initialize matrices for u_kn/observables matrices and expected value/uncertainty matrices
-u_kn = np.zeros([K,sum(N_kang)],np.float64)
-E_kn_samp = np.zeros([K,sum(N_kang)],np.float64)
-u_knnew = np.zeros([K,sum(N_kang)], np.float64)
-E_knnew_samp = np.zeros([K,sum(N_kang)], np.float64)
-Ang_kn_samp = np.zeros([sum(N_kang)],np.float64)
-Ang2_kn = np.zeros([sum(N_kang)],np.float64)
+u_kn = np.zeros([K, sum(N_kA)], dtype=np.float64)
+E_kn_samp = np.zeros([K,sum(N_kA)],np.float64)
+u_knnew = np.zeros([K,sum(N_kA)], np.float64)
+E_knnew_samp = np.zeros([K,sum(N_kA)], np.float64)
+A_kn_samp = np.zeros([sum(N_kA)],np.float64)
+A2_kn = np.zeros([sum(N_kA)],np.float64)
+
 
 nBoots_work = nBoots + 1
 
 allE_expect = np.zeros([K,nBoots_work], np.float64)
-allAng_expect = np.zeros([K,nBoots_work],np.float64)
+allA_expect = np.zeros([K,nBoots_work],np.float64)
 allE2_expect = np.zeros([K,nBoots_work], np.float64)
 dE_expect = np.zeros([K], np.float64)
 allE_expectnew = np.zeros([K,nBoots_work], np.float64)
 allE2_expectnew = np.zeros([K,nBoots_work], np.float64)
 dE_expectnew = np.zeros([K], np.float64)
-dAng_expect = np.zeros([K],np.float64)
-dAng_expect_unsamp = np.zeros([K],np.float64)
-allAng_expect_unsamp = np.zeros([K,nBoots_work],np.float64)
+dA_expect = np.zeros([K],np.float64)
+dA_expect_unsamp = np.zeros([K],np.float64)
+allA_expect_unsamp = np.zeros([K,nBoots_work],np.float64)
 
 
 # Begin bootstrapping loop
 for n in range(nBoots_work):
     if (n > 0):
         print "Bootstrap: %d/%d" % (n,nBoots)
-    for k in range(K):
-        if N_kang[k] > 0:
+    for k in range(K):        
+        if N_kA[k] > 0:
 	    if (n == 0):
-    		booti = np.array(range(N_kang[k]))
+                booti = np.array(range(N_kA[k]))
 	    else:
-		booti = np.random.randint(N_kang[k], size = N_kang[k])
+	        booti = np.random.randint(N_kA[k], size = N_kA[k])
            
-            E_kn_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = E_kn[:,booti]
-            E_knnew_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = E_knnew[:,booti]
-            Ang_kn_samp[sum(N_kang[0:k]):sum(N_kang[0:k+1])] = Ang_kn[booti] 
+            E_kn_samp[:,sum(N_kA[0:k]):sum(N_kA[0:k+1])] = E_kn[:,booti]
+            E_knnew_samp[:,sum(N_kA[0:k]):sum(N_kA[0:k+1])] = E_knnew[:,booti]
+            A_kn_samp[sum(N_kA[0:k]):sum(N_kA[0:k+1])] = A_kn[booti] 
+            
 #        if N_kang[k] > 0:
 #	    if (n ==0):
 #		bootnewi = np.array(range(N_kang[k]))
@@ -914,10 +922,10 @@ for n in range(nBoots_work):
 #	    Ang_kn_samp[0:sum(N_kang)] = Ang_kn[bootangi]
         
     for k in range(K): 
-        u_kn[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = beta_k * E_kn_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])]     
-        u_knnew[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])] = beta_k * E_knnew_samp[:,sum(N_kang[0:k]):sum(N_kang[0:k+1])]
-	Ang2_kn[sum(N_kang[0:k]):sum(N_kang[0:k+1])] = Ang_kn_samp[sum(N_kang[0:k]):sum(N_kang[0:k+1])]
-    
+        u_kn[:,sum(N_kA[0:k]):sum(N_kA[0:k+1])] = beta_k * E_kn_samp[:,sum(N_kA[0:k]):sum(N_kA[0:k+1])]     
+        u_knnew[:,sum(N_kA[0:k]):sum(N_kA[0:k+1])] = beta_k * E_knnew_samp[:,sum(N_kA[0:k]):sum(N_kA[0:k+1])]
+	A2_kn[sum(N_kA[0:k]):sum(N_kA[0:k+1])] = A_kn_samp[sum(N_kA[0:k]):sum(N_kA[0:k+1])]
+    print repr(u_kn)
 ############################################################################
 # Initialize MBAR
 ############################################################################
@@ -931,18 +939,19 @@ for n in range(nBoots_work):
 	print "--N = number of Energies per parameter value = %d" % (np.max(N_k))
 
         # Use Adaptive Method (Both Newton-Raphson and Self-Consistent, testing which is better)
-    if (n==0):
-	initial_f_k = None # start from zero 
-    else:
-	initial_f_k = mbar.f_k # start from the previous final free energies to speed convergence
+#    if (n==0):
+#	initial_f_k = None # start from zero 
+#    else:
+#	initial_f_k = mbar.f_k # start from the previous final free energies to speed convergence
 		
-    mbar = pymbar.MBAR(u_kn, N_kang, verbose=False, relative_tolerance=1e-12, initial_f_k=initial_f_k)
+    mbar = pymbar.MBAR(u_kn, N_kA, verbose=False, relative_tolerance=1e-12 )
 
     #------------------------------------------------------------------------
     # Compute Expectations for energy and angle distributions
     #------------------------------------------------------------------------
-
-
+    if (n==40):
+        pdb.set_trace()
+    
     print ""
     print "Computing Expectations for E..."
     E_kn2 = u_kn  # not a copy, we are going to write over it, but we don't need it any more.
@@ -952,12 +961,12 @@ for n in range(nBoots_work):
 	E_knnew2[k,:]*=beta_k**(-1)
     (E_expect, dE_expect) = mbar.computeExpectations(E_kn2,state_dependent = True)
     (E_expectnew, dE_expectnew) = mbar.computeExpectations(E_knnew2,state_dependent = True)
-    (Ang_expect, dAng_expect) = mbar.computeExpectations(Ang2_kn,state_dependent = False) 
+    (A_expect, dA_expect) = mbar.computeExpectations(A2_kn,state_dependent = False) 
 
 
     allE_expect[:,n] = E_expect[:]
     allE_expectnew[:,n] = E_expectnew[:]
-    allAng_expect[:,n] = Ang_expect[:]
+    allA_expect[:,n] = A_expect[:]
     
     # expectations for the differences, which we need for numerical derivatives  
     # To be used once the energy expectations are fixed
@@ -968,50 +977,50 @@ for n in range(nBoots_work):
     (E2_expect, dE2_expect) = mbar.computeExpectations(E_kn2**2, state_dependent = True)
     allE2_expect[:,n] = E2_expect[:]
 
-    (Ang_expect_unsamp, dAng_expect_unsamp) = mbar.computeExpectations(Ang2_kn,u_knnew,state_dependent=False)
-    allAng_expect_unsamp[:,n] = Ang_expect_unsamp[:]
+    (A_expect_unsamp, dA_expect_unsamp) = mbar.computeExpectations(A2_kn,u_knnew,state_dependent=False)
+    allA_expect_unsamp[:,n] = A_expect_unsamp[:]
    
 if nBoots > 0:
     dE_boot = np.zeros([K])
     dE_bootnew = np.zeros([K])
-    dAng_boot = np.zeros([K])
-    dAng_boot_unsamp = np.zeros([K])
+    dA_boot = np.zeros([K])
+    dA_boot_unsamp = np.zeros([K])
     for k in range(K):
 	dE_boot[k] = np.std(allE_expect[k,1:nBoots_work])
         dE_bootnew[k] = np.std(allE_expectnew[k,1:nBoots_work])
-        dAng_boot[k] = np.std(allAng_expect[k,1:nBoots_work])
-        dAng_boot_unsamp[k] = np.std(allAng_expect_unsamp[k,1:nBoots_work])
+        dA_boot[k] = np.std(allA_expect[k,1:nBoots_work])
+        dA_boot_unsamp[k] = np.std(allA_expect_unsamp[k,1:nBoots_work])
     print "E_expect: %s  dE_expect: %s  dE_boot: %s" % (E_expect,dE_expect,dE_boot)
     print "E_expectnew: %s  dE_expectnew: %s  dE_bootnew: %s" % (E_expectnew,dE_expectnew,dE_bootnew)
     print "delta_E_expect: %s  percent_delta_E_expect: %s" % (E_expectnew-E_expect, 100.*(E_expectnew-E_expect)/E_expect)
-    print "Ang_expect: %s  dAng_expect: %s  dAng_boot: %s" % (Ang_expect,dAng_expect,dAng_boot)
-    print "Ang_expect_unsamp: %s  dAng_expect_unsamp: %s  dAng_boot_unsamp: %s" % (Ang_expect_unsamp,dAng_expect_unsamp,dAng_boot_unsamp)
-    print "The mean of the sampled series = %s" % ([np.average(A) for A in ang_sub])
-    print "The true sampled mean of the observable we're reweighting to = %s" % ([np.average(A) for A in ang_sub_test])
+    print "A_expect: %s  dA_expect: %s  dA_boot: %s" % (A_expect,dA_expect,dA_boot)
+    print "A_expect_unsamp: %s  dA_expect_unsamp: %s  dA_boot_unsamp: %s" % (A_expect_unsamp,dA_expect_unsamp,dA_boot_unsamp)
+    print "The mean of the sampled series = %s" % ([np.average(A) for A in A_sub])
+    print "The true sampled mean of the observable we're reweighting to = %s" % ([np.average(A) for A in A_sub_test])
     print "The mean of the energies corresponding to the sampled series = %s" % ([np.average(E) for E in E_kn]) 
     print "The mean of the energies corresponding to the unsampled series = %s" % ([np.average(E) for E in E_knnew])
 
     # calculate standard deviations away that estimate is from sampled value
     E_mean_samp = np.array([np.average(E) for E in E_kn])
     E_mean_unsamp = np.array([np.average(E) for E in E_knnew]) 
-    Ang_mean_samp = np.array([np.average(A) for A in ang_sub])
-    Angnew_mean_test = np.array([np.average(A) for A in ang_sub_test])
+    A_mean_samp = np.array([np.average(A) for A in A_sub])
+    A_mean_test = np.array([np.average(A) for A in A_sub_test])
     
     E_samp_stddevaway = np.zeros([K],np.float64)
     E_unsamp_stddevaway = np.zeros([K],np.float64)
-    Ang_samp_stddevaway = np.zeros([K],np.float64)
-    Ang_test_stddevaway = np.zeros([K],np.float64) 
+    A_samp_stddevaway = np.zeros([K],np.float64)
+    A_test_stddevaway = np.zeros([K],np.float64) 
     for k in range(K):  
         for i in allE_expect[k,1:]:
             E_samp_stddevaway[k] = np.array([np.average(np.abs(i-j)/u) for j,u in zip(E_mean_samp,dE_boot)])
         for i in allE_expectnew[k,1:]:
             E_unsamp_stddevaway[k] = np.array([np.average(np.abs(i-j)/u) for j,u in zip(E_mean_unsamp,dE_boot)])
-        for i in allAng_expect[k,1:]:
-            Ang_samp_stddevaway[k] = np.array([np.average(np.abs(i-j)/u) for j,u in zip(Ang_mean_samp,dAng_boot)])
-        for i in allAng_expect_unsamp[k,1:]:
-            Ang_test_stddevaway[k] = np.array([np.average(np.abs(i-j)/u) for j,u in zip(Angnew_mean_test,dAng_boot_unsamp)])
+        for i in allA_expect[k,1:]:
+            A_samp_stddevaway[k] = np.array([np.average(np.abs(i-j)/u) for j,u in zip(A_mean_samp,dA_boot)])
+        for i in allA_expect_unsamp[k,1:]:
+            A_test_stddevaway[k] = np.array([np.average(np.abs(i-j)/u) for j,u in zip(A_mean_test,dA_boot_unsamp)])
     
-    print "Standard deviations away from true sampled observables for E_expect: %s  E_expectnew: %s  Ang_expect: %s Ang_expect_unsamp: %s" % (E_samp_stddevaway,E_unsamp_stddevaway,Ang_samp_stddevaway,Ang_test_stddevaway) 
+    print "Standard deviations away from true sampled observables for E_expect: %s  E_expectnew: %s  A_expect: %s A_expect_unsamp: %s" % (E_samp_stddevaway,E_unsamp_stddevaway,A_samp_stddevaway,A_test_stddevaway) 
 sys.exit()
 
 ########################################################################
