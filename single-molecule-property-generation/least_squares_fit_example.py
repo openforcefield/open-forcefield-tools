@@ -439,8 +439,8 @@ torsion_r51_b = torstimeser_r51[7]
 torsion_r48_c = torstimeser_r48[12]
 torsion_r51_c = torstimeser_r51[11]
 
-bond_r48_a = bondtimeser_r48[4]
-angle_r51_a = angtimeser_r51[4]
+bond_r48_a = bondtimeser_r48[0]
+angle_r51_a = angtimeser_r51[0]
 
 #step = 0.05
 #bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1)+step,step)
