@@ -457,14 +457,14 @@ num_bins = 100
 
 plt.figure()
 plt.hist(bond_r51_a,num_bins,color='green')
-plt.ylabel('Likelihood that configuration is sampled')
+plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Bond length (angstroms)')
 plt.title('Sample bond distribution in AlkEthOH_r51')
 plt.savefig('sample_bond_AlkEthOH_r51.png')
 
 plt.figure()
 plt.hist(angle_r51_a,num_bins,color='green')
-plt.ylabel('Likelihood that configuration is sampled')
+plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Bond angle (radians)')
 plt.title('Sample angle distribution in AlkEthOH_r51')
 plt.savefig('sample_angle_AlkEthOH_r51.png')
@@ -498,7 +498,7 @@ plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X
 
 plt.figure()
 plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48',color='green')
-plt.ylabel('Likelihood that configuration is sampled')
+plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.title('Torsion sample in AlkEthOH_r48')
 plt.savefig('torsion_histograms/r48/Torsion_likelihood_r48_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
