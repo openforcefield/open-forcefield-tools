@@ -382,8 +382,14 @@ for ind, val in enumerate(OEMol_r51):
     label = ff.labelMolecules([val])
     labels_r51.append(label)
 
+
 atominds_r51 = [tors[0] for tors in labels_r51[0][0]['PeriodicTorsionGenerator']]
 atominds_r48 = [tors[0] for tors in labels_r48[0][0]['PeriodicTorsionGenerator']]
+
+atominds_r51_b = [tors[0] for tors in labels_r51[0][0]['HarmonicBondGenerator']]
+atominds_r48_a = [tors[0] for tors in labels_r48[0][0]['HarmonicAngleGenerator']]
+
+
 #print([atominds_r51[2],atominds_r51[1],atominds_r51[0]])
 #print([atominds_r48[33],atominds_r48[0],atominds_r48[1]])
 #print([AtomDict_r51['Torsion'][1],AtomDict_r51['Torsion'][7],AtomDict_r51['Torsion'][11]])
@@ -407,13 +413,22 @@ b = ComputeBondsAnglesTorsions(xyzn_r51,AtomDict_r51['Bond'],AtomDict_r51['Angle
 torsions_r48 = a[2]
 torsions_r51 = b[2]
 
+bonds_r48 = a[0]
+angles_r51 = b[1]
+
 # Get number of angles in molecule
 numtors_r48 = len(torsions_r48[0])
 numtors_r51 = len(torsions_r51[0])
 
+numbonds_r48 = len(bonds_r48[0])
+numangs_r51 = len(angles_r51[0])
+
 # Re-organize data into timeseries
 torstimeser_r48 = [torsions_r48[:,ind] for ind in range(numtors_r48)]
 torstimeser_r51 = [torsions_r51[:,ind] for ind in range(numtors_r51)]
+
+bondtimeser_r48 = [bonds_r48[:,ind] for ind in range(numbonds_r48)]
+angtimeser_r51 = [angles_r51[:,ind] for ind in range(numangs_r51)]
 
 # Using the angle at index 0 for test case
 #torsion = np.zeros([1,100],np.float64)
@@ -423,6 +438,9 @@ torsion_r48_b = torstimeser_r48[29]
 torsion_r51_b = torstimeser_r51[7]
 torsion_r48_c = torstimeser_r48[12]
 torsion_r51_c = torstimeser_r51[11]
+
+bond_r48_a = bondtimeser_r48[4]
+angle_r51_a = angtimeser_r51[4]
 
 #step = 0.05
 #bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1)+step,step)
@@ -434,6 +452,20 @@ torsion_r51_c = torstimeser_r51[11]
 
 
 num_bins = 100
+
+plt.figure()
+plt.hist(bond_r48_a,num_bins,color='green')
+plt.ylabel('Likelihood that configuration is sampled')
+plt.xlabel('Bond length (angstroms)')
+plt.title('Sample bond distribution in AlkEthOH_r48')
+plt.savefig('sample_bond_AlkEthOH_r48.png')
+
+plt.figure()
+plt.hist(angle_r51_a,num_bins,color='green')
+plt.ylabel('Likelihood that configuration is sampled')
+plt.xlabel('Bond angle (radians)')
+plt.title('Sample angle distribution in AlkEthOH_r51')
+plt.savefig('sample_angle_AlkEthOH_r51.png')
 
 plt.figure()
 plt.hist(torsion_r48_a,num_bins,alpha=0.5,label='AlkEthOH_r48')
@@ -463,10 +495,10 @@ plt.legend()
 plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
 
 plt.figure()
-plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48')
+plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48',color='green')
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion [#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
+plt.title('Torsion sample in AlkEthOH_r48')
 plt.savefig('torsion_histograms/r48/Torsion_likelihood_r48_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
 
 plt.figure()
@@ -484,10 +516,10 @@ plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
 plt.savefig('torsion_histograms/r48/Torsion_likelihood_r48_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
 
 plt.figure()
-plt.hist(torsion_r51_a,num_bins,label='AlkEthOH_r51')
+plt.hist(torsion_r51_a,num_bins,label='AlkEthOH_r51',color='green')
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion [#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
+plt.title('Torsion sample in AlkEthOH_r51')
 plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
 
 plt.figure()
