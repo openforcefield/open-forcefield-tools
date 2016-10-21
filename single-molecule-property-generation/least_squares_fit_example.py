@@ -413,22 +413,24 @@ b = ComputeBondsAnglesTorsions(xyzn_r51,AtomDict_r51['Bond'],AtomDict_r51['Angle
 torsions_r48 = a[2]
 torsions_r51 = b[2]
 
-bonds_r48 = a[0]
+bonds_r51 = b[0]
 angles_r51 = b[1]
 
 # Get number of angles in molecule
 numtors_r48 = len(torsions_r48[0])
 numtors_r51 = len(torsions_r51[0])
 
-numbonds_r48 = len(bonds_r48[0])
+numbonds_r51 = len(bonds_r51[0])
 numangs_r51 = len(angles_r51[0])
 
 # Re-organize data into timeseries
 torstimeser_r48 = [torsions_r48[:,ind] for ind in range(numtors_r48)]
 torstimeser_r51 = [torsions_r51[:,ind] for ind in range(numtors_r51)]
 
-bondtimeser_r48 = [bonds_r48[:,ind] for ind in range(numbonds_r48)]
+bondtimeser_r51 = [bonds_r51[:,ind] for ind in range(numbonds_r51)]
 angtimeser_r51 = [angles_r51[:,ind] for ind in range(numangs_r51)]
+
+print bondtimeser_r51
 
 # Using the angle at index 0 for test case
 #torsion = np.zeros([1,100],np.float64)
@@ -439,7 +441,7 @@ torsion_r51_b = torstimeser_r51[7]
 torsion_r48_c = torstimeser_r48[12]
 torsion_r51_c = torstimeser_r51[11]
 
-bond_r48_a = bondtimeser_r48[0]
+bond_r51_a = bondtimeser_r51[0]
 angle_r51_a = angtimeser_r51[0]
 
 #step = 0.05
@@ -454,11 +456,11 @@ angle_r51_a = angtimeser_r51[0]
 num_bins = 100
 
 plt.figure()
-plt.hist(bond_r48_a,num_bins,color='green')
+plt.hist(bond_r51_a,num_bins,color='green')
 plt.ylabel('Likelihood that configuration is sampled')
 plt.xlabel('Bond length (angstroms)')
-plt.title('Sample bond distribution in AlkEthOH_r48')
-plt.savefig('sample_bond_AlkEthOH_r48.png')
+plt.title('Sample bond distribution in AlkEthOH_r51')
+plt.savefig('sample_bond_AlkEthOH_r51.png')
 
 plt.figure()
 plt.hist(angle_r51_a,num_bins,color='green')
