@@ -12,12 +12,13 @@ import sys
 import numpy as np
 
 #Define what molecule to work on, and a few simulation parameters
-molname = ['AlkEthOH_r0','AlkEthOH_r48','AlkEthOH_r51','AlkEthOH_c581','AlkEthOH_c100','AlkEthOH_c1161','AlkEthOH_c1266','AlkEthOH_c38','AlkEthOH_r118','AlkEthOH_r12']
+#molname = ['AlkEthOH_r0','AlkEthOH_r48','AlkEthOH_r51','AlkEthOH_c581','AlkEthOH_c100','AlkEthOH_c1161','AlkEthOH_c1266','AlkEthOH_c38','AlkEthOH_r118','AlkEthOH_r12']
+molname = ['AlkEthOH_c581','AlkEthOH_r0']
 mol_filename = ['Mol2_files/'+m+'.mol2' for m in molname]
 time_step = 2 #Femtoseconds
 temperature = 300 #kelvin
 friction = 1 # per picosecond
-num_steps = 100000 
+num_steps = 1000000
 trj_freq = 1000 #steps
 data_freq = 1000 #steps
 
@@ -52,7 +53,7 @@ for ind,j in enumerate(mol_filename):
     forcefield.setParameter(params, smirks='[#1:1]-[#8]')
     system = forcefield.createSystem(topology, [mol])
 
-    paramlist = np.arange(100,200,20)
+    paramlist = np.arange(200,1200,20)
     smirkseries = '[#6X4:1]-[#1:2]'
     paramtype = 'k'
 
