@@ -79,7 +79,7 @@
 \title{Best Practices for Property Prediction from Molecular Simulations}
 
 \author{Bryce C. Manubay} 
-\email{email@email.com}
+\email{bryce.manubay@colorado.edu}
 \affiliation{University of Colorado}
 
 \author{John D. Chodera}
@@ -88,7 +88,7 @@
 
 \author{Michael R. Shirts}
 \thanks{Corresponding author}
-\email{michael.shirts@virginia.edu}
+\email{michael.shirts@colorado.edu}
 \affiliation{University of Colorado}
 
 % Date
@@ -138,12 +138,12 @@ Definitions
 Macroscopically, the quantities $V$, $U$, $N$ are constants (assuming
 the system is not perturbed in any way), as we assume that the
 fluctuations are essentially zero, and any uncertainty comes from our
-inability to measure that constant precisly. For a mole of compound
+inability to measure that constant precisely. For a mole of compound
 (about 18 mL for water), the relative uncertainty in any of these
 quantites is about $10^{-12}$, far lower than any thermodynamics
 experiment.
 
-\comment[JDC]{This is a TODO item example.}
+%\comment[JDC]{This is a TODO item example.}
 
 However, in a molecular simulation, these quantites are not
 necessarily constant. For example, in an $NVT$ equilibrium simulation, $U$ is
@@ -243,7 +243,7 @@ distibution becomes.
 \langle X \rangle_i = \sum_{n=1}^N X(x_n) \frac{e^{f_i - u_i(x_n)}}{\sum_{k=1}^{N_k} e^{f_k - u_k(x)}}
 \end{equation}
 which can be seen to be the same formula as the MBAR formula for
-expectations. The free energies can be obtained by setting X=1, and
+expectations. The free energies can be obtained by setting $X = 1$, and
 looking at the $K$ equations obtained by reweighting to the $K$
 different distributions. 
 
@@ -254,7 +254,7 @@ example, $u_j(x) = \beta_i U(x) + \beta_i (P_i + \Delta P) V$, or $u_j
 P_i V$. However, the relationship between $f$ and $G$ can be
 problematic when looking at differences in free energy with respect to
 temperature, because $G_2 - G_1 = \beta_2 f_2 - \beta_1 f_1$.  
-[MRS: needs to find notes on how this was dealt with last time]
+\comment[MRS]{Need to find notes on how this was dealt with last time}
 
 Since with MBAR, one can make the differences as small as one would
 like (you don't have to actually carry out a simulation at those
@@ -265,11 +265,16 @@ And for 2nd deriatives:
 Thus, only properties at two additional points need to be evaluated to
 calculate both first and 2nd derivatives.
 
-Note that if the finite differences are reevaluated using reweighting
+Note that if the finite differences are re-evaluated using reweighting
 approaches, it is important that the simulation used generates the
 correct Boltzmann distribution. If not, reweighted observables will be
 incorrect, and the results of the finite difference approach will have
 significant error.
+
+The following document details calculation of various mechanical observables
+by both direct methods pulled from literature sources and the use of 
+reweighting techniques. Corrections in certain observables are also summarized
+where suggested by previous authors. 
 
 %MRS: I removed noindent -- better to fix formatting by changing the latex definitions, not by adding a bunch of exceptions.
 
@@ -364,7 +369,7 @@ The definition of the speed of sound is\cite{sos}:
 Where:\\*
 \begin{equation}\gamma_V = \left(\frac{\partial P}{\partial T}\right)_{V}\end{equation}\\*
 
- $\gamma_V$ is known as the isochoric pressure coefficient. $\kappa_T$ is the same isothermal compressibility from section A.1.3\\*
+ $\gamma_V$ is known as the isochoric pressure coefficient. $\kappa_T$ is the same isothermal compressibility from equation 20\\*
 
 %BCM: Did this derivation myself, pretty sure it's right
 An alternate derivation, applying the triple product rule to $\left(\frac{\partial P}{\partial V}\right)_{S}$ yields the following.
@@ -373,7 +378,7 @@ An alternate derivation, applying the triple product rule to $\left(\frac{\parti
 
 \begin{equation}\left(\frac{\partial S}{\partial V}\right)_{P} = \left(\frac{\partial S}{\partial T}\right)_{P} \left(\frac{\partial T}{\partial V}\right)_{P} = \frac{C_P}{T} \left(\frac{\partial T}{\partial V}\right)_{P} = \frac{C_P}{T V \alpha}\end{equation}\\*
 
-Where $\alpha = \frac{1}{V} \left(\frac{\partial V}{\partial T}\right)_{P} = \left(\frac{\partial \ln V}{\partial T}\right)_{P}$ is the coefficient of thermal expansion. The second term is our triple product rule $\left(\frac{\partial S}{\partial P}\right)_{V}$ can be expressed as follows.
+Where $\alpha = \frac{1}{V} \left(\frac{\partial V}{\partial T}\right)_{P} = \left(\frac{\partial \ln V}{\partial T}\right)_{P}$ is the coefficient of thermal expansion. The second term in our triple product rule expansion, $\left(\frac{\partial S}{\partial P}\right)_{V}$, can be expressed as follows:
 
 \begin{equation}\left(\frac{\partial S}{\partial P}\right)_{V} = \left(\frac{\partial S}{\partial T}\right)_{V} \left(\frac{\partial T}{\partial P}\right)_{V} = \frac{C_V}{T} \left(\frac{\partial T}{\partial P}\right)_{V} = \frac{C_V}{T \gamma_V}\end{equation}\\* 
 
@@ -442,22 +447,22 @@ difference $\mu_i(T,P,\vec{x}_i) - \mu(T,P)$ by calculating $\Delta
 simulation of the pure substance, followed by the calculation of
 $\mu_i(T,P,\vec{x}_i)_{liquid} - \Delta \mu(T,P,\vec{x}_i)_{gas}$, and
 assuming that $\Delta \mu(T,P,\vec{x}_i)_{gas} = \Delta
-\mu(T,P)_{gas}$ (note: there are a few subleties here relating to the
+\mu(T,P)_{gas}$. Note: there are a few subleties here relating to the
 $\ln x_i$ factor, but it appears that with alchemical simulations with
-a only one particle that is allowed to change, this will cancel out
+only one particle that is allowed to change, this will cancel out
 (need to follow up).
 
 Several of these alchemical simulation methods for calculating activity coefficients have been pioneered by Andrew Paluch \cite{paluch1}. A method detailing the calculation of infinite dilution activity coefficients $\gamma_i^{inf}$ for binary a mixture follows directly:
 
 \begin{multline}
-\ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) \\ + \ln\left[\frac{R T}{v_1\left(T,P\right)}\right] - \ln f_2^0\left(T,P\right)
+\ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) \\ + \ln\left[\frac{R T}{V_1\left(T,P\right)}\right] - \ln f_2^0\left(T,P\right)
 \end{multline}\\*
 
-Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at inifinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $v_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:
+Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at inifinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $V_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:
 
-\begin{equation}\ln f_2^0\left(T,P\right) = \beta\mu_2^{res}\left(T,P\right) + \ln\left[\frac{R T}{v_2\left(T,P\right)}\right]\end{equation}\\*
+\begin{equation}\ln f_2^0\left(T,P\right) = \beta\mu_2^{res}\left(T,P\right) + \ln\left[\frac{R T}{V_2\left(T,P\right)}\right]\end{equation}\\*
 
-Paluch et al. use a multistage free energy perturbation approach utilizing MBAR in order to calculate the residual chemical potentials (recall that the chemical potential is the partial molar Gibbs free energy and dimensionless Gibbs free energy differences between multiple states are readily computed with MBAR). The idea is to connect two states of interest. In the case of a pure liquid, connecting a system of pure liquid molecules with $N - 1$ interacting molecules and one fully decoupled molecule to a system of $N$ fully interacting molecules. The coupling/decoupling process is detailed by Paluch et al \cite{paluch0}, but involves a linear alchemical switching function where LJ and electronic interactions are slowly turned on for the decoupled molecule until they are fully on.     
+Paluch et al. use a multistage free energy perturbation approach utilizing MBAR in order to calculate the residual chemical potentials (recall that the chemical potential is the partial molar Gibbs free energy and dimensionless Gibbs free energy differences between multiple states are readily computed with MBAR). The idea is to connect two states of interest. In the case of a pure liquid, connecting a system of pure liquid molecules with $N - 1$ interacting molecules and one fully decoupled molecule to a system of $N$ fully interacting molecules. The coupling/decoupling process is detailed by Paluch et al \cite{paluch0}, but involves a linear alchemical switching function where LJ and electronic interactions are slowly turned on for the decoupled molecule until they are fully on. The free energy of this coupling is calculated by simpling summing the free energy changes along this path.     
 
 %-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -471,15 +476,15 @@ We note that only one set of pure simulations are needed to calculate excess pro
 %--------------------------------------------------------------------------------------------------------------------------------------
 
 \subsubsection{Excess Molar Heat Capacity and Volume}
-Excess molar heat capacities and volume will be calculated using the  methods for the pure quantities in section $A.1$ in combination with the general method for excess property calculation above.\\*
+Excess molar heat capacities and volume will be calculated using the  methods for the pure quantities in section $I$ in combination with the general method for excess property calculation above.\\*
 
 %---------------------------------------------------------------------------------------------------------------------------------------
 
 \subsubsection{Excess Molar Enthalpy}
-Excess molar enthalpy can be calculated using the general relation of molar enthalpy as it relates to Gibbs Free Energy from section $A.1$ and the generalized method of ecess molar property calculation above or by the following\cite{hexcess}:
+Excess molar enthalpy can be calculated using the general relation of molar enthalpy as it relates to Gibbs Free Energy from section $I$ and the general method of excess molar property calculation above or by the following\cite{hexcess}:
 \begin{equation}H^E = \langle E^M \rangle + P V^E - \sum_{i} x_i \langle E_i \rangle\end{equation}\\*
  
-Where $\langle \rangle$ denotes an ensemble average and $V^E$ is calculated using the general method of excess molar properties.\\* 
+Where $\langle E \rangle$ denotes an ensemble average of total energy and $V^E$ is calculated using the general method of excess molar properties.\\* 
 
 %--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -515,7 +520,7 @@ If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal (and therefore 
 
 %-----------------------------------------------------------------------------------------------------------------------------------------
 
-\subsection{Binary Mixture Properties}
+%\subsection{Binary Mixture Properties}
 
 %-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -540,18 +545,18 @@ Where $B$ is the second virial coefficient.
 
 \begin{equation}C_x = \int_{P_{ext}}^{P_{vap}} \left[V\left(P_{ext}\right)\left[1 - \left(P - P_{ext}\right) \kappa_T\right] - T V \alpha\right] dP\end{equation}\\*
 
-Where $P_{ext}$ in the external pressure and $V\left(P_{ext}\right)$ is the volume at $P_{ext}$. 
+Where $P_{ext}$ is the external pressure and $V\left(P_{ext}\right)$ is the volume at $P_{ext}$. 
 
 %MRS: made a complete sentence (plus added some detail)
 This is frequently done as a single simulation calculation by assuming
-the average intramolecular energies remains constant during the phase
+the average intramolecular energy remains constant during the phase
 change, which is rigorously correct for something like a rigid water
 molecule (intramolecular energies are zero), but less true for
 something with structural rearrangement between gas and liquid phases. 
 
 As discussed by myself and MRS, we have decided to not initially begin the parametrization process using enthalpy of vaporization data. While force field parametrization is commonly done using said property we have ample reason to not follow classical practice. First of all, the enthalpy data is usually not collected at standard temperature and pressure, but at the saturation conditions of the liquid being vaporized \cite{chickos}.  This would require corrections to be made to get the property at STP (the process will be explained below) using fitted equations for heat capacity. Not only is this inconvenient, but it adds an unknown complexity when adjusting experimental uncertainties due to the added correction. Often times the uncertainties of these "experimental" enthalpies are unrecorded because they are estimated from fitted Antoine equation coefficients \cite{chickos}. 
 
-An additional issue is the necessity of having to use gas phase simulation data in order to validate a parametrization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parametrization. If the parametrization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental heat of vaporization in order to get a value at STP using the following equation.
+An additional issue is the necessity of having to use gas phase simulation data in order to validate a parametrization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parametrization. If the parametrization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental data in order to get a value at STP using the following equation.
 \begin{equation}\Delta H_{vap}(T) = \Delta H_{vap}^{ref} + \int_{T_{ref}}^T \left(C_{P, gas} - C_{P, liq}\right) dT \end{equation}\\*
 
 
@@ -560,7 +565,7 @@ An additional issue is the necessity of having to use gas phase simulation data 
 % BIBLIOGRAPHY
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\bibliographystyle{prsty} 
+\bibliographystyle{IEEEtran} 
 \bibliography{prop_calc_best_practices}
 
 \end{document}

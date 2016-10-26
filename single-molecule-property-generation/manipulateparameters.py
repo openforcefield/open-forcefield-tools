@@ -709,28 +709,29 @@ def subsampletimeseries(timeser,xyzn,N_k):
 #-----------------------------------------------------------------
 # PARAMETERS
 #-----------------------------------------------------------------
-mol2 = [['molecules/AlkEthOH_r0.mol2'],['molecules/AlkEthOH_r48.mol2'],['molecules/AlkEthOH_r51.mol2'],['molecules/AlkEthOH_c581.mol2'],['molecules/AlkEthOH_c100.mol2'],['molecules/AlkEthOH_c1161.mol2'],['molecules/AlkEthOH_c1266.mol2'],['molecules/AlkEthOH_c38.mol2'],['molecules/AlkEthOH_r118.mol2'],['molecules/AlkEthOH_r12.mol2']]
+#mol2 = [['molecules/AlkEthOH_r0.mol2'],['molecules/AlkEthOH_r48.mol2'],['molecules/AlkEthOH_r51.mol2'],['molecules/AlkEthOH_c581.mol2'],['molecules/AlkEthOH_c100.mol2'],['molecules/AlkEthOH_c1161.mol2'],['molecules/AlkEthOH_c1266.mol2'],['molecules/AlkEthOH_c38.mol2'],['molecules/AlkEthOH_r118.mol2'],['molecules/AlkEthOH_r12.mol2']]
+mol2 = [['molecules/AlkEthOH_r0.mol2'],['molecules/AlkEthOH_c581.mol2']]
 
 
-mol2en = ['molecules/AlkEthOH_r0.mol2','molecules/AlkEthOH_r48.mol2','molecules/AlkEthOH_r51.mol2','molecules/AlkEthOH_c581.mol2','molecules/AlkEthOH_c100.mol2','molecules/AlkEthOH_c1161.mol2','molecules/AlkEthOH_c1266.mol2','molecules/AlkEthOH_c38.mol2','molecules/AlkEthOH_r118.mol2','molecules/AlkEthOH_r12.mol2']
+#mol2en = ['molecules/AlkEthOH_r0.mol2','molecules/AlkEthOH_r48.mol2','molecules/AlkEthOH_r51.mol2','molecules/AlkEthOH_c581.mol2','molecules/AlkEthOH_c100.mol2','molecules/AlkEthOH_c1161.mol2','molecules/AlkEthOH_c1266.mol2','molecules/AlkEthOH_c38.mol2','molecules/AlkEthOH_r118.mol2','molecules/AlkEthOH_r12.mol2']
+mol2en = ['molecules/AlkEthOH_r0.mol2','molecules/AlkEthOH_c581.mol2']
 
+#traj = ['traj/AlkEthOH_r0.nc','traj/AlkEthOH_r48.nc','traj/AlkEthOH_r51.nc','traj/AlkEthOH_c581.nc','traj/AlkEthOH_c100.nc','traj/AlkEthOH_c1161.nc','traj/AlkEthOH_c1266.nc','traj/AlkEthOH_c38.nc','traj/AlkEthOH_r118.nc','traj/AlkEthOH_r12.nc']
+traj = ['traj/AlkEthOH_r0.nc','traj/AlkEthOH_c581.nc']
 
-traj = ['traj/AlkEthOH_r0.nc','traj/AlkEthOH_r48.nc','traj/AlkEthOH_r51.nc','traj/AlkEthOH_c581.nc','traj/AlkEthOH_c100.nc','traj/AlkEthOH_c1161.nc','traj/AlkEthOH_c1266.nc','traj/AlkEthOH_c38.nc','traj/AlkEthOH_r118.nc','traj/AlkEthOH_r12.nc']
-
-
-trajs = [['traj/AlkEthOH_r0.nc'],['traj/AlkEthOH_r48.nc'],['traj/AlkEthOH_r51.nc'],['traj/AlkEthOH_c581.nc'],['traj/AlkEthOH_c100.nc'],['traj/AlkEthOH_c1161.nc'],['traj/AlkEthOH_c1266.nc'],['traj/AlkEthOH_c38.nc'],['traj/AlkEthOH_r118.nc'],['traj/AlkEthOH_r12.nc']] 
-
+#trajs = [['traj/AlkEthOH_r0.nc'],['traj/AlkEthOH_r48.nc'],['traj/AlkEthOH_r51.nc'],['traj/AlkEthOH_c581.nc'],['traj/AlkEthOH_c100.nc'],['traj/AlkEthOH_c1161.nc'],['traj/AlkEthOH_c1266.nc'],['traj/AlkEthOH_c38.nc'],['traj/AlkEthOH_r118.nc'],['traj/AlkEthOH_r12.nc']] 
+trajs = [['traj/AlkEthOH_r0.nc'],['traj/AlkEthOH_c581.nc']]
 
 trajstest = [[] for i in traj]
 for ind,val in enumerate(trajs):
-   trajstest[ind] = [val[0][:-3]+'_[#6X4:1]-[#1:2]_k280.nc']
+   trajstest[ind] = [val[0][:-3]+'_[#6X4:1]-[#1:2]_k600.nc']
 
 
 smirkss = ['[#6X4:1]-[#1:2]']
 
 #N_k = np.array([100, 100, 100, 100, 100])
 #N_k = np.array([100,100])
-N_k= np.array([100])
+N_k= np.array([1000])
 
 K = np.size(N_k)
 
@@ -742,7 +743,7 @@ K_k = np.array([[680.]])
 
 #K_extra = np.array([[96], [99], [103], [105], [108]]) # unsampled force constants
 #K_extra = np.array([[110.],[98.]])
-K_extra = np.array([[280.]])
+K_extra = np.array([[600.]])
 
 
 paramtype = [['k']]
