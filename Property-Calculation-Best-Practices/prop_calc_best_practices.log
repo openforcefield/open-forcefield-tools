@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.7.7)  26 OCT 2016 14:23
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.7.7)  25 OCT 2016 11:58
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1414,6 +1418,11 @@ LaTeX Font Warning: Font shape `OMS/SourceSansPro-LF/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
 (Font)              for symbol `textbullet' on input line 119.
 
+<<<<<<< HEAD
+=======
+Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
+ine 146.
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
 Underfull \hbox (badness 2495) in paragraph at lines 161--171
 \T1/SourceSansPro-LF/m/n/10 ing the equi-lib-rium sim-u-la-tions and ex-per-i-m
@@ -1451,6 +1460,7 @@ Underfull \hbox (badness 1348) in paragraph at lines 227--229
 LF/m/n/10 are sam-pled from prob-a-bil-ity dis-tri-bu-tion
  []
 
+<<<<<<< HEAD
 Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
 ine 257.
 
@@ -1469,92 +1479,171 @@ LaTeX Font Info:    Font shape `T1/SourceSansPro-LF/m/it' will be
 (Font)              scaled to size 10.0pt on input line 286.
 [2]
 Underfull \hbox (badness 10000) in paragraph at lines 324--326
+=======
+LaTeX Font Info:    Font shape `T1/SourceSansPro-LF/m/it' will be
+(Font)              scaled to size 10.0pt on input line 281.
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 319--321
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 338--339
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 333--334
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 341--342
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 336--337
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 [3]
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 354--355
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 349--350
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 357--358
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 352--353
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 367--368
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 369--370
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 364--365
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 370--371
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 365--366
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 372--373
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 367--368
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 377--378
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 372--373
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 379--380
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 374--375
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 383--384
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 378--379
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 386--387
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 381--382
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 398--399
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 393--394
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 400--401
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 395--396
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 []\T1/SourceSansPro-LF/m/n/10 Finite dif-fer-ences ap-prox-i-ma-tions and/or an
 -a-lyt-i-cal
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 401--402
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 396--397
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 [4]
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 426--431
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 421--426
 
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 428--429
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
+
+ []
+
+
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 433--434
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 431--432
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
@@ -1564,104 +1653,176 @@ Underfull \hbox (badness 10000) in paragraph at lines 436--437
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 441--442
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 454--455
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 459--460
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 458--459
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 463--464
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 466--467
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 [5]
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 471--472
 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 479--480
+=======
+Underfull \hbox (badness 1286) in paragraph at lines 474--475
+\OML/cmm/m/it/10 A:\OT1/cmr/m/n/10 1$ \T1/SourceSansPro-LF/m/n/10 in com-bi-na-
+tion with the gen-eral method for ex-cess
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 474--475
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 485--486
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 480--481
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 487--488
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 482--483
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 497--498
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 492--493
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 500--501
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 495--496
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 501--502
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 496--497
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 1259) in paragraph at lines 503--504
+=======
+Underfull \hbox (badness 1259) in paragraph at lines 498--499
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 []\T1/SourceSansPro-LF/m/n/10 Above, $\OML/cmm/m/it/10 n[]$ \T1/SourceSansPro-L
 F/m/n/10 is the num-ber of vi-bra-tional modes, $\OML/cmm/m/it/10 h$ \T1/Source
 SansPro-LF/m/n/10 is
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 1436) in paragraph at lines 503--504
+=======
+Underfull \hbox (badness 1436) in paragraph at lines 498--499
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 \T1/SourceSansPro-LF/m/n/10 Planck's con-stant and $\OML/cmm/m/it/10 v[]$ \T1/S
 ourceSansPro-LF/m/n/10 is the vi-bra-tional fre-quency of
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 516--517
 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 519--520
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 511--512
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 530--531
 
  []
 
 [6]
 Underfull \hbox (badness 10000) in paragraph at lines 535--536
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 514--515
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 538--539
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 525--526
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 542--543
 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 546--547
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 530--531
+
+ []
+
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 533--534
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
  []
 
 
+<<<<<<< HEAD
 Underfull \hbox (badness 10000) in paragraph at lines 560--561
 
  []
@@ -1695,12 +1856,34 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 571.
  (./prop_calc_best_practices.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 571.
 Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 571.
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 537--538
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 541--542
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 555--556
+
+ []
+
+(./prop_calc_best_practices.bbl) [7]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 566.
+ (./prop_calc_best_practices.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 566.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 566.
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
+<<<<<<< HEAD
  35770 strings out of 493013
  692844 string characters out of 6133329
  793223 words of memory out of 5000000
@@ -1708,6 +1891,15 @@ Here is how much of TeX's memory you used:
  136098 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,13n,92p,10398b,944s stack positions out of 5000i,500n,10000p,200000b,80000s
+=======
+ 35765 strings out of 493013
+ 692726 string characters out of 6133329
+ 788223 words of memory out of 5000000
+ 38792 multiletter control sequences out of 15000+600000
+ 136098 words of font info for 77 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 62i,13n,92p,10398b,862s stack positions out of 5000i,500n,10000p,200000b,80000s
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/sourcesanspro/a_5tbsmu.en
 c}{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/sourcesanspro/a_ggs4wk.en
 c}</usr/local/texlive/2016/texmf-dist/fonts/type1/adobe/sourcesanspro/SourceSan
@@ -1726,10 +1918,17 @@ lic/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmsy6.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmsy7.pfb>
+<<<<<<< HEAD
 Output written on prop_calc_best_practices.pdf (8 pages, 289861 bytes).
 PDF statistics:
  96 PDF objects out of 1000 (max. 8388607)
  70 compressed objects within 1 object stream
+=======
+Output written on prop_calc_best_practices.pdf (7 pages, 287694 bytes).
+PDF statistics:
+ 93 PDF objects out of 1000 (max. 8388607)
+ 68 compressed objects within 1 object stream
+>>>>>>> cc589e04e4ab8c9c3c59970cbdf36e664d3809a9
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
