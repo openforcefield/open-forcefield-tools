@@ -76,7 +76,7 @@
 % DOCUMENT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{Best Practices for Property Prediction from Molecular Simulations}
+\title{[DRAFT]: Best Practices for Thermodynamic Property Prediction from Molecular Simulations}
 
 \author{Bryce C. Manubay} 
 \email{bryce.manubay@colorado.edu}
@@ -138,47 +138,59 @@ Definitions
 Macroscopically, the quantities $V$, $U$, $N$ are constants (assuming
 the system is not perturbed in any way), as we assume that the
 fluctuations are essentially zero, and any uncertainty comes from our
-inability to measure that constant precisely. For a mole of compound
-(about 18 mL for water), the relative uncertainty in any of these
-quantites is about $10^{-12}$, far lower than any thermodynamics
-experiment.
+inability to measure that constant value precisely. For a mole of
+compound (about 18 mL for water), the relative uncertainty in any of
+these quantites is about $10^{-12}$, far lower than any thermodynamics
+experiment can actually measure.
 
 %\comment[JDC]{This is a TODO item example.}
 
 However, in a molecular simulation, these quantites are not
-necessarily constant. For example, in an $NVT$ equilibrium simulation, $U$ is
-allowed to vary. For a long enough simulation (assuming ergodicity,
-which can pretty much always be assumed with correct simulations and
-simple fluids), then the ensemble average value of $U$ = $\langle U
-\rangle$ will be constant, and in the limit of large simulations/long
-time will converge to the macroscopic value $U$; at least, the
-macroscopic value of that given model, though perhaps not the $U$ for
-the real system. In an $NVT$ simulation, clearly $V$ is constant.
-In an $NPT$ simulation, however, $V$ is a variable, and we must estimate
-what the macroscopic value would be with the ensemble average
-$\langle V \rangle$.
+necessarily constant. For example, in an $NVT$ equilibrium simulation,
+$U$ is allowed to vary. For a long enough simulation (assuming
+ergodicity, which can pretty much always be assumed with correctly
+implemented simulations and simple fluids), then the ensemble average
+value of $U$ = $\langle U \rangle$ will converge to a constant value,
+and in the limit of large simulations/long time will converge to the
+macroscopic value $U$; at least, the macroscopic value of that given
+model, though perhaps not the $U$ for the real system. In an $NVT$
+simulation, clearly $V$ is constant.  In an $NPT$ simulation, however,
+$V$ is a variable, and we must estimate what the macroscopic value
+would be using the ensemble average $\langle V \rangle$.
 
-The quantities $T$, $P$, and $\mu$ are typically constant during the
-equilibrium simulations and experiments of interest here. 
-There are a number of quantities that can
-be used to ESTIMATE these constants. For example, $\langle
-\frac{1}{3Nk_B}\sum_i m_i |v_i|^2\rangle$, where $m$ is the mass of each
-particle and $|v_i|$ is the magnitude of the velocity of each
-particle, is an estimate of $T$, and it's average will be equal to
-the temperature. But it is not the temperature. This quantity
-fluctuates, but the tempature remains constant; otherwise the
-simulation could not be at constant temperature.
+The quantities $T$, $P$, and $\mu$ are typically {\em set} as constant
+during the equilibrium simulations and experiments of interest
+here. More precisely, the system is in contact with a thermal bath
+with a fixed $T$ (or in the case of $NPT$ simulations, in contact with
+a thermal and mechanical bath, and we sample from the systems in
+equilibrium with this bath.  There are a number of quantities that can
+be used to ESTIMATE constants such as $T$ and $P$. For example,
+$\langle \frac{1}{3Nk_B}\sum_i m_i |v_i|^2\rangle$, where $m$ is the
+mass of each particle and $|v_i|$ is the magnitude of the velocity of
+each particle, is an estimate of $T$ (the temperaure of the bath), and
+it's average will be equal to the $T$. But it is not the
+temperature. This quantity fluctuates, but $T$ remains
+constant; otherwise the simulation could not be at constant
+temperature.
 
-To even say that some environmental variable, such as $T$ or $P$ is held 
-constant is not entirely correct. What this means is that such quantities 
-are controlled by an external force in order to hold them at a certain
-value. In the case of temperature, a thermostat is used. Recalling some
-basics of chemical engineering controller design, we know that no controller
-is perfect. Corrections from feedback cannot be made instantanteously, hence 
-there is some variation in the simulation temperature reported. 
-A thermostat constantly modifies the velocities of the particles
-in simulation in order to achieve the distribution of kinetic energies that 
-would be expected for a simulation at the temperature specified.
+%MRS: This below is not really not correct. For the NPT ensemble, T is
+%constant. The average kinetic energy has fluctuations, but the
+%temperature is defined as being constant, MEANING that the system is
+%in equilibrium with a bath with constant, FIXED temperature.  The
+%temperature of the system itself isn't a meaningful thing.  The
+%average kinetic energy is fixed.  I have adjusted the text above to
+%make it clearer.
+
+%To even say that some environmental variable, such as $T$ or $P$ is held 
+%constant is not entirely correct. What this means is that such quantities 
+%are controlled by an external force in order to hold them at a certain
+%value. In the case of temperature, a thermostat is used. Recalling some
+%basics of chemical engineering controller design, we know that no controller
+%is perfect. Corrections from feedback cannot be made instantanteously, hence 
+%there is some variation in the simulation temperature reported. 
+%A thermostat constantly modifies the velocities of the particles
+%in simulation in order to achieve the distribution of kinetic energies that 
+%would be expected for a simulation at the temperature specified.
 
 Ensemble averages of some quantity $X$ ($\langle X \rangle$) are
 assumed to be averages over the appropriate Boltzmann weighting,
@@ -254,16 +266,30 @@ example, $u_j(x) = \beta_i U(x) + \beta_i (P_i + \Delta P) V$, or $u_j
 P_i V$. However, the relationship between $f$ and $G$ can be
 problematic when looking at differences in free energy with respect to
 temperature, because $G_2 - G_1 = \beta_2 f_2 - \beta_1 f_1$.  
-\comment[MRS]{Need to find notes on how this was dealt with last time}
+We can in general write
+\[\Delta G_{ij}(T) = k_B T \left (\Delta f_ij(T) - \Delta f_ij(T_{ref})\right) + \frac{T}{T_{ref}}\Delta G_ij(T_{ref})\], 
+where $\Delta G_{ij}(T_{ref})$ is know at some temperature.
+
+ 
+%\comment[MRS]{Need to find notes on how this was dealt with last time}
 
 Since with MBAR, one can make the differences as small as one would
 like (you don't have to actually carry out a simulation at those
-points), we can use the simplest formulas: central difference for first derivatives: 
+points), we can use the simplest formulas: central difference for
+first derivatives:
 \[\frac{dA}{dx} \approx \frac{1}{2\Delta x}\left( A(x+\Delta x) - A(x-\Delta x)\right)\]
 And for 2nd deriatives:
 \[\frac{d^2A}{dx^2} \approx \frac{1}{\Delta x^2}\left( A(x+\Delta x) - 2A(x) + A(x-\Delta x)\right)\]
 Thus, only properties at two additional points need to be evaluated to
-calculate both first and 2nd derivatives.
+calculate both first and 2nd derivatives.  
+
+It may first appear that these finite difference calculations will
+propagate significant error as they subtract similar numbers.
+However, MBAR calculates the covariance matrix between $\langle A
+\rangle$, $A(x+\Delta x)$, and $A(x-\Delta x)$, meaning in practice
+the uncertainty is far lower than would be expected by standard error
+propagation of uncorrelated observables.
+
 
 Note that if the finite differences are re-evaluated using reweighting
 approaches, it is important that the simulation used generates the
@@ -351,7 +377,7 @@ The definition of isothermal compressibility is:
 Thus, it can be estimated by the finite difference of $\langle V \rangle$
 \begin{equation}\kappa_T = -\frac{1}{2V(T,P)^2} \left(\langle V(P+\Delta P,T)\rangle - \langle V(P-\Delta P,T)\right\rangle) \end{equation}
 Or by the finite differences evaluation of:
-\begin{equation}\kappa_T = -\frac{\left(\frac{\partial^2 G}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial G}{\partial P}\right)_{T, N}}\end{equation}\\*
+\begin{equation}\kappa_T = -\frac{\left(\frac{\partial^2 G}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial G}{\partial P}\right)_{T, N}} = -\frac{\left(\frac{\partial^2 f}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial f}{\partial P}\right)_{T, N}}\end{equation} \\*
 
 $\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
 \begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{VT}}\end{equation}\\*
