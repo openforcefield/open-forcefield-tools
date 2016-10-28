@@ -1,17 +1,21 @@
 Contains
 
-* thermopyl_description.txt: a description of the data representation of single molecule simulation data for our simple test case
-
-* bonded_term_list.py: take multiple parmtops and generate a pandas dataframe as output by thermopyl
-
-* trajectory_parser.py: take multiple .nc files with identifier names and a pandas dataframe with property names for single atom bonded properties (including the atom numbers) and populate those property pandas dataframe.
-
-* generate_single_molecule_properties.py: sample script running bonded_term_list.py and trajectory_parser.py on a specific data set.
+* manipulateparameters.py: script for testing allowable accurate jumps in parameter space for reweighting. Can utilize multiple trajectories in order to reweight to unsampled states using the Python implementation of MBAR and calculate various single molecule observables including:   
 
   * Bond equilibrium lengths
   * Bond equilibrium standard deviations
   * Angle equilibrium angles
   * Angle equilibrium standard deviations
-  * Torsion Fourier representations (0, 1, 2, 3, 6 + phase angle) (determined by least square fit)
+  * Torsion Fourier representations (0, 1, 2, 3, 6 + phase angle) (determined by least square fit) (still a WIP)
 
-and populate the pandas dataframe.
+Simulation trajectories of the "unsampled" states are also used as input in order to assesss the accuracy of the reweighting. Current criteria of an accurate reweighted estimate are:
+
+  * 1) Estimated observable is within 2 standard deviations away of the true sampled value
+  * 2) Error in estimated uncertainties is less than 20%
+
+* run_molecule.py: script used to run simulations whose trajectories are utilized in the reweighting script
+
+* least_squares_fit_example.py: script being used to develop eventual fitting process for torsion representations 
+ 
+* oe_license.txt: the license for using the OpenEye tools necessary for the reweighting and simulation processes
+
