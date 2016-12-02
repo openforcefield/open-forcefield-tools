@@ -1,0 +1,2612 @@
+/projects/brma3379/anaconda2/lib/python2.7/site-packages/pymbar/utils.py:110: FutureWarning: comparison to `None` will result in an elementwise object comparison in the future.
+  if N_k == None:
+/projects/brma3379/anaconda2/lib/python2.7/site-packages/pymbar/mbar.py:872: FutureWarning: comparison to `None` will result in an elementwise object comparison in the future.
+  if u_kn == None:
+/projects/brma3379/anaconda2/lib/python2.7/site-packages/pymbar/mbar.py:240: FutureWarning: comparison to `None` will result in an elementwise object comparison in the future.
+  if initial_f_k != None:
+[#8:1]-[#1:2] occurs 2 times
+[#6X4:1]-[#8X2H0:2] occurs 2 times
+[#6X4:1]-[#6X4:2] occurs 2 times
+[#6X4:1]-[#1:2] occurs 4 times
+[#6X4:1]-[#8X2:2] occurs 2 times
+#################################################################################
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k200.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.2965508]  dE_expect: [ 0.06196185]  dE_boot: [ 0.0550583] 
+
+E_expectnew: [ 60.25240863]  dE_expectnew: [ 0.05728711]  dE_bootnew: [ 0.05240022] 
+
+delta_E_expect: [-1.04414217]  percent_delta_E_expect: [-1.70342728] 
+
+A_expect: [ 1.09360055]  dA_expect: [ 0.00079254]  dA_boot: [ 0.00077633] 
+
+A_expect_unsamp: [ 1.10679034]  dA_expect_unsamp: [ 0.01639785]  dA_boot_unsamp: [ 0.02168638] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0991794573186062] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [60.223333688304457] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.06858128]  E_expectnew: [ 0.02007066]  A_expect: [ 0.0046873] A_expect_unsamp: [ 1.84899622]
+Percent shift = 67.7419354839 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k250.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.27464035]  dE_expect: [ 0.0621493]  dE_boot: [ 0.05898829] 
+
+E_expectnew: [ 60.35636551]  dE_expectnew: [ 0.05861872]  dE_bootnew: [ 0.05670498] 
+
+delta_E_expect: [-0.91827484]  percent_delta_E_expect: [-1.49862135] 
+
+A_expect: [ 1.09443482]  dA_expect: [ 0.00080471]  dA_boot: [ 0.0007411] 
+
+A_expect_unsamp: [ 1.11815902]  dA_expect_unsamp: [ 0.00866603]  dA_boot_unsamp: [ 0.02094202] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0993140899804179] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [60.345664002626457] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.05984298]  E_expectnew: [ 0.05347988]  A_expect: [ 0.00392989] A_expect_unsamp: [ 2.64570478]
+Percent shift = 59.6774193548 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k300.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.24462856]  dE_expect: [ 0.06225533]  dE_boot: [ 0.0580496] 
+
+E_expectnew: [ 60.46524053]  dE_expectnew: [ 0.05862144]  dE_bootnew: [ 0.05577639] 
+
+delta_E_expect: [-0.77938802]  percent_delta_E_expect: [-1.27258184] 
+
+A_expect: [ 1.09284836]  dA_expect: [ 0.00078919]  dA_boot: [ 0.00069875] 
+
+A_expect_unsamp: [ 1.09268896]  dA_expect_unsamp: [ 0.01032994]  dA_boot_unsamp: [ 0.01730328] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0957209941665091] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [60.467994316948463] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.03162804]  E_expectnew: [ 0.01036756]  A_expect: [ 0.04352746] A_expect_unsamp: [ 1.68888034]
+Percent shift = 51.6129032258 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k350.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.20960947]  dE_expect: [ 0.062081]  dE_boot: [ 0.05499385] 
+
+E_expectnew: [ 60.55197641]  dE_expectnew: [ 0.05869855]  dE_bootnew: [ 0.05049675] 
+
+delta_E_expect: [-0.65763307]  percent_delta_E_expect: [-1.07439514] 
+
+A_expect: [ 1.09460537]  dA_expect: [ 0.00078483]  dA_boot: [ 0.00085538] 
+
+A_expect_unsamp: [ 1.10647765]  dA_expect_unsamp: [ 0.0117802]  dA_boot_unsamp: [ 0.01556944] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0950541310006221] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [60.59032463127047] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.12640386]  E_expectnew: [ 0.12164284]  A_expect: [ 0.13047761] A_expect_unsamp: [ 1.1607766]
+Percent shift = 43.5483870968 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k400.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.30271107]  dE_expect: [ 0.06337088]  dE_boot: [ 0.0655949] 
+
+E_expectnew: [ 60.75791671]  dE_expectnew: [ 0.06007439]  dE_bootnew: [ 0.06310387] 
+
+delta_E_expect: [-0.54479436]  percent_delta_E_expect: [-0.88869539] 
+
+A_expect: [ 1.09227329]  dA_expect: [ 0.00080106]  dA_boot: [ 0.00075516] 
+
+A_expect_unsamp: [ 1.08452194]  dA_expect_unsamp: [ 0.00998569]  dA_boot_unsamp: [ 0.01232237] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0945337426611488] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [60.712654945592483] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.04930796]  E_expectnew: [ 0.04915542]  A_expect: [ 0.0174894] A_expect_unsamp: [ 1.37342722]
+Percent shift = 35.4838709677 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k450.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.30827937]  dE_expect: [ 0.0622769]  dE_boot: [ 0.06370237] 
+
+E_expectnew: [ 60.8856649]  dE_expectnew: [ 0.05983654]  dE_bootnew: [ 0.06132675] 
+
+delta_E_expect: [-0.42261447]  percent_delta_E_expect: [-0.68932691] 
+
+A_expect: [ 1.09329145]  dA_expect: [ 0.00078012]  dA_boot: [ 0.00073205] 
+
+A_expect_unsamp: [ 1.08186647]  dA_expect_unsamp: [ 0.01349388]  dA_boot_unsamp: [ 0.009499] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0945487742661153] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [60.834985259914482] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.04448522]  E_expectnew: [ 0.06551875]  A_expect: [ 0.10369067] A_expect_unsamp: [ 0.79191205]
+Percent shift = 27.4193548387 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k500.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.29648859]  dE_expect: [ 0.06351922]  dE_boot: [ 0.05746305] 
+
+E_expectnew: [ 60.99836356]  dE_expectnew: [ 0.06162001]  dE_bootnew: [ 0.05554647] 
+
+delta_E_expect: [-0.29812503]  percent_delta_E_expect: [-0.48636559] 
+
+A_expect: [ 1.09387546]  dA_expect: [ 0.00078723]  dA_boot: [ 0.00066057] 
+
+A_expect_unsamp: [ 1.08021704]  dA_expect_unsamp: [ 0.00766851]  dA_boot_unsamp: [ 0.0071065] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0933490006274669] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [60.957315574236482] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.04558698]  E_expectnew: [ 0.04426654]  A_expect: [ 0.06189326] A_expect_unsamp: [ 0.8876136]
+Percent shift = 19.3548387097 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k550.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.30852598]  dE_expect: [ 0.06295905]  dE_boot: [ 0.06178442] 
+
+E_expectnew: [ 61.13702496]  dE_expectnew: [ 0.06196453]  dE_bootnew: [ 0.06085309] 
+
+delta_E_expect: [-0.17150102]  percent_delta_E_expect: [-0.27973438] 
+
+A_expect: [ 1.09111859]  dA_expect: [ 0.00078664]  dA_boot: [ 0.00082448] 
+
+A_expect_unsamp: [ 1.07468804]  dA_expect_unsamp: [ 0.00715694]  dA_boot_unsamp: [ 0.00719902] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0933164902870884] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.079645888558488] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.11430042]  E_expectnew: [ 0.11191707]  A_expect: [ 0.05993394] A_expect_unsamp: [ 0.94626161]
+Percent shift = 11.2903225806 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k600.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.18847975]  dE_expect: [ 0.06006874]  dE_boot: [ 0.05690814] 
+
+E_expectnew: [ 61.13981924]  dE_expectnew: [ 0.05975465]  dE_bootnew: [ 0.05671882] 
+
+delta_E_expect: [-0.04866052]  percent_delta_E_expect: [-0.07952562] 
+
+A_expect: [ 1.09352085]  dA_expect: [ 0.00079122]  dA_boot: [ 0.0008046] 
+
+A_expect_unsamp: [ 1.08450044]  dA_expect_unsamp: [ 0.00711031]  dA_boot_unsamp: [ 0.00665311] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0949202931948232] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.201976202880495] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.04093818]  E_expectnew: [ 0.04104957]  A_expect: [ 0.06278404] A_expect_unsamp: [ 1.00214167]
+Percent shift = 3.22580645161 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k650.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.2860703]  dE_expect: [ 0.06221787]  dE_boot: [ 0.06002769] 
+
+E_expectnew: [ 61.35906512]  dE_expectnew: [ 0.06266327]  dE_bootnew: [ 0.06049965] 
+
+delta_E_expect: [ 0.07299482]  percent_delta_E_expect: [ 0.11910507] 
+
+A_expect: [ 1.09481069]  dA_expect: [ 0.00077876]  dA_boot: [ 0.00076032] 
+
+A_expect_unsamp: [ 1.07855444]  dA_expect_unsamp: [ 0.00249895]  dA_boot_unsamp: [ 0.00523649] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0939637026456086] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.324306517202508] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.04198655]  E_expectnew: [ 0.0428495]  A_expect: [ 0.18523216] A_expect_unsamp: [ 2.96130363]
+Percent shift = -4.83870967742 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k700.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.26871311]  dE_expect: [ 0.06160293]  dE_boot: [ 0.05888154] 
+
+E_expectnew: [ 61.46597158]  dE_expectnew: [ 0.06303951]  dE_bootnew: [ 0.05991034] 
+
+delta_E_expect: [ 0.19725846]  percent_delta_E_expect: [ 0.32195627] 
+
+A_expect: [ 1.09244071]  dA_expect: [ 0.00080005]  dA_boot: [ 0.00068226] 
+
+A_expect_unsamp: [ 1.08694411]  dA_expect_unsamp: [ 0.00510864]  dA_boot_unsamp: [ 0.00473539] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0918435087731926] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.446636831524508] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.02743524]  E_expectnew: [ 0.02181451]  A_expect: [ 0.07498181] A_expect_unsamp: [ 0.63621403]
+Percent shift = -12.9032258065 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k750.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.29252092]  dE_expect: [ 0.06164205]  dE_boot: [ 0.06687331] 
+
+E_expectnew: [ 61.6119218]  dE_expectnew: [ 0.06384792]  dE_bootnew: [ 0.06913181] 
+
+delta_E_expect: [ 0.31940088]  percent_delta_E_expect: [ 0.52110907] 
+
+A_expect: [ 1.0929769]  dA_expect: [ 0.00077162]  dA_boot: [ 0.00069225] 
+
+A_expect_unsamp: [ 1.09137017]  dA_expect_unsamp: [ 0.0038165]  dA_boot_unsamp: [ 0.00464504] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0928695270834623] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.568967145846514] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.01916931]  E_expectnew: [ 0.01949631]  A_expect: [ 0.08819496] A_expect_unsamp: [ 1.40711149]
+Percent shift = -20.9677419355 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k800.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.2710725]  dE_expect: [ 0.06228]  dE_boot: [ 0.06478707] 
+
+E_expectnew: [ 61.71759705]  dE_expectnew: [ 0.06559875]  dE_bootnew: [ 0.06724592] 
+
+delta_E_expect: [ 0.44652455]  percent_delta_E_expect: [ 0.72876895] 
+
+A_expect: [ 1.09258762]  dA_expect: [ 0.00080511]  dA_boot: [ 0.00078957] 
+
+A_expect_unsamp: [ 1.08960697]  dA_expect_unsamp: [ 0.005246]  dA_boot_unsamp: [ 0.00475781] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0919991607935329] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.691297460168521] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.13735337]  E_expectnew: [ 0.14397936]  A_expect: [ 0.10151769] A_expect_unsamp: [ 0.88280599]
+Percent shift = -29.0322580645 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k850.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.20044944]  dE_expect: [ 0.05855847]  dE_boot: [ 0.05797033] 
+
+E_expectnew: [ 61.74988455]  dE_expectnew: [ 0.06232273]  dE_bootnew: [ 0.06199892] 
+
+delta_E_expect: [ 0.54943512]  percent_delta_E_expect: [ 0.8977632] 
+
+A_expect: [ 1.09350916]  dA_expect: [ 0.0007949]  dA_boot: [ 0.00076264] 
+
+A_expect_unsamp: [ 1.08709199]  dA_expect_unsamp: [ 0.00514552]  dA_boot_unsamp: [ 0.00472007] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0921961381548997] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.813627774490527] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.07016949]  E_expectnew: [ 0.08220564]  A_expect: [ 0.02623064] A_expect_unsamp: [ 0.88608323]
+Percent shift = -37.0967741935 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k900.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.35110386]  dE_expect: [ 0.06383715]  dE_boot: [ 0.06344995] 
+
+E_expectnew: [ 62.05034545]  dE_expectnew: [ 0.06955501]  dE_bootnew: [ 0.06857383] 
+
+delta_E_expect: [ 0.69924159]  percent_delta_E_expect: [ 1.13973759] 
+
+A_expect: [ 1.09285371]  dA_expect: [ 0.00078807]  dA_boot: [ 0.00080409] 
+
+A_expect_unsamp: [ 1.08203997]  dA_expect_unsamp: [ 0.00352715]  dA_boot_unsamp: [ 0.0043379] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0908442006124401] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [61.935958088812534] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.13070292]  E_expectnew: [ 0.13381534]  A_expect: [ 0.19843929] A_expect_unsamp: [ 1.16914199]
+Percent shift = -45.1612903226 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k950.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.32111851]  dE_expect: [ 0.06184059]  dE_boot: [ 0.05946417] 
+
+E_expectnew: [ 62.13618146]  dE_expectnew: [ 0.06783976]  dE_bootnew: [ 0.06540519] 
+
+delta_E_expect: [ 0.81506294]  percent_delta_E_expect: [ 1.32917169] 
+
+A_expect: [ 1.0925457]  dA_expect: [ 0.00080312]  dA_boot: [ 0.00089214] 
+
+A_expect_unsamp: [ 1.08688504]  dA_expect_unsamp: [ 0.00463996]  dA_boot_unsamp: [ 0.00447335] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0912776491368972] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [62.058288403134533] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.28313365]  E_expectnew: [ 0.31144434]  A_expect: [ 0.0234852] A_expect_unsamp: [ 0.86014804]
+Percent shift = -53.2258064516 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k1000.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.16862841]  dE_expect: [ 0.06098542]  dE_boot: [ 0.06109175] 
+
+E_expectnew: [ 62.11116204]  dE_expectnew: [ 0.06832964]  dE_bootnew: [ 0.06833002] 
+
+delta_E_expect: [ 0.94253363]  percent_delta_E_expect: [ 1.5408775] 
+
+A_expect: [ 1.09247083]  dA_expect: [ 0.00079841]  dA_boot: [ 0.00075408] 
+
+A_expect_unsamp: [ 1.0854107]  dA_expect_unsamp: [ 0.00525118]  dA_boot_unsamp: [ 0.00521366] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0917522255268619] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [62.180618717456539] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.05053399]  E_expectnew: [ 0.0518112]  A_expect: [ 0.04192835] A_expect_unsamp: [ 0.87154215]
+Percent shift = -61.2903225806 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k1050.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.32914601]  dE_expect: [ 0.06074855]  dE_boot: [ 0.06357903] 
+
+E_expectnew: [ 62.35922697]  dE_expectnew: [ 0.06817598]  dE_bootnew: [ 0.07185341] 
+
+delta_E_expect: [ 1.03008096]  percent_delta_E_expect: [ 1.6795945] 
+
+A_expect: [ 1.09400857]  dA_expect: [ 0.00076812]  dA_boot: [ 0.00086265] 
+
+A_expect_unsamp: [ 1.08574903]  dA_expect_unsamp: [ 0.00386805]  dA_boot_unsamp: [ 0.00479231] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0910484041046895] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [62.302949031778553] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.0596624]  E_expectnew: [ 0.0414164]  A_expect: [ 0.0340462] A_expect_unsamp: [ 1.20727514]
+Percent shift = -69.3548387097 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k1100.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+No sub-sampling occurred
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.10559501]  dE_expect: [ 0.06103403]  dE_boot: [ 0.05966157] 
+
+E_expectnew: [ 62.28597991]  dE_expectnew: [ 0.0703208]  dE_bootnew: [ 0.0696884] 
+
+delta_E_expect: [ 1.1803849]  percent_delta_E_expect: [ 1.93171329] 
+
+A_expect: [ 1.09293739]  dA_expect: [ 0.00076635]  dA_boot: [ 0.00075881] 
+
+A_expect_unsamp: [ 1.08975662]  dA_expect_unsamp: [ 0.005035]  dA_boot_unsamp: [ 0.00489681] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0913839803361105] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [62.42527934610056] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.06356674]  E_expectnew: [ 0.05574595]  A_expect: [ 0.0182423] A_expect_unsamp: [ 0.75106376]
+Percent shift = -77.4193548387 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP
+traj/AlkEthOH_r0_[#6X4:1]-[#1:2]_k1150.nc
+No sub-sampling occurred
+Sub-sampling...
+Sub-sampling...
+Sub-sampling...
+Bootstrap: 1/100
+Bootstrap: 2/100
+Bootstrap: 3/100
+Bootstrap: 4/100
+Bootstrap: 5/100
+Bootstrap: 6/100
+Bootstrap: 7/100
+Bootstrap: 8/100
+Bootstrap: 9/100
+Bootstrap: 10/100
+Bootstrap: 11/100
+Bootstrap: 12/100
+Bootstrap: 13/100
+Bootstrap: 14/100
+Bootstrap: 15/100
+Bootstrap: 16/100
+Bootstrap: 17/100
+Bootstrap: 18/100
+Bootstrap: 19/100
+Bootstrap: 20/100
+Bootstrap: 21/100
+Bootstrap: 22/100
+Bootstrap: 23/100
+Bootstrap: 24/100
+Bootstrap: 25/100
+Bootstrap: 26/100
+Bootstrap: 27/100
+Bootstrap: 28/100
+Bootstrap: 29/100
+Bootstrap: 30/100
+Bootstrap: 31/100
+Bootstrap: 32/100
+Bootstrap: 33/100
+Bootstrap: 34/100
+Bootstrap: 35/100
+Bootstrap: 36/100
+Bootstrap: 37/100
+Bootstrap: 38/100
+Bootstrap: 39/100
+Bootstrap: 40/100
+Bootstrap: 41/100
+Bootstrap: 42/100
+Bootstrap: 43/100
+Bootstrap: 44/100
+Bootstrap: 45/100
+Bootstrap: 46/100
+Bootstrap: 47/100
+Bootstrap: 48/100
+Bootstrap: 49/100
+Bootstrap: 50/100
+Bootstrap: 51/100
+Bootstrap: 52/100
+Bootstrap: 53/100
+Bootstrap: 54/100
+Bootstrap: 55/100
+Bootstrap: 56/100
+Bootstrap: 57/100
+Bootstrap: 58/100
+Bootstrap: 59/100
+Bootstrap: 60/100
+Bootstrap: 61/100
+Bootstrap: 62/100
+Bootstrap: 63/100
+Bootstrap: 64/100
+Bootstrap: 65/100
+Bootstrap: 66/100
+Bootstrap: 67/100
+Bootstrap: 68/100
+Bootstrap: 69/100
+Bootstrap: 70/100
+Bootstrap: 71/100
+Bootstrap: 72/100
+Bootstrap: 73/100
+Bootstrap: 74/100
+Bootstrap: 75/100
+Bootstrap: 76/100
+Bootstrap: 77/100
+Bootstrap: 78/100
+Bootstrap: 79/100
+Bootstrap: 80/100
+Bootstrap: 81/100
+Bootstrap: 82/100
+Bootstrap: 83/100
+Bootstrap: 84/100
+Bootstrap: 85/100
+Bootstrap: 86/100
+Bootstrap: 87/100
+Bootstrap: 88/100
+Bootstrap: 89/100
+Bootstrap: 90/100
+Bootstrap: 91/100
+Bootstrap: 92/100
+Bootstrap: 93/100
+Bootstrap: 94/100
+Bootstrap: 95/100
+Bootstrap: 96/100
+Bootstrap: 97/100
+Bootstrap: 98/100
+Bootstrap: 99/100
+Bootstrap: 100/100
+E_expect: [ 61.26475206]  dE_expect: [ 0.06036901]  dE_boot: [ 0.0475654] 
+
+E_expectnew: [ 62.56488867]  dE_expectnew: [ 0.07145187]  dE_bootnew: [ 0.05487678] 
+
+delta_E_expect: [ 1.30013662]  percent_delta_E_expect: [ 2.1221609] 
+
+A_expect: [ 1.09297084]  dA_expect: [ 0.00078645]  dA_boot: [ 0.00066472] 
+
+A_expect_unsamp: [ 1.0902717]  dA_expect_unsamp: [ 0.00571544]  dA_boot_unsamp: [ 0.00440982] 
+
+The mean of the sampled series = [1.0936246568284023] 
+
+The true sampled mean of the observable we're reweighting to = [1.0912701588070637] 
+
+The mean of the energies corresponding to the sampled series = [61.250908328609299] 
+
+The mean of the energies corresponding to the unsampled series = [62.547609660422559] 
+
+Standard deviations away from true sampled observables for E_expect: [ 0.0121174]  E_expectnew: [ 0.01579476]  A_expect: [ 0.20608407] A_expect_unsamp: [ 0.8224851]
+Percent shift = -85.4838709677 
+
+Percent of molecule that is [#6X4:1]-[#1:2] = 33.3333333333 
+
+###############################################################################
+NEXT LOOP

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#SBATCH --job-name 'Single Molecule Parameter Exploration'
+#SBATCH --qos janus
+#SBATCH --nodes 12
+#SBATCH --ntasks-per-node 1
+#SBATCH --time 10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=brma3379@colorado.edu
+
+# some modules I use
+ml slurm
+
+#commands
+python run_molecule.py
