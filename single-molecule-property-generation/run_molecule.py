@@ -54,9 +54,9 @@ for ind,j in enumerate(mol_filename):
     forcefield.setParameter(params, smirks='[#1:1]-[#8]')
     system = forcefield.createSystem(topology, [mol])
 
-    paramlist = np.arange(200,1200,50)
-    smirkseries = '[#6X4:1]-[#1:2]'
-    paramtype = 'k'
+    paramlist = np.arange(float(sys.argv[2]),float(sys.argv[3]),float(sys.argv[4]))
+    smirkseries = sys.argv[5]#'[#6X4:1]-[#1:2]'
+    paramtype = 'length'
 
 
     param = forcefield.getParameter(smirks=smirkseries)
@@ -72,9 +72,9 @@ for ind,j in enumerate(mol_filename):
         simulation = app.Simulation(topology, system, integrator)
         simulation.context.setPositions(positions)
         simulation.context.setVelocitiesToTemperature(temperature*kelvin)
-        netcdf_reporter = NetCDFReporter('traj/'+molname[ind]+'_'+smirkseries+'_'+paramtype+str(i)+'.nc', trj_freq)
+        netcdf_reporter = NetCDFReporter('traj4ns/'+molname[ind]+'_'+smirkseries+'_'+paramtype+str(i)+'.nc', trj_freq)
         simulation.reporters.append(netcdf_reporter)
-        simulation.reporters.append(app.StateDataReporter('StateData/data_'+molname[ind]+'_'+smirkseries+'_'+paramtype+str(i)+'.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
+        simulation.reporters.append(app.StateDataReporter('StateData4ns/data_'+molname[ind]+'_'+smirkseries+'_'+paramtype+str(i)+'.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
 
         print("Starting simulation")
         start = time.clock()
