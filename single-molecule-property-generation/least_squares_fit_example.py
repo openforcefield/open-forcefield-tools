@@ -1,6 +1,3 @@
-# Ben Coscia
-# Homework 10
-# Part II Question 3
 import matplotlib as mpl
 
 mpl.use('Agg')
@@ -329,6 +326,13 @@ def readtraj(ncfiles):
     return data, xyz, time 
 
 #------------------------------------------------------------------
+tau = 1.
+def fourier(x, *a):
+    ret = a[0]* np.cos(np.pi / tau * x)
+    for deg in range(1, len(a)):
+        ret += a[deg] * np.cos((deg+1) * np.pi / tau * x)
+    return ret
+#-----------------------------------------------------------------
 # Fit the given data to a 5 term fourier series:
 # S_6(x) = (a0/2) + a1*np.sin(2*math.pi*x/P + phi1) + a2*np.sin(4*math.pi*x/P + phi2) + a3*np.sin(6*math.pi*x/P + phi3) + a6*np.sin(12*math.pi*x/P + phi6)
 #   S_6(x)  == Torsion angle in radians
@@ -453,7 +457,7 @@ torsion_r48_c = torstimeser_r48[12]
 #likelihood = (np.bincount(binplace))/100.
 
 
-num_bins = 100
+num_bins = 500
 
 #plt.figure()
 #plt.hist(bond_r51_a,num_bins,color='green')
@@ -497,7 +501,9 @@ num_bins = 100
 #plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
 print torsion_r48_a
 plt.figure()
-plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48',color='green')
+(n1,bins1,patch1) = plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48',color='green')
+popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0] * 7)
+plt.plot(bins1[1:],fourier(bins1[1:],popt[0],popt[1],popt[2],popt[3],popt[6]))
 plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.title('Torsion sample in AlkEthOH_r48')
