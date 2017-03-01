@@ -212,7 +212,7 @@ def ComputeBondsAnglesTorsions(xyz, bonds, angles, torsions):
         xyzn = xyz[n] # coordinates this iteration
         bond_vectors = np.zeros([nbonds,3])
 	for i, bond in enumerate(bonds):
-	    bond_vectors[i,:] = xyzn[bond[0]-1] - xyzn[bond[1]-1]  # calculate the length of the vector
+	    bond_vectors[i,:] = xyzn[bond[0]] - xyzn[bond[1]]  # calculate the length of the vector
             bond_dist[n,i] = np.linalg.norm(bond_vectors[i]) # calculate the bond distance
 
         # we COULD reuse the bond vectors and avoid subtractions, but would involve a lot of bookkeeping
@@ -223,8 +223,8 @@ def ComputeBondsAnglesTorsions(xyz, bonds, angles, torsions):
         bond_vector3 = np.zeros(3)
 
         for i, angle in enumerate(angles):
-            bond_vector1 = xyzn[angle[0]-1] - xyzn[angle[1]-1]  # calculate the length of the vector
-            bond_vector2 = xyzn[angle[1]-1] - xyzn[angle[2]-1]  # calculate the length of the vector
+            bond_vector1 = xyzn[angle[0]] - xyzn[angle[1]]  # calculate the length of the vector
+            bond_vector2 = xyzn[angle[1]] - xyzn[angle[2]]  # calculate the length of the vector
             dot = np.dot(bond_vector1,bond_vector2)
             len1 = np.linalg.norm(bond_vector1)
             len2 = np.linalg.norm(bond_vector2)
@@ -232,9 +232,9 @@ def ComputeBondsAnglesTorsions(xyz, bonds, angles, torsions):
 
         for i, torsion in enumerate(torsions):
             # algebra from http://math.stackexchange.com/questions/47059/how-do-i-calculate-a-dihedral-angle-given-cartesian-coordinates, Daniel's answer
-            bond_vector1 = xyzn[torsion[0]-1] - xyzn[torsion[1]-1]  # calculate the length of the vector
-            bond_vector2 = xyzn[torsion[1]-1] - xyzn[torsion[2]-1]  # calculate the length of the vector
-            bond_vector3 = xyzn[torsion[2]-1] - xyzn[torsion[3]-1]  # calculate the length of the vector
+            bond_vector1 = xyzn[torsion[0]] - xyzn[torsion[1]]  # calculate the length of the vector
+            bond_vector2 = xyzn[torsion[1]] - xyzn[torsion[2]]  # calculate the length of the vector
+            bond_vector3 = xyzn[torsion[2]] - xyzn[torsion[3]]  # calculate the length of the vector
             bond_vector1 /= np.linalg.norm(bond_vector1)
             bond_vector2 /= np.linalg.norm(bond_vector2)
             bond_vector3 /= np.linalg.norm(bond_vector3)
@@ -372,22 +372,22 @@ mol2 = ['molecules/AlkEthOH_r48.mol2', 'molecules/AlkEthOH_r51.mol2']
 traj = ['AlkEthOH_r48_50ns.nc', 'AlkEthOH_r51_50ns.nc']
 
 AtomDict_r48, OEMol_r48, cols2_r48 = get_small_mol_dict([mol2[0]], [traj[0]])
-AtomDict_r51, OEMol_r51, cols2_r51 = get_small_mol_dict([mol2[1]], [traj[1]])
+#AtomDict_r51, OEMol_r51, cols2_r51 = get_small_mol_dict([mol2[1]], [traj[1]])
 labels_r48 = []
 for ind, val in enumerate(OEMol_r48):
     label = ff.labelMolecules([val])
     labels_r48.append(label)
-labels_r51 = []
-for ind, val in enumerate(OEMol_r51):
-    label = ff.labelMolecules([val])
-    labels_r51.append(label)
+#labels_r51 = []
+#for ind, val in enumerate(OEMol_r51):
+#    label = ff.labelMolecules([val])
+#    labels_r51.append(label)
 
 
-atominds_r51 = [tors[0] for tors in labels_r51[0][0]['PeriodicTorsionGenerator']]
+#atominds_r51 = [tors[0] for tors in labels_r51[0][0]['PeriodicTorsionGenerator']]
 atominds_r48 = [tors[0] for tors in labels_r48[0][0]['PeriodicTorsionGenerator']]
 
-atominds_r51_b = [tors[0] for tors in labels_r51[0][0]['HarmonicBondGenerator']]
-atominds_r48_a = [tors[0] for tors in labels_r48[0][0]['HarmonicAngleGenerator']]
+#atominds_r51_b = [tors[0] for tors in labels_r51[0][0]['HarmonicBondGenerator']]
+#atominds_r48_a = [tors[0] for tors in labels_r48[0][0]['HarmonicAngleGenerator']]
 
 
 #print([atominds_r51[2],atominds_r51[1],atominds_r51[0]])
@@ -397,52 +397,52 @@ atominds_r48_a = [tors[0] for tors in labels_r48[0][0]['HarmonicAngleGenerator']
 
 
 data_r48, xyz_r48, time_r48 = readtraj([traj[0]])
-data_r51, xyz_r51, time_r51 = readtraj([traj[1]])
+#data_r51, xyz_r51, time_r51 = readtraj([traj[1]])
 #print len(xyz_r51)
 
 xyzn_r48 = unit.Quantity(xyz_r48[:], unit.angstroms)
 time_r48 = unit.Quantity(time_r48[:], unit.picoseconds)
-xyzn_r51 = unit.Quantity(xyz_r51[:9238], unit.angstroms)
-time_r51 = unit.Quantity(time_r51[:9238], unit.picoseconds)
+#xyzn_r51 = unit.Quantity(xyz_r51[:9238], unit.angstroms)
+#time_r51 = unit.Quantity(time_r51[:9238], unit.picoseconds)
 
 # Compute bond lengths and angles and return array of angles
 a = ComputeBondsAnglesTorsions(xyzn_r48,AtomDict_r48['Bond'],AtomDict_r48['Angle'],AtomDict_r48['Torsion'])
-b = ComputeBondsAnglesTorsions(xyzn_r51,AtomDict_r51['Bond'],AtomDict_r51['Angle'],AtomDict_r51['Torsion'])
+#b = ComputeBondsAnglesTorsions(xyzn_r51,AtomDict_r51['Bond'],AtomDict_r51['Angle'],AtomDict_r51['Torsion'])
 
 # Pull out torsion data
 torsions_r48 = a[2]
-torsions_r51 = b[2]
+#torsions_r51 = b[2]
 
-bonds_r51 = b[0]
-angles_r51 = b[1]
+#bonds_r51 = b[0]
+#angles_r51 = b[1]
 
 # Get number of angles in molecule
 numtors_r48 = len(torsions_r48[0])
-numtors_r51 = len(torsions_r51[0])
+#numtors_r51 = len(torsions_r51[0])
 
-numbonds_r51 = len(bonds_r51[0])
-numangs_r51 = len(angles_r51[0])
+#numbonds_r51 = len(bonds_r51[0])
+#numangs_r51 = len(angles_r51[0])
 
 # Re-organize data into timeseries
 torstimeser_r48 = [torsions_r48[:,ind] for ind in range(numtors_r48)]
-torstimeser_r51 = [torsions_r51[:,ind] for ind in range(numtors_r51)]
+#torstimeser_r51 = [torsions_r51[:,ind] for ind in range(numtors_r51)]
 
-bondtimeser_r51 = [bonds_r51[:,ind] for ind in range(numbonds_r51)]
-angtimeser_r51 = [angles_r51[:,ind] for ind in range(numangs_r51)]
+#bondtimeser_r51 = [bonds_r51[:,ind] for ind in range(numbonds_r51)]
+#angtimeser_r51 = [angles_r51[:,ind] for ind in range(numangs_r51)]
 
-print bondtimeser_r51
+#print bondtimeser_r51
 
 # Using the angle at index 0 for test case
 #torsion = np.zeros([1,100],np.float64)
 torsion_r48_a = torstimeser_r48[4]
-torsion_r51_a = torstimeser_r51[1]
+#torsion_r51_a = torstimeser_r51[1]
 torsion_r48_b = torstimeser_r48[29]
-torsion_r51_b = torstimeser_r51[7]
+#torsion_r51_b = torstimeser_r51[7]
 torsion_r48_c = torstimeser_r48[12]
-torsion_r51_c = torstimeser_r51[11]
+#torsion_r51_c = torstimeser_r51[11]
 
-bond_r51_a = bondtimeser_r51[0]
-angle_r51_a = angtimeser_r51[0]
+#bond_r51_a = bondtimeser_r51[0]
+#angle_r51_a = angtimeser_r51[0]
 
 #step = 0.05
 #bins = np.arange(np.around(np.min(torsion),decimals=1),np.around(np.max(torsion),decimals=1)+step,step)
@@ -455,47 +455,47 @@ angle_r51_a = angtimeser_r51[0]
 
 num_bins = 100
 
-plt.figure()
-plt.hist(bond_r51_a,num_bins,color='green')
-plt.ylabel('Number of times configuration is sampled')
-plt.xlabel('Bond length (angstroms)')
-plt.title('Sample bond distribution in AlkEthOH_r51')
-plt.savefig('sample_bond_AlkEthOH_r51.png')
+#plt.figure()
+#plt.hist(bond_r51_a,num_bins,color='green')
+#plt.ylabel('Number of times configuration is sampled')
+#plt.xlabel('Bond length (angstroms)')
+#plt.title('Sample bond distribution in AlkEthOH_r51')
+#plt.savefig('sample_bond_AlkEthOH_r51.png')
 
-plt.figure()
-plt.hist(angle_r51_a,num_bins,color='green')
-plt.ylabel('Number of times configuration is sampled')
-plt.xlabel('Bond angle (radians)')
-plt.title('Sample angle distribution in AlkEthOH_r51')
-plt.savefig('sample_angle_AlkEthOH_r51.png')
+#plt.figure()
+#plt.hist(angle_r51_a,num_bins,color='green')
+#plt.ylabel('Number of times configuration is sampled')
+#plt.xlabel('Bond angle (radians)')
+#plt.title('Sample angle distribution in AlkEthOH_r51')
+#plt.savefig('sample_angle_AlkEthOH_r51.png')
 
-plt.figure()
-plt.hist(torsion_r48_a,num_bins,alpha=0.5,label='AlkEthOH_r48')
-plt.hist(torsion_r51_a,num_bins,alpha=0.5,label='AlkEthOh_r51')
-plt.ylabel('Likelihood that configuration is sampled')
-plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion [#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
-plt.legend()
-plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
+#plt.figure()
+#plt.hist(torsion_r48_a,num_bins,alpha=0.5,label='AlkEthOH_r48')
+#plt.hist(torsion_r51_a,num_bins,alpha=0.5,label='AlkEthOh_r51')
+#plt.ylabel('Likelihood that configuration is sampled')
+#plt.xlabel('Torsion angle (radians)')
+#plt.title('Torsion [#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
+#plt.legend()
+#plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
 
-plt.figure()
-plt.hist(torsion_r48_b,num_bins,alpha=0.5,label='AlkEthOH_r48')
-plt.hist(torsion_r51_b,num_bins,alpha=0.5,label='AlkEthOh_r51')
-plt.ylabel('Likelihood that configuration is sampled')
-plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
-plt.legend()
-plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
+#plt.figure()
+#plt.hist(torsion_r48_b,num_bins,alpha=0.5,label='AlkEthOH_r48')
+#plt.hist(torsion_r51_b,num_bins,alpha=0.5,label='AlkEthOh_r51')
+#plt.ylabel('Likelihood that configuration is sampled')
+#plt.xlabel('Torsion angle (radians)')
+#plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
+#plt.legend()
+#plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
 
-plt.figure()
-plt.hist(torsion_r48_c,num_bins,alpha=0.5,label='AlkEthOH_r48')
-plt.hist(torsion_r51_c,num_bins,alpha=0.5,label='AlkEthOh_r51')
-plt.ylabel('Likelihood that configuration is sampled')
-plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
-plt.legend()
-plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
-
+#plt.figure()
+#plt.hist(torsion_r48_c,num_bins,alpha=0.5,label='AlkEthOH_r48')
+#plt.hist(torsion_r51_c,num_bins,alpha=0.5,label='AlkEthOh_r51')
+#plt.ylabel('Likelihood that configuration is sampled')
+#plt.xlabel('Torsion angle (radians)')
+#plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
+#plt.legend()
+#plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
+print torsion_r48_a
 plt.figure()
 plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48',color='green')
 plt.ylabel('Number of times configuration is sampled')
@@ -517,26 +517,26 @@ plt.xlabel('Torsion angle (radians)')
 plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
 plt.savefig('torsion_histograms/r48/Torsion_likelihood_r48_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
 
-plt.figure()
-plt.hist(torsion_r51_a,num_bins,label='AlkEthOH_r51',color='green')
-plt.ylabel('Likelihood that configuration is sampled')
-plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion sample in AlkEthOH_r51')
-plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
+#plt.figure()
+#plt.hist(torsion_r51_a,num_bins,label='AlkEthOH_r51',color='green')
+#plt.ylabel('Likelihood that configuration is sampled')
+#plt.xlabel('Torsion angle (radians)')
+#plt.title('Torsion sample in AlkEthOH_r51')
+#plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
 
-plt.figure()
-plt.hist(torsion_r51_b,num_bins,label='AlkEthOH_r51')
-plt.ylabel('Likelihood that configuration is sampled')
-plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
-plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
+#plt.figure()
+#plt.hist(torsion_r51_b,num_bins,label='AlkEthOH_r51')
+#plt.ylabel('Likelihood that configuration is sampled')
+#plt.xlabel('Torsion angle (radians)')
+#plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4]')
+#plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
 
-plt.figure()
-plt.hist(torsion_r51_c,num_bins,label='AlkEthOH_r51')
-plt.ylabel('Likelihood that configuration is sampled')
-plt.xlabel('Torsion angle (radians)')
-plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
-plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
+#plt.figure()
+#plt.hist(torsion_r51_c,num_bins,label='AlkEthOH_r51')
+#plt.ylabel('Likelihood that configuration is sampled')
+#plt.xlabel('Torsion angle (radians)')
+#plt.title('Torsion [#1:1]-[#6X4:2]-[#6X4:3]-[#1:4]')
+#plt.savefig('torsion_histograms/r51/Torsion_likelihood_r51_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
 
 print "Done"
 

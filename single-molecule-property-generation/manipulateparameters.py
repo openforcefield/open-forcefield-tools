@@ -817,7 +817,7 @@ dA_boot_new_sampdf = []
 # Return AtomDict needed to feed to ComputeBondsAnglesTorsions()
 for ind,(i,j) in enumerate(zip(mol2,traj)):
     AtomDict,lst_0,lst_1,lst_2 = get_small_mol_dict(i, [j]) 
-    mylist = [ii[1] for ii in lst_0[0]]
+    mylist = [ii[1] for ii in lst_0[0]] 
     myset = set(mylist)
     poplist = np.zeros([len(myset)],np.float64) 
     for b,k in enumerate(myset):
