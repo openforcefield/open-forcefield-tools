@@ -502,6 +502,9 @@ num_bins = 500
 
 plt.figure()
 (n1,bins1,patch1) = plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48',color='green')
+for i in n1:
+	if i==0:
+           i+=5
 popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0] * 7, bounds=(0,np.inf))
 plt.plot(bins1[1:],fourier(bins1[1:],popt[0],popt[1],popt[2],popt[3],popt[6]))
 plt.ylabel('Number of times configuration is sampled')
