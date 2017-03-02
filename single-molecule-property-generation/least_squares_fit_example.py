@@ -507,7 +507,7 @@ for i,j in enumerate(n1):
            n1[i]=5.
 
 popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0]*14)
-plt.plot(bins1[1:],fourier(bins1[1:],popt[0],popt[1],popt[2],popt[3],popt[6]))
+plt.plot(bins1[1:],fourier(bins1[1:],*popt))
 plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.title('Torsion sample in AlkEthOH_r48')
