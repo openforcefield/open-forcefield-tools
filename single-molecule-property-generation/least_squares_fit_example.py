@@ -328,9 +328,9 @@ def readtraj(ncfiles):
 #------------------------------------------------------------------
 tau = 2.
 def fourier(x, *a):
-    ret = a[0]* np.cos(np.pi / tau * x)
-    for deg in range(1, len(a)):
-        ret += a[deg] * np.cos((deg+1) * np.pi / tau * x)
+    ret = a[0] / 2 + a[2] * np.sin(2*np.pi*x / tau + a[1])
+    for deg in range(2, len(a)/2):
+        ret += a[2*deg] * np.sin((deg) * 2*np.pi*x / tau + a[2*deg-1])
     return ret
 #-----------------------------------------------------------------
 # Fit the given data to a 5 term fourier series:
@@ -404,8 +404,8 @@ data_r48, xyz_r48, time_r48 = readtraj([traj[0]])
 #data_r51, xyz_r51, time_r51 = readtraj([traj[1]])
 #print len(xyz_r51)
 
-xyzn_r48 = unit.Quantity(xyz_r48[:], unit.angstroms)
-time_r48 = unit.Quantity(time_r48[:], unit.picoseconds)
+xyzn_r48 = unit.Quantity(xyz_r48[-2500:], unit.angstroms)
+#time_r48 = unit.Quantity(time_r48[:], unit.picoseconds)
 #xyzn_r51 = unit.Quantity(xyz_r51[:9238], unit.angstroms)
 #time_r51 = unit.Quantity(time_r51[:9238], unit.picoseconds)
 
@@ -505,8 +505,8 @@ plt.figure()
 for i,j in enumerate(n1):
 	if j==0.:
            n1[i]=5.
-print n1
-popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0] * 7, bounds=(0,np.inf))
+
+popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0]*14)
 plt.plot(bins1[1:],fourier(bins1[1:],popt[0],popt[1],popt[2],popt[3],popt[6]))
 plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
