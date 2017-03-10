@@ -464,7 +464,7 @@ torsion_r48_c = torstimeser_r48[12]
 #likelihood = (np.bincount(binplace))/100.
 
 
-num_bins = 500
+num_bins = 100
 
 #plt.figure()
 #plt.hist(bond_r51_a,num_bins,color='green')
