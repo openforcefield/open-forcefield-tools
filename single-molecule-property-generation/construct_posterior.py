@@ -11,18 +11,42 @@ across parameter space given some initial set of data.
 
 Author: Bryce Manubay
 """
-#%matplotlib inline
+
+import matplotlib as mpl
+
+mpl.use('Agg')
 
 
+from smarty.forcefield import *
+import openeye
+from openeye import oechem
+import smarty
+from smarty.utils import get_data_filename
+from simtk import openmm
+from simtk import unit
 import numpy as np
-import scipy as sp
+import netCDF4 as netcdf
+import collections as cl
 import pandas as pd
+import pymbar
+from pymbar import timeseries
+import glob
+import sys
+from smarty.forcefield import generateTopologyFromOEMol
+import pdb
+import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
+
+#np.set_printoptions(threshold=np.inf)
+
+import scipy as sp
 import seaborn as sns
 
 from scipy.stats import norm
-
+from scipt.stats import multivariate_normal
 import sys
+
+
 
 sns.set_style('white')
 sns.set_context('talk')
@@ -51,6 +75,37 @@ ax1.set(xlabel='mu', ylabel='belief', title='Analytical posterior');
 sns.despine()
 
 def sampler(data, samples=4, mu_init=.5, proposal_width=.5, plot=False, mu_prior_mu=0, mu_prior_sd=1.):
+    """
+    Outline:
+    1)Take data and calculate observable
+    2)Reweight observable to different state and calculate observable based on new state
+	- smarty move in many parameters
+        - will have to start without torsion moves
+        - Safe moves in equilibrium bond length and angle is ~3%. For force constants ~5%.
+    3)Will have to make decision here:
+        a)Continue to sample in order to gather more data? -or-
+        b)Attempt to create surrogate models from the data we have? What does that entail?
+            i)We want a surrogate model for every observable we have, $O\left(\theta\right)$
+            ii)Thus for bonds and angles; we have 4 observables as a function of however many parameters we're working with at the time
+            iii)Choice of surrogate model becomes important. Start with splining though
+            iv)What is the best surrogate modeling technique to use when we have very sparse data?
+    4)
+   
+            
+          
+
+    Other things to consider:
+    1)Choice of surrogate models:
+        a)Splining
+        b)Rich's ideas
+        c)Other ideas from Michael he got at conference last week
+    2)Choice of likelihood:
+        a)Gaussian likelihood
+        b)More general based on mean squared error
+    3)Prior
+        a)Start with uniforms with physically relevant bounds for given parameter
+        b)Informationless priors
+    """
     mu_current = mu_init
     posterior = [mu_current]
     for i in range(samples):
