@@ -518,6 +518,7 @@ plt.plot(bins1[1:],fourier(bins1[1:],*popt),label='AlkEthOH_r48 fourier fit')
 plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.title('Torsion sample in AlkEthOH_r48')
+plt.legend()
 plt.savefig('torsion_histograms/r48/Torsion_likelihood_r48_tors_[#6X4:1]-[#6X4:2]-[#6X4:3]-[#6X4:4].png')
 
 plt.figure()
