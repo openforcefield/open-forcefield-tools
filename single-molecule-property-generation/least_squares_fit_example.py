@@ -464,7 +464,7 @@ torsion_r48_c = torstimeser_r48[12]
 #likelihood = (np.bincount(binplace))/100.
 
 
-num_bins = 500
+num_bins = 100
 
 #plt.figure()
 #plt.hist(bond_r51_a,num_bins,color='green')
@@ -508,13 +508,13 @@ num_bins = 500
 #plt.savefig('torsion_histograms/Torsion_likelihood_r48_r51_comp_tors_[#1:1]-[#6X4:2]-[#6X4:3]-[#1:4].png')
 
 plt.figure()
-(n1,bins1,patch1) = plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48',color='green')
+(n1,bins1,patch1) = plt.hist(torsion_r48_a,num_bins,label='AlkEthOH_r48 histogram',color='green')
 for i,j in enumerate(n1):
 	if j==0.:
            n1[i]=5.
 
-popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0] + [1.0,1.0,0.0]*6,maxfev=10000)
-plt.plot(bins1[1:],fourier(bins1[1:],*popt))
+popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0] + [1.0,1.0,0.0]*6,maxfev=100000)
+plt.plot(bins1[1:],fourier(bins1[1:],*popt),label='AlkEthOH_r48 fourier fit')
 plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
 plt.title('Torsion sample in AlkEthOH_r48')
