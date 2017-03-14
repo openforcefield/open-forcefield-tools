@@ -326,15 +326,14 @@ def readtraj(ncfiles):
     return data, xyz, time 
 
 #------------------------------------------------------------------
-tau = 1.
+phase = np.pi/3.
 def fourier(x, *a):
-    ret =  a[0] / 2 + \
-           a[1] * np.sin(2*np.pi*x / a[2] + a[3]) + \
-           a[4] * np.sin(2*np.pi*x / a[5] + a[6]) + \
-           a[7] * np.sin(2*np.pi*x / a[8] + a[9]) + \
-           a[10] * np.sin(2*np.pi*x / a[11] + a[12]) + \
-           a[13] * np.sin(2*np.pi*x / a[14] + a[15]) + \
-           a[16] * np.sin(2*np.pi*x / a[17] + a[18])
+    ret =  a[0] * (np.sin(2*np.pi*x / a[1] + phase))**2 + \
+           a[2] * (np.sin(2*np.pi*x / a[3] + phase))**2 + \
+           a[4] * (np.sin(2*np.pi*x / a[5] + phase))**2 #+ \
+           #a[6] * (np.sin(2*np.pi*x / a[7] + phase))**2 + \
+           #a[8] * (np.sin(2*np.pi*x / a[9] + phase))**2 + \
+           #a[10] * (np.sin(2*np.pi*x / a[11] + phase))**2
           
     #for deg in range(2, len(a)/2):
     #    ret += a[2*deg] * np.sin((deg) * 2*np.pi*x / tau + a[2*deg-1])
@@ -464,7 +463,7 @@ torsion_r48_c = torstimeser_r48[12]
 #likelihood = (np.bincount(binplace))/100.
 
 
-num_bins = 100
+num_bins = 500
 
 #plt.figure()
 #plt.hist(bond_r51_a,num_bins,color='green')
@@ -513,7 +512,7 @@ plt.figure()
 #	if j==0.:
 #           n1[i]=5.
 
-popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0] + [1.0,1.0,0.0]*6,maxfev=100000)
+popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0,1.0]*3, maxfev=100000)
 plt.plot(bins1[1:],fourier(bins1[1:],*popt),label='AlkEthOH_r48 fourier fit')
 plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')

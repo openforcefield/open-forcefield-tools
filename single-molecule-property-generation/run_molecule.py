@@ -16,10 +16,10 @@ import numpy as np
 #molname = ['AlkEthOH_c581','AlkEthOH_r0']
 molname = [sys.argv[1]]
 mol_filename = ['Mol2_files/'+m+'.mol2' for m in molname]
-time_step = 2 #Femtoseconds
+time_step = 0.8 #Femtoseconds
 temperature = 300 #kelvin
 friction = 1 # per picosecond
-num_steps = 2000000
+num_steps = 5000000
 trj_freq = 1000 #steps
 data_freq = 1000 #steps
 
@@ -56,7 +56,7 @@ for ind,j in enumerate(mol_filename):
 
     paramlist = np.arange(float(sys.argv[2]),float(sys.argv[3]),float(sys.argv[4]))
     smirkseries = sys.argv[5]#'[#6X4:1]-[#1:2]'
-    paramtype = 'length'
+    paramtype = 'k'
 
 
     param = forcefield.getParameter(smirks=smirkseries)
