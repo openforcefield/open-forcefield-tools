@@ -727,20 +727,20 @@ def reject_outliers(data, m=2):
 #N_k = np.array([100,100])
 #N_k_orig = 10000.
 #pctkeep = 0.8
-indkeep = 1500
-N_k= np.array([1500])
+indkeep = 3000
+N_k= np.array([3000])
 
 K = np.size(N_k)
 
 N_max = np.max(N_k)
 
-K_extra_vals = np.arange(570,675,5)
+K_extra_vals = np.arange(580.0,685.0,5.0)
 
 #K_k = np.array([[106], [104], [102], [100], [98]])
 #K_k = np.array([[104.],[100.]])
 #K_k = np.array([[680.]])
 #K_k = np.array([[680.]])
-K_k = np.array([[[620]] for val in K_extra_vals])
+K_k = np.array([[[620.0]] for val in K_extra_vals])
 
 #K_extra = np.array([[96], [99], [103], [105], [108]]) # unsampled force constants
 #K_extra = np.array([[110.],[98.]])

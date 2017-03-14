@@ -12,7 +12,7 @@ for i in ncfiles:
     xyz = data.variables['coordinates']
     #xyzn = unit.Quantity(xyz[-indkeep:], unit.angstroms)
     xyzn = unit.Quantity(xyz[:],unit.angstroms)
-    if len(xyzn) < 2000:
+    if len(xyzn) > 2000:
         print i,len(xyzn)
 
 
