@@ -512,7 +512,7 @@ plt.figure()
 #	if j==0.:
 #           n1[i]=5.
 
-popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0,0.0,1.0]*3, maxfev=100000)
+popt, pcov = sci.curve_fit(fourier, bins1[1:], n1, [1.0,1.0,1.0]*3, maxfev=100000)
 plt.plot(bins1[1:],fourier(bins1[1:],*popt),label='AlkEthOH_r48 fourier fit')
 plt.ylabel('Number of times configuration is sampled')
 plt.xlabel('Torsion angle (radians)')
