@@ -727,27 +727,27 @@ def reject_outliers(data, m=2):
 #N_k = np.array([100,100])
 #N_k_orig = 10000.
 #pctkeep = 0.8
-indkeep = 3000
-N_k= np.array([3000])
+indkeep = 4000
+N_k= np.array([4000])
 
 K = np.size(N_k)
 
 N_max = np.max(N_k)
 
-K_extra_vals = np.arange(580.0,685.0,5.0)
+K_extra_vals = np.arange(0.99,1.20,0.01)
 
 #K_k = np.array([[106], [104], [102], [100], [98]])
 #K_k = np.array([[104.],[100.]])
 #K_k = np.array([[680.]])
 #K_k = np.array([[680.]])
-K_k = np.array([[[620.0]] for val in K_extra_vals])
+K_k = np.array([[[1.090]] for val in K_extra_vals])
 
 #K_extra = np.array([[96], [99], [103], [105], [108]]) # unsampled force constants
 #K_extra = np.array([[110.],[98.]])
 #K_extra = np.array([[600.]])
 K_extra = np.array([[[val]] for val in K_extra_vals])
 
-paramtype = [['k']]
+paramtype = [['length']]
 obstype = 'Bond'
 
 #mol2 = [['molecules/AlkEthOH_r0.mol2'],['molecules/AlkEthOH_r48.mol2'],['molecules/AlkEthOH_r51.mol2'],['molecules/AlkEthOH_c581.mol2'],['molecules/AlkEthOH_c100.mol2'],['molecules/AlkEthOH_c1161.mol2'],['molecules/AlkEthOH_c1266.mol2'],['molecules/AlkEthOH_c38.mol2'],['molecules/AlkEthOH_r118.mol2'],['molecules/AlkEthOH_r12.mol2']]
@@ -767,12 +767,12 @@ traj = ['traj4ns/'+sys.argv[1]+'.nc']
 #trajs = [['traj/AlkEthOH_r0.nc'],['traj/AlkEthOH_c581.nc']]
 trajs = [[val] for val in traj]
 
-smirkss = ['[#6X4:1]-[#6X4:2]']
+smirkss = ['[#6X4:1]-[#1:2]']
 
 trajstest = [[[] for i in K_extra] for _ in traj]
 for ind,val in enumerate(trajs):
     for ind1,val1 in enumerate(K_extra):
-        trajstest[ind][ind1] = [val[0][:-3]+'_'+smirkss[0]+'_k'+str(val1[0][0])+'.nc']
+        trajstest[ind][ind1] = [val[0][:-3]+'_'+smirkss[0]+'_length'+str(val1[0][0])+'.nc']
 
 # Calculate energies at various parameters of interest
 #energies, xyzn, system = new_param_energy(mol2en,traj, smirkss, N_k, K_k, paramtype, N_max)

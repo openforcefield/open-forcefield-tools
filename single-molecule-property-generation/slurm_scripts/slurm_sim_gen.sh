@@ -12,8 +12,8 @@
 ml slurm
 
 #commands
-python run_molecule.py AlkEthOH_c100 630 680 5 [#6X4:1]-[#1:2] &
-python run_molecule.py AlkEthOH_c100 685 735 5 [#6X4:1]-[#1:2] &
-python run_molecule.py AlkEthOH_c100 580 630 5 [#6X4:1]-[#6X4:2] &
-python run_molecule.py AlkEthOH_c100 635 685 5 [#6X4:1]-[#6X4:2] &
+#python run_molecule.py AlkEthOH_c100 630 680 5 [#6X4:1]-[#1:2] &
+#python run_molecule.py AlkEthOH_c100 685 735 5 [#6X4:1]-[#1:2] &
+python run_molecule.py AlkEthOH_c100 630 635 5 [#6X4:1]-[#6X4:2] &
+#python run_molecule.py AlkEthOH_c100 635 685 5 [#6X4:1]-[#6X4:2] &
 wait
