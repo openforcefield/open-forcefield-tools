@@ -15,7 +15,6 @@ Simulation trajectories of the "unsampled" states are also used as input in orde
 
 * run_molecule.py: script used to run simulations whose trajectories are utilized in the reweighting script
 
-* least_squares_fit_example.py: script being used to develop eventual fitting process for torsion representations 
+* least_squares_fit_example.py: script being used to develop eventual fitting process for torsion representations (still a WIP) 
  
-* oe_license.txt: the license for using the OpenEye tools necessary for the reweighting and simulation processes
-
+* construct_posterior.py: script for developing posterior sampling process with surrogate modeling (still a WIP)
