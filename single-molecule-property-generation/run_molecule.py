@@ -74,7 +74,7 @@ for ind,j in enumerate(mol_filename):
         simulation.context.setVelocitiesToTemperature(temperature*kelvin)
         netcdf_reporter = NetCDFReporter('traj4ns/'+molname[ind]+'_'+smirkseries+'_'+paramtype+str(i)+'.nc', trj_freq)
         simulation.reporters.append(netcdf_reporter)
-        simulation.reporters.append(app.StateDataReporter('StateData4ns/data_'+molname[ind]+'_'+smirkseries+'_'+paramtype+str(i)+'.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
+        #simulation.reporters.append(app.StateDataReporter('StateData4ns/data_'+molname[ind]+'_'+smirkseries+'_'+paramtype+str(i)+'.csv', data_freq, step=True, potentialEnergy=True, temperature=True, density=True))
 
         print("Starting simulation")
         start = time.clock()
