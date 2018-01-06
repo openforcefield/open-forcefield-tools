@@ -19,8 +19,6 @@
 }%
 \makeatother
 
-%\linespread{0.956}
-
 \usepackage{listings} % For code examples
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage{amsmath}
@@ -80,7 +78,7 @@
 
 \author{Bryce C. Manubay} 
 \email{bryce.manubay@colorado.edu}
-\affiliation{University of Colorado}
+\affiliation{University of Colorado Boulder, Boulder, CO 80309}
 
 \author{John D. Chodera}
 \email{john.chodera@choderalab.org}
@@ -89,7 +87,7 @@
 \author{Michael R. Shirts}
 \thanks{Corresponding author}
 \email{michael.shirts@colorado.edu}
-\affiliation{University of Colorado}
+\affiliation{University of Colorado Boulder, Boulder, CO 80309}
 
 % Date
 \date{\today}
@@ -117,8 +115,8 @@ This document describes a collected set of best practices for computing various 
 Definitions
 \begin{itemize}
 \item $V$: Volume
-\item $U$: Total energy (including potential and kinetic, excluding external energy such as due to gravity, etc)
-\item $S$: Entopy
+\item $U$: Total internal energy (including potential and kinetic, excluding external energy such as due to gravity, etc)
+\item $S$: Entropy
 \item $N$: Number of particles
 \item $T$: Temperature
 \item $P$: Pressure
@@ -140,12 +138,12 @@ the system is not perturbed in any way), as we assume that the
 fluctuations are essentially zero, and any uncertainty comes from our
 inability to measure that constant value precisely. For a mole of
 compound (about 18 mL for water), the relative uncertainty in any of
-these quantites is about $10^{-12}$, far lower than any thermodynamics
+these quantities is about $10^{-12}$, far lower than any thermodynamics
 experiment can actually measure.
 
 %\comment[JDC]{This is a TODO item example.}
 
-However, in a molecular simulation, these quantites are not
+However, in a molecular simulation, these quantities are not
 necessarily constant. For example, in an $NVT$ equilibrium simulation,
 $U$ is allowed to vary. For a long enough simulation (assuming
 ergodicity, which can pretty much always be assumed with correctly
@@ -167,7 +165,7 @@ equilibrium with this bath.  There are a number of quantities that can
 be used to ESTIMATE constants such as $T$ and $P$. For example,
 $\langle \frac{1}{3Nk_B}\sum_i m_i |v_i|^2\rangle$, where $m$ is the
 mass of each particle and $|v_i|$ is the magnitude of the velocity of
-each particle, is an estimate of $T$ (the temperaure of the bath), and
+each particle, is an estimate of $T$ (the temperature of the bath), and
 it's average will be equal to the $T$. But it is not the
 temperature. This quantity fluctuates, but $T$ remains
 constant; otherwise the simulation could not be at constant
@@ -186,7 +184,7 @@ temperature.
 %are controlled by an external force in order to hold them at a certain
 %value. In the case of temperature, a thermostat is used. Recalling some
 %basics of chemical engineering controller design, we know that no controller
-%is perfect. Corrections from feedback cannot be made instantanteously, hence 
+%is perfect. Corrections from feedback cannot be made instantaneously, hence 
 %there is some variation in the simulation temperature reported. 
 %A thermostat constantly modifies the velocities of the particles
 %in simulation in order to achieve the distribution of kinetic energies that 
@@ -218,12 +216,14 @@ isobaric-isothermal (NPT) ensemble, and $u = \beta U - \beta N\mu$ in
 the grand canonical ensemble (similar potentials can be defined in
 other ensembles). We then define $f = \int e^{-u} dx$, where the
 integral is over all of the DOF of the system ($x$ for $NVT$, $x,V$ for
-$NPT$, and $x,N$ for $\mu VT$.  For $NPT$, we then have $f = \beta G$, and for $NVT$
+$NPT$, and $x,N$ for $\mu VT$).  For $NPT$, we then have $f = \beta G$, and for $NVT$
 we have $f = \beta A$, while for $\mu V T$ we have $f = -\beta \langle
 P \rangle V$.
 
+\subsection{Observables by reweighting}
+
 To calculate expectations at one set of parameters generated with
-paramters that give rise to a different set of probability
+parameters that give rise to a different set of probability
 distributions, we start with the definition of an ensemble average
 given a probability distribution $p_i(x)$. 
 \begin{equation}
@@ -250,7 +250,7 @@ from samples from the mixture distribution is:
 \end{equation}
 In the case of Boltzmann averages, then $p_i(x) = e^{f_i-u_i(x)}$, where
 the reduced free energy $f$ is unknown.  Reweighting from the mixture
-distibution becomes.
+distribution becomes.
 \begin{equation}
 \langle X \rangle_i = \sum_{n=1}^N X(x_n) \frac{e^{f_i - u_i(x_n)}}{\sum_{k=1}^{N_k} e^{f_k - u_k(x)}}
 \end{equation}
@@ -259,6 +259,7 @@ expectations. The free energies can be obtained by setting $X = 1$, and
 looking at the $K$ equations obtained by reweighting to the $K$
 different distributions. 
 
+\subsection{Observables by derivatives}
 Finite differences at different temperatures and pressures can be
 calculated by including states with different reduced potentials. For
 example, $u_j(x) = \beta_i U(x) + \beta_i (P_i + \Delta P) V$, or $u_j
@@ -267,7 +268,7 @@ P_i V$. However, the relationship between $f$ and $G$ can be
 problematic when looking at differences in free energy with respect to
 temperature, because $G_2 - G_1 = \beta_2 f_2 - \beta_1 f_1$.  
 We can in general write
-\[\Delta G_{ij}(T) = k_B T \left (\Delta f_ij(T) - \Delta f_ij(T_{ref})\right) + \frac{T}{T_{ref}}\Delta G_ij(T_{ref})\], 
+\[\Delta G_{ij}(T) = k_B T \left (\Delta f_{ij}(T) - \Delta f_{ij}(T_{ref})\right) + \frac{T}{T_{ref}}\Delta G_{ij}(T_{ref})\], 
 where $\Delta G_{ij}(T_{ref})$ is known at some temperature.
 
  
@@ -277,19 +278,21 @@ Since with MBAR, one can make the differences as small as one would
 like (you don't have to actually carry out a simulation at those
 points), we can use the simplest formulas: central difference for
 first derivatives:
-\[\frac{dA}{dx} \approx \frac{1}{2\Delta x}\left( A(x+\Delta x) - A(x-\Delta x)\right)\]
-And for 2nd deriatives:
-\[\frac{d^2A}{dx^2} \approx \frac{1}{\Delta x^2}\left( A(x+\Delta x) - 2A(x) + A(x-\Delta x)\right)\]
+\[\frac{\partial A}{\partial x} \approx \frac{1}{2\Delta x}\left( A(x+\Delta x) - A(x-\Delta x)\right)\]
+And for 2nd derivatives:
+\[\frac{\partial ^2A}{\partial x^2} \approx \frac{1}{\Delta x^2}\left( A(x+\Delta x) - 2A(x) + A(x-\Delta x)\right)\]
 Thus, only properties at two additional points need to be evaluated to
 calculate both first and 2nd derivatives.  
+
+For mixed partial derivatives, we can write (in the central difference approximation).
+\[\frac{\partial^2 A}{\partial x\partial y} \approx \frac{A(x+\Delta x,y+\Delta y) - A(x+\Delta x,y-\Delta y) - A(x-\Delta x,y+\Delta y) + A(x-\Delta x,y-\Delta y)}{4\Delta x \Delta y}\]
 
 It may first appear that these finite difference calculations will
 propagate significant error as they subtract similar numbers.
 However, MBAR calculates the covariance matrix between $\langle A
-\rangle$, $A(x+\Delta x)$, and $A(x-\Delta x)$, meaning in practice
+\rangle$, $\langle A(x+\Delta x) \rangle$, and $\langle A(x-\Delta x) \rangle$, meaning in practice
 the uncertainty is far lower than would be expected by standard error
 propagation of uncorrelated observables.
-
 
 Note that if the finite differences are re-evaluated using reweighting
 approaches, it is important that the simulation used generates the
@@ -308,25 +311,27 @@ where suggested by previous authors.
 
 \section{Single Phase Properties}
 \subsection{Pure Solvent Properties}
-\subsubsection{Density}
-\paragraph{Direct calculation}
+\subsubsection{Molar volume / Density}
 %MRS: Experimentally, <V> is just the macroscopic V.
-Starting with the equation used to calculate the density experimentally, 
+We suggest, that molar volume is usually a better quantity to use than density.  Molar volume contains the same information as density, since we assume the molar masses are invariant under parameterization.  The molar volume is simply the volume divided by the number of moles, and in an NPT simulation, the volume is what one directly calculates.  Any additional error propagation is complicated by putting the density in the denominator.
+Starting with the equation used to calculate the density experimentally:
 \begin{equation} \rho = \frac{M}{V} \end{equation}
-We replace the average with the esemble estimate (calculated either directly, or with reweighting) to obtain: 
+\paragraph{Direct calculation}
+The molar volume is simply $\frac{\langle V \rangle}{n}$, where $n$ is the number of modes.
+We replace the average with the ensemble estimate (calculated either directly, or with reweighting) to obtain: 
 \begin{equation} \rho = \frac{M}{\langle V \rangle} \end{equation}
 \paragraph{Derivative Estimate}
  From the differential definition of the Gibbs free energy $dG = VdP -SdT + \sum_i \mu_i dN_i$ that V can be calculated from the Gibbs free energy as:
-\begin{equation} V = \left( \frac{\partial G}{\partial P} \right)_{T,N} \end{equation}
+\begin{equation} \langle V \rangle = \left( \frac{\partial G}{\partial P} \right)_{T,N} \end{equation}
  The density can therefore be estimated from the Gibbs free energy.
 \begin{equation} \rho = \frac{M}{ \left( \frac{\partial G}{\partial P} \right)_{T,N}} \end{equation}
  The derivative can be estimated using a central difference numerical method utilizing Gibbs free energies reweighted to different pressures.
 \begin{equation} \left( \frac{\partial G}{\partial P} \right)_{T,N} \approx \frac{G_{P + \Delta P} - G_{P-\Delta P}}{2\Delta p} \end{equation}
  The density can then finally be estimated.
 %MRS: I changed a lot of the lower case p's for pressure to upper case P's to use more standard symbols -- you should review and correct the rest.
-\begin{equation} \rho \approx \frac{M}{\frac{G_{P + \Delta P} - G_{P-\Delta P}}{2\Delta P}} \end{equation}
+\begin{equation} \rho \approx \frac{M}{\frac{G(P + \Delta P) - G_(P-\Delta P)}{2\Delta P}} \end{equation}
 This can be calculated from the reduced free energy $f$ if desired by simply substituting:
-\begin{equation} \rho \approx \frac{\beta M}{\frac{f_{P + \Delta P} - f_{P-\Delta P}}{2\Delta P}} \end{equation}
+\begin{equation} \rho \approx \frac{\beta M}{\frac{f(P + \Delta P) - f_(P-\Delta P)}{2\Delta P}}\end{equation}
 
 Intuitively, one would imagine that equation 12 would be a worse estimate of density given that the calculations involved have more room for error than direct simulations. That being said, this method should prove invaluable when estimating densities of unsampled states using MBAR. 
 
@@ -335,12 +340,17 @@ Intuitively, one would imagine that equation 12 would be a worse estimate of den
 \subsubsection{Molar Enthalpy}
 This section is on the relation of enthalpy to Gibbs free energy (should we need it). This is not an experimental quantity, but will be helpful in calculating related properties of interest. The enthalpy, $H$, can be found from the Gibbs free energy, $G$, by the Gibbs-Helmholtz relation: 
 
+\paragraph{Direct simulation estimate}
+H can be calculated as directly as: 
+\[H = \langle U \rangle + P \langle V \rangle\], where U is the total internal energy (including both kinetic and potential energy). 
+
+\paragraph{Derivative estimate}
 \begin{equation}H=-T^2 \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial T}\right)_{P,N}\end{equation}
 
-Transforming the derivative in the Gibbs-Helmholtz relation to be in terms of $\beta$ instead of $T$ yields:
+Transforming the derivative in the Gibbs-Helmholtz relation to be in
+terms of $\beta$ instead of $T$ yields:
 
 \begin{equation}H=-T^2  \frac{\beta^2}{\beta^2}\left(\frac{\partial \big(\frac{G}{T}\big)}{\partial T} \frac{\partial T}{\partial \beta} \frac{\partial \beta}{\partial T}\right)_{P,N}\end{equation}
-
 
 Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$. Substituting these values into the enthalpy equation gives:
 
@@ -350,18 +360,27 @@ H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\par
 \end{multline}\\*
 %MRS: I like this equation more, as it's hard to take finite differences of $G$ (as discussed above).  Then you can eliminate the last few lines.
 
-%MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantites (like the enthalpy of mixing, and the heat capacity).
+%MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantities (like the enthalpy of mixing, and the heat capacity).
 
 %------------------------------------------------------------------------------------------------------------------------
 
 \subsubsection{Heat Capacity}
+There are two different heat capacities: the isochoric heat capacity
+$C_V = \frac{\partial U}{\partial T}_V$, and isobaric heat capacity
+$C_P = \frac{\partial H}{\partial T}_P$. The are calculated 
+
+\paragraph{Direct simulation estimate}
+There is no direct way to estimate either heat capacity.
+
+\paragraph
 The definition of the isobaric heat capacity is:
 \begin{equation}C_P = \left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
-%MRS: probably easier to take df/dbeta, and then take the temperature derivaive, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
+%MRS: probably easier to take df/dbeta, and then take the temperature derivative, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
 \begin{equation}C_P =  \frac{\partial \left(\frac{\partial f}{\partial \beta}\right)}{\partial T}_{P,N}\end{equation}
 \begin{equation}C_P = k_B \beta^2 \frac{\partial^2 f}{\partial \beta^2}\end{equation}
 
 This could be computed by finite differences approach or analytical derivation using MBAR\\*
+\paragraph{Fluctuation estimate}
 
 The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn}.
 \begin{equation}C_P = \frac{\langle H^2 \rangle - \langle H \rangle^2}{N k_B \langle T \rangle^2}\end{equation}\\*
@@ -380,7 +399,7 @@ Or by the finite differences evaluation of:
 \begin{equation}\kappa_T = -\frac{\left(\frac{\partial^2 G}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial G}{\partial P}\right)_{T, N}} = -\frac{\left(\frac{\partial^2 f}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial f}{\partial P}\right)_{T, N}}\end{equation} \\*
 
 $\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
-\begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{VT}}\end{equation}\\*
+\begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{\mu VT}}\end{equation}\\*
 
 %---------------------------------------------------------------------------------------------------------------------------------
 
@@ -388,7 +407,7 @@ $\kappa_T$ can also be estimated from the ensemble average and fluctuation of vo
 The definition of the speed of sound is\cite{sos}:
 \begin{equation}c^2 = \left(\frac{\partial P}{\partial \rho}\right)_{S} = -\frac{V^2}{M}\left(\frac{\partial P}{\partial V}\right)_{S}\end{equation}
 
-%MRS: I'd make the derivation more explicit, breakin down (dP/dV)_S -> in terms of the triple product rule, and then expressing it a a function of explicit deriatives, so it's clear what evaluations would be needed. 
+%MRS: I'd make the derivation more explicit, breaking down (dP/dV)_S -> in terms of the triple product rule, and then expressing it a a function of explicit derivatives, so it's clear what evaluations would be needed. 
 
 \begin{equation}c^2 = \frac{V^2}{\beta M}\left[\frac{\left(\frac{\gamma_V}{k_B}\right)^2}{\frac{C_V}{k_B}} + \frac{\beta}{V \kappa_T}\right]\end{equation}\\*
 
@@ -417,7 +436,7 @@ Horn et al set out several ways for calculating $\alpha$\cite{horn}:
 \begin{equation}\alpha = -\frac{d\ln\langle \rho \rangle}{dT}\end{equation}
 
 \paragraph{Numerical derivative of density over range of T of interest}
-The same finite differnces approach as shown for isothermal compressibility can be applied here, thus:
+The same finite differences approach as shown for isothermal compressibility can be applied here, thus:
 \begin{multline}
 \alpha = -\frac{d\ln\langle \rho \rangle}{dT} = \\ -\frac{1}{2\rho(T,P)} \left(\ln \langle \rho(P,T+\Delta T)\rangle - \ln \langle V(P,T-\Delta T)\right\rangle)\end{multline}
 \paragraph{Using the enthalpy-volume fluctuation formula}
@@ -446,7 +465,7 @@ The methods for these calculations are the same for a multicomponent system.
 \subsubsection{Activity Coefficient}
 The definition of chemical potential in a pure substance is:
 \begin{equation}\mu(T,P) = \left(\frac{\partial G}{\partial N}\right)_{T,P}\end{equation}
-which is a function of only temperaure and pressure.
+which is a function of only temperature and pressure.
 
 Then the definition of the chemical potential $\mu_i$ of compound $i$ in a mixture is:
 \begin{equation}\mu_{i}(T,P,\vec{N}) = \left(\frac{\partial G}{\partial N_{i}}\right)_{T,P,N_{j \neq i}}\end{equation}\\*
@@ -473,7 +492,7 @@ difference $\mu_i(T,P,\vec{x}_i) - \mu(T,P)$ by calculating $\Delta
 simulation of the pure substance, followed by the calculation of
 $\mu_i(T,P,\vec{x}_i)_{liquid} - \Delta \mu(T,P,\vec{x}_i)_{gas}$, and
 assuming that $\Delta \mu(T,P,\vec{x}_i)_{gas} = \Delta
-\mu(T,P)_{gas}$. Note: there are a few subleties here relating to the
+\mu(T,P)_{gas}$. Note: there are a few subtleties here relating to the
 $\ln x_i$ factor, but it appears that with alchemical simulations with
 only one particle that is allowed to change, this will cancel out
 (need to follow up).
@@ -484,11 +503,11 @@ Several of these alchemical simulation methods for calculating activity coeffici
 \ln\gamma_2^{\infty}\left(T,P,x_2 = 0\right) = \beta \mu_2^{res,\infty}\left(T,P,N_1,N_2 = 1\right) \\ + \ln\left[\frac{R T}{V_1\left(T,P\right)}\right] - \ln f_2^0\left(T,P\right)
 \end{multline}\\*
 
-Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at inifinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $V_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:
+Where $\beta\mu_2^{res,\infty}$ is the dimensionless residual chemical potential of component $2$ at infinite dilution. The residual is defined here as the difference between the liquid and ideal gas state. $V_1\left(T,P\right)$ is the molar volume of component $1$ at $T$ and $P$. $\ln f_2^0\left(T,P\right)$ is the natural logarithm of the pure liquid fugacity of component $2$ and is defined as:
 
 \begin{equation}\ln f_2^0\left(T,P\right) = \beta\mu_2^{res}\left(T,P\right) + \ln\left[\frac{R T}{V_2\left(T,P\right)}\right]\end{equation}\\*
 
-Paluch et al. use a multistage free energy perturbation approach utilizing MBAR in order to calculate the residual chemical potentials (recall that the chemical potential is the partial molar Gibbs free energy and dimensionless Gibbs free energy differences between multiple states are readily computed with MBAR). The idea is to connect two states of interest. In the case of a pure liquid, connecting a system of pure liquid molecules with $N - 1$ interacting molecules and one fully decoupled molecule to a system of $N$ fully interacting molecules. The coupling/decoupling process is detailed by Paluch et al \cite{paluch0}, but involves a linear alchemical switching function where LJ and electronic interactions are slowly turned on for the decoupled molecule until they are fully on. The free energy of this coupling is calculated by simpling summing the free energy changes along this path.     
+Paluch et al. use a multistage free energy perturbation approach utilizing MBAR in order to calculate the residual chemical potentials (recall that the chemical potential is the partial molar Gibbs free energy and dimensionless Gibbs free energy differences between multiple states are readily computed with MBAR). The idea is to connect two states of interest. In the case of a pure liquid, connecting a system of pure liquid molecules with $N - 1$ interacting molecules and one fully decoupled molecule to a system of $N$ fully interacting molecules. The coupling/decoupling process is detailed by Paluch et al \cite{paluch0}, but involves a linear alchemical switching function where LJ and electronic interactions are slowly turned on for the decoupled molecule until they are fully on. The free energy of this coupling is calculated by sampling summing the free energy changes along this path.     
 
 %-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -539,10 +558,10 @@ Above, $n_{vib}$ is the number of vibrational modes, $h$ is Planck's constant an
 %others you should check out.
 
 The definition of the enthalpy of vaporization is\cite{hvap}:
-\begin{equation}\Delta H_{vap} = H_{gas} - H_{liq} = E_{gas} - E_{liq} + P(V_{gas} - V_{liq})\end{equation}\\*
+\begin{equation}\Delta H_{vap} = H_{gas} - H_{liq} = U_{gas} - U_{liq} + P(V_{gas} - V_{liq})\end{equation}\\*
 
-If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal (and therefore kinetic energy terms cancel):
-\begin{equation}\Delta H_{vap} = E_{gas, potential} - E_{liq, potential} + R T\end{equation}\\*
+If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal:
+\begin{equation}\Delta H_{vap} = U_{gas, potential} - U_{liq, potential} + R T\end{equation}\\*
 
 %-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -552,7 +571,7 @@ If we assume that $V_{gas} >> V_{liq}$ and that the gas is ideal (and therefore 
 
 \subsection{Suggested Corrections}
 \subsubsection{Enthalpy of Vaporization}
-An alternate, but similar, method for calculating the enthlapy of vaporization is recommended by Horn et al \cite{horn}.
+An alternate, but similar, method for calculating the enthalpy of vaporization is recommended by Horn et al \cite{horn}.
 \begin{equation}\Delta H_{vap} = -\frac{E_{liq, potential}}{N} + R T - P V_{liq} + C\end{equation}\\*
 
 In the above equation $C$ is a correction factor for vibrational energies, polarizability, non-ideality of the gas and pressure. It can be calculated as follows.
@@ -560,7 +579,7 @@ In the above equation $C$ is a correction factor for vibrational energies, polar
 C_{vib} = C_{vib,intra} + C_{vib,inter} \\ = \left(E_{vib,QM,gas,intra} - E_{vib,QM,liq,intra}\right) \\ + \left(E_{vib,QM,liq,inter} - E_{vib,CM,liq,inter}\right)
 \end{multline}\\*
 
-The $QM$ and $CM$ subscripts stand for quantum and classical mechanics, resectively. 
+The $QM$ and $CM$ subscripts stand for quantum and classical mechanics, respectively. 
 \begin{equation}C_{pol} = \frac{N}{2} \frac{\left(d_{gas} - d_{liq}\right)^2}{\alpha_{p,gas}}\end{equation}\\*
 
 Where $d_i$ is the dipole moment of a molecule in phase $i$ and $\alpha_{p,gas}$ is the mean polarizability of a molecule in the gas phase.
@@ -580,9 +599,9 @@ change, which is rigorously correct for something like a rigid water
 molecule (intramolecular energies are zero), but less true for
 something with structural rearrangement between gas and liquid phases. 
 
-As discussed by myself and MRS, we have decided to not initially begin the parametrization process using enthalpy of vaporization data. While force field parametrization is commonly done using said property we have ample reason to not follow classical practice. First of all, the enthalpy data is usually not collected at standard temperature and pressure, but at the saturation conditions of the liquid being vaporized \cite{chickos}.  This would require corrections to be made to get the property at STP (the process will be explained below) using fitted equations for heat capacity. Not only is this inconvenient, but it adds an unknown complexity when adjusting experimental uncertainties due to the added correction. Often times the uncertainties of these "experimental" enthalpies are unrecorded because they are estimated from fitted Antoine equation coefficients \cite{chickos}. 
+As discussed by myself and MRS, we have decided to not initially begin the parameterization process using enthalpy of vaporization data. While force field parameterization is commonly done using said property we have ample reason to not follow classical practice. First of all, the enthalpy data is usually not collected at standard temperature and pressure, but at the saturation conditions of the liquid being vaporized \cite{chickos}.  This would require corrections to be made to get the property at STP (the process will be explained below) using fitted equations for heat capacity. Not only is this inconvenient, but it adds an unknown complexity when adjusting experimental uncertainties due to the added correction. Often times the uncertainties of these "experimental" enthalpies are unrecorded because they are estimated from fitted Antoine equation coefficients \cite{chickos}. 
 
-An additional issue is the necessity of having to use gas phase simulation data in order to validate a parametrization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parametrization. If the parametrization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental data in order to get a value at STP using the following equation.
+An additional issue is the necessity of having to use gas phase simulation data in order to validate a parameterization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parameterization. If the parameterization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental data in order to get a value at STP using the following equation.
 \begin{equation}\Delta H_{vap}(T) = \Delta H_{vap}^{ref} + \int_{T_{ref}}^T \left(C_{P, gas} - C_{P, liq}\right) dT \end{equation}\\*
 
 
@@ -595,3 +614,8 @@ An additional issue is the necessity of having to use gas phase simulation data 
 \bibliography{prop_calc_best_practices}
 
 \end{document}
+
+% LocalWords:  url graphicx Manubay mL JDC TODO reweighted NVT DOF MBAR df WRT
+% LocalWords:  noindent isochoric dbeta prefactors VT dP dV BCM al CJ Fennell
+% LocalWords:  Paluch fugacity LJ vibrational Horne ew polarizability ideality
+% LocalWords:  virial intramolecular vaporized STP enthalpies calc
