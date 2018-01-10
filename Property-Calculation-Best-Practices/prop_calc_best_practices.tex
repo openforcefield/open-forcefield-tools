@@ -39,7 +39,7 @@
 % Units
 \DeclareSIUnit\Molar{\textsc{m}}
 
-
+\newcommand{\var}[1]{\mathrm{Var}(#1)}
 % Comments
 \newcounter{comment}
 \newcommand{\comment}[2][]{%
@@ -167,27 +167,8 @@ mass of each particle and $|v_i|$ is the magnitude of the velocity of
 each particle, is an estimate of $T$ (the temperature of the bath), and
 it's average will be equal to the $T$. But it is not the
 temperature. This quantity fluctuates, but $T$ remains
-constant; otherwise the simulation could not be at constant
+constant; otherwise the simulation could not be said to be at constant
 temperature.
-
-%MRS: This below is not really not correct. For the NPT ensemble, T is
-%constant. The average kinetic energy has fluctuations, but the
-%temperature is defined as being constant, MEANING that the system is
-%in equilibrium with a bath with constant, FIXED temperature.  The
-%temperature of the system itself isn't a meaningful thing.  The
-%average kinetic energy is fixed.  I have adjusted the text above to
-%make it clearer.
-
-%To even say that some environmental variable, such as $T$ or $P$ is held 
-%constant is not entirely correct. What this means is that such quantities 
-%are controlled by an external force in order to hold them at a certain
-%value. In the case of temperature, a thermostat is used. Recalling some
-%basics of chemical engineering controller design, we know that no controller
-%is perfect. Corrections from feedback cannot be made instantaneously, hence 
-%there is some variation in the simulation temperature reported. 
-%A thermostat constantly modifies the velocities of the particles
-%in simulation in order to achieve the distribution of kinetic energies that 
-%would be expected for a simulation at the temperature specified.
 
 Ensemble averages of some quantity $X$ ($\langle X \rangle$) are
 assumed to be averages over the appropriate Boltzmann weighting,
@@ -266,8 +247,9 @@ example, $u_j(x) = \beta_i U(x) + \beta_i (P_i + \Delta P) V$, or $u_j
 P_i V$. However, the relationship between $f$ and $G$ can be
 problematic when looking at differences in free energy with respect to
 temperature, because $G_2 - G_1 = \beta_2 f_2 - \beta_1 f_1$.  
-We can in general write
-\[\Delta G_{ij}(T) = k_B T \left (\Delta f_{ij}(T) - \Delta f_{ij}(T_{ref})\right) + \frac{T}{T_{ref}}\Delta G_{ij}(T_{ref})\], 
+We can in general write:
+\begin{equation}\Delta G_{ij}(T) = k_B T \left (\Delta f_{ij}(T) - \Delta f_{ij}(T_{ref})\right) + \frac{T}{T_{ref}}\Delta G_{ij}(T_{ref})
+\end{equation},
 where $\Delta G_{ij}(T_{ref})$ is known at some temperature.
 
  
@@ -289,9 +271,32 @@ For mixed partial derivatives, we can write (in the central difference approxima
 It may first appear that these finite difference calculations will
 propagate significant error as they subtract similar numbers.
 However, MBAR calculates the covariance matrix between $\langle A
-\rangle$, $\langle A(x+\Delta x) \rangle$, and $\langle A(x-\Delta x) \rangle$, meaning in practice
-the uncertainty is far lower than would be expected by standard error
-propagation of uncorrelated observables.
+\rangle$, $\langle A(x+\Delta x) \rangle$, and $\langle A(x-\Delta x)
+\rangle$, meaning in practice the uncertainty is far lower than would
+be expected by standard error propagation of uncorrelated observables.
+We should therefore then use parameters that are as close as possible.
+
+%In the case of temperature finite difference, then in MBAR this becomes in the reduced potentials:
+%
+%\[u(T+\delta T) &=& \frac{U(\vec{x})}{k_B(T + \Delta T)}\]
+%\[u(T-\delta T) &=& \frac{U(\vec{x})}{k_B(T - \Delta T)}\]
+%
+%\begin{eqnarray}
+%f(T+\Delta T) &=& f(T) - \ln \frac{1}{N}\sum_i^N e^{ - \frac{U(x)}{k_B(T + \Delta T)} + \frac{U(x)}{k_B T} \\
+%              &=& f(T) - \ln \frac{1}{N}\sum_i^N e^{ - U(x) \frac{1}{k_B}\left(\frac{1}{T + \Delta T} - \frac{1}{T}\right)} \\
+%              &=& f(T) - \ln \frac{1}{N}\sum_i^N e^{ - U(x) \frac{1}{k_B}\ \left(\frac{1}{T + \Delta T} - \frac{1}{T}\right)} \\
+%              &=& f(T) - \ln \frac{1}{N}\sum_i^N e^{ \frac{U(x)\Delta T}{k_B T^2}}
+%              &=& f(T) - \ln \frac{1}{N}\sum_i^N e^{ \frac{\beta U(x)\Delta T}{T}}
+%              &=& f(T) - \ln \frac{1}{N}\sum_i^N e^{ u(x)\frac{\Delta T}{T}}
+%\end{eqnarray}
+
+%In the case of finite $\beta$ difference, this becones:
+%\[f(T+\Delta T) &=& f(T) - \ln \frac{1}{N}\sum_i^N e^{ -\Delta \beta U(x) } \]\\
+%                &=& f(T) - \ln \frac{1}{N}\sum_i^N (1 - \Delta \beta U(x)) 
+%\begin{equation}
+%\frac{e^{f_i - u_i(x_n)}}{\sum_{k=1}^{N_k} e^{f_k - u_k(x)}}
+%\end{equation}
+
 
 Note that if the finite differences are re-evaluated using reweighting
 approaches, it is important that the simulation used generates the
@@ -303,10 +308,6 @@ The following document details calculation of various mechanical observables
 by both direct methods pulled from literature sources and the use of 
 reweighting techniques. Corrections in certain observables are also summarized
 where suggested by previous authors. 
-
-%MRS: I removed noindent -- better to fix formatting by changing the latex definitions, not by adding a bunch of exceptions.
-
-%--------------------------------------------------------------------------------------------------------------------------------
 
 \section{Single Phase Properties}
 \subsection{Pure Solvent Properties}
@@ -349,14 +350,15 @@ H can be calculated as directly as:
 Transforming the derivative in the Gibbs-Helmholtz relation to be in
 terms of $\beta$ instead of $T$ yields:
 
-\begin{equation}H=-T^2  \frac{\beta^2}{\beta^2}\left(\frac{\partial \big(\frac{G}{T}\big)}{\partial T} \frac{\partial T}{\partial \beta} \frac{\partial \beta}{\partial T}\right)_{P,N}\end{equation}
+\begin{equation}H=-T^2 \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta} \frac{\partial \beta}{\partial T}\right)_{P,N}\end{equation}
 
-Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$. Substituting these values into the enthalpy equation gives:
+Recall that $\beta = \frac{1}{k_B T}$, therefore $\frac{\partial \beta}{\partial T} = - \frac{1}{k_B T^2}$, or alternately $-k_B \beta^2$.  Substituting these values into the enthalpy equation gives:
 
 %MRS: usually, you should just use \left( instead of \big(, since it will choose the correct size for you! 
-\begin{multline}
-H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} \\ = \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{P,N} 
-\end{multline}\\*
+\begin{eqnarray}
+H &=& -T^2 \left(-\frac{1}{k_B T^2}\right) \left(\frac{\partial \big(\frac{G}{T}\big)}{\partial \beta}\right)_{P,N} \\ 
+  &=& \frac{1}{k_B} \left(\frac{\partial \big(\frac{G}{T}\big)}{\beta}\right)_{P,N} = \frac{\partial f}{\partial \beta}_{P,N}
+\end{eqnarray}\\*
 %MRS: I like this equation more, as it's hard to take finite differences of $G$ (as discussed above).  Then you can eliminate the last few lines.
 
 %MRS: Also, not clear it should go here because molar enthalpy isn't an experimental measurement.  OR explicitly mention it isn't an experimental quantity, BUT you need it for other quantities (like the enthalpy of mixing, and the heat capacity).
@@ -365,24 +367,39 @@ H = \frac{1}{k_B^3 T^2 \beta^2} \left(\frac{\partial \big(\frac{G}{T}\big)}{\par
 
 \subsubsection{Heat Capacity}
 There are two different heat capacities: the isochoric heat capacity
-$C_V = \frac{\partial U}{\partial T}_V$, and isobaric heat capacity
-$C_P = \frac{\partial H}{\partial T}_P$. The are calculated 
+$C_V = \left(\frac{\partial U}{\partial T}\right)_V$, and isobaric heat capacity
+$C_P = \left(\frac{\partial H}{\partial T}\right)_P$. The are calculated in similar ways.
 
 \paragraph{Direct simulation estimate}
-There is no direct way to estimate either heat capacity.
+There is no direct way to estimate either heat capacity as an expectation of any observable.
 
-\paragraph
+\paragraph{Derivative estimates}
 The definition of the isobaric heat capacity is:
 \begin{equation}C_P = \left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
-%MRS: probably easier to take df/dbeta, and then take the temperature derivative, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
-\begin{equation}C_P =  \frac{\partial \left(\frac{\partial f}{\partial \beta}\right)}{\partial T}_{P,N}\end{equation}
-\begin{equation}C_P = k_B \beta^2 \frac{\partial^2 f}{\partial \beta^2}\end{equation}
 
-This could be computed by finite differences approach or analytical derivation using MBAR\\*
+This can be rewritten in terms of $\beta$ finite differences (carried out at fixed $P$ and $N$).
+\begin{eqnarray}C_P &=& \left( \frac{\partial H}{\partial \beta}\frac{\partial \beta}{\partial T}\right)\\
+                    %(k_b T)^-1 / dT = -1/k_B T^-2 = -k_b beta^2
+                    &=& -k_B \beta^2 \left( \frac{\partial H}{\partial \beta}\right)
+\end{eqnarray}
+And can also then be rewritten compactly as:
+\begin{equation}C_P = -k_B \beta^2 \left( \frac{\partial^2 f}{\partial \beta^2}\right)\end{equation}
+%MRS: 
+Which can then also be rewritten in terms of temperature derivatives of the reduced free energy alone as:
+\begin{eqnarray}
+C_P &=& \frac{\partial H}{\partial T} = \frac{\partial}{\partial T}\left(-k_B T^2 \left(\frac{\partial f}{\partial T}\right)\right) \\
+    &=&                               = -2k_B T\left(\frac{\partial f}{\partial T}\right) - k_B T^2 \left(\frac{\partial^2 f}{\partial T^2}\right)
+\end{eqnarray}
+Which is somewhat more complicated and therefore less desired than the $\beta$ derivative expression.
+
+These derivatives could be computed by finite differences approach
+with two separate simulations using a central difference approch, or
+by finite difference with MBAR.\\*
+
 \paragraph{Fluctuation estimate}
 
 The enthalpy fluctuation formula can also be used to calculate $C_P$\cite{horn}.
-\begin{equation}C_P = \frac{\langle H^2 \rangle - \langle H \rangle^2}{N k_B \langle T \rangle^2}\end{equation}\\*
+\begin{equation}C_P = \frac\var{H}{N k_B T^2}\end{equation}\\*
 
 The form is equivalent for isochoric heat capacity, but with derivatives at constant volume rather than pressure.
 
@@ -397,8 +414,9 @@ Thus, it can be estimated by the finite difference of $\langle V \rangle$
 Or by the finite differences evaluation of:
 \begin{equation}\kappa_T = -\frac{\left(\frac{\partial^2 G}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial G}{\partial P}\right)_{T, N}} = -\frac{\left(\frac{\partial^2 f}{\partial P^2}\right)_{T, N}}{\left(\frac{\partial f}{\partial P}\right)_{T, N}}\end{equation} \\*
 
+\paragraph{variance formula}:
 $\kappa_T$ can also be estimated from the ensemble average and fluctuation of volume (in the NPT ensemble) or particle number (in the $\mu$VT ensemble)\cite{comp}:
-\begin{equation}\kappa_T = \beta \frac{\langle \Delta V^2 \rangle_{NTP}}{\langle V \rangle_{NTP}} = V \beta \frac{\langle \Delta N^2 \rangle_{VT}}{\langle N \rangle_{\mu VT}}\end{equation}\\*
+\begin{equation}\kappa_T = \beta \frac{\var{V}}{\langle V \rangle_{NTP}} = V \beta \frac{\var{N}}{\langle N \rangle_{\mu VT}}\end{equation}\\*
 
 %---------------------------------------------------------------------------------------------------------------------------------
 
