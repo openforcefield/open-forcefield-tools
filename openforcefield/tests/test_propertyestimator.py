@@ -10,12 +10,12 @@ def test_propertyestimator():
 
     """
     # Get synthetic dataset and parameters
-    from openforcefield import testsystems
+    from openforcefield.tests import testsystems
     dataset = testsystems.TestDataset()
     parameters = testsystems.TestParameterSet()
 
     # Create a PropertyEstimator
-    from openforcefield import PropertyEstimator
+    from openforcefield.propertyestimator import PropertyEstimator
     estimator = PropertyEstimator()
 
     # Compute properties

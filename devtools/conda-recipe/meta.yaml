@@ -19,14 +19,16 @@ requirements:
     - numpy
     - networkx
     - lxml
+    - openmm
+    - packmol
+    - openmoltools
+    #- smarty
 
 test:
   requires:
     - nose
     - nose-timer
   imports:
-    - openforcefield
-  commands:
     - openforcefield
 
 about:
