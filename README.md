@@ -1,10 +1,12 @@
 [![Build Status](https://travis-ci.org/open-forcefield-group/open-forcefield-tools.svg?branch=master)](https://travis-ci.org/open-forcefield-group/open-forcefield-tools)
 
-# Open Forcefield Tools
+# Property calculation toolkit
 
-Tools for open forcefield development.
+Property calculation toolkit from the [Open Forcefield Consortium](http://openforcefield.org).
 
-## API documentation
+This toolkit provides an API for storing, manipulating, and computing measured physical properties from simulation data.
+
+## API docs
 
 ### Physical property measurements
 
@@ -16,7 +18,7 @@ A physical property is defined by a combination of:
 * A `MeasurementMethod` specifying the kind of measurement that was performed
 
 An example of each:
-* `Mixture`: 0.8 mole fraction mixture of ethanol and water
+* `Mixture`: a 0.8 mole fraction mixture of ethanol and water
 * `ThermodynamicState`: 298 kelvin, 1 atmosphere
 * `PhysicalProperty`: mass density
 * `MeasurementMethod`: vibrating tube method
@@ -49,12 +51,9 @@ ternary_mixture.addComponent('water')
 The infinite dilution of one solute within a solvent or mixture is also specified as a `Mixture`, where the solute has zero mole fraction:
 ```python
 infinite_dilution = Mixture()
-infinite_dilution.addComponent('phenol', impurity=True) # infinite dilution
+infinite_dilution.addComponent('phenol', impurity=True) # infinite dilution; one copy only of the impurity
 infinite_dilution.addComponent('water')
 ```
-
-**TODO**:
-* Ken Kroenlein suggests we avoid this notation and instead create an explicit way to specify zero-dilution impurities.
 
 For testing against synthetic data, we also make use of `isolatedMolecule` objects (also subclasses of `Substance`) that represent a single molecule:
 ```python
@@ -88,10 +87,7 @@ A `ThermodynamicState` specifies a combination of thermodynamic parameters (e.g.
 from simtk import unit
 thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperature=298.15*unit.kelvin)
 ```
-We use the `simtk.unit` unit system from [OpenMM](http://openmm.org) for units.
-
-**QUESTIONS:**
-* Is it OK to use `simtk.unit` from OpenMM for now, or should we switch to [`pint`](https://pint.readthedocs.io/en/0.7.2/) to make this more portable?
+We use the `simtk.unit` unit system from [OpenMM](http://openmm.org) for units (though we may later migrate to [`pint`](https://pint.readthedocs.io) for portability).
 
 #### Measurement methods
 
@@ -115,15 +111,19 @@ thermodynamic_state = ThermodynamicState(pressure=500*unit.kilopascals, temperat
 measurement = ExcessMolarEnthalpy(substance, thermodynamic_state, value=83.3863244*unit.kilojoules_per_mole, uncertainty=0.1220794866*unit.kilojoules_per_mole)
 ```
 The various properties are all subclasses of `MeasuredPhysicalProperty` and generally follow the `<ePropName/>` ThermoML tag names.
-Some examples:
+
+Some examples of `MeasuredPhysicalProperty`:
 * `MassDensity` - mass density
 * `ExcessMolarEnthalpy` - excess partial apparent molar enthalpy
 * `HeatCapacity` - molar heat capacity at constant pressure
+
 There are also some examples of measured physical properties we use exclusively for testing against synthetic data:
 * `MeanPotentialEnergy` - mean potential energy of a system
 * `BondMoment` - the `n`th moment (mean `E[x]` if n==1, or central moment `E[(x-E[x])^n]` if n >= 2) of a specified bond of an isolated molecule
 * `AngleMoment` - the `n`th moment (mean `E[x]` if n==1, or central moment `E[(x-E[x])^n]` if n >= 2) of a specified angle of an isolated molecule
 * `TorsionMoment` - the `n`th circular moment (`E[e^{i*n*phi}]`) of a specified torsion of an isolated molecule
+
+For example:
 ```python
 molecule = IsolatedMolecule(smiles=smiles)
 thermodynamic_state = ThermodynamicState(temperature=300*unit.kelvin)
@@ -143,10 +143,11 @@ Please raise an issue if your physical property of interest is not listed!
 
 Each `MeasuredPhysicalProperty` has several properties:
 * `.substance` - the `Mixture` for which the measurement was made
-* `.thermodynamic_state` - the `ThermodynamicState`
+* `.thermodynamic_state` - the `ThermodynamicState` at which the measurement was made
+* `.measurement_method` - the `MeasurementMethod` used to measure the physical property
 * `.value` - the unit-bearing measurement value
 * `.uncertainty` - the standard uncertainty of the measurement
-* `.reference` - the literature reference (if present) for the measurement
+* `.reference` - the literature reference (if available) for the measurement
 * `.DOI` - the literature reference DOI (if available) for the measurement
 
 The value, uncertainty, reference, and DOI do not necessarily need to be defined for a dataset in order for property calculations to be performed.
@@ -171,13 +172,18 @@ print(dataset.DOIs)
 print(dataset.references)
 ```
 
-### ThermoML datasets
+For convenience, you can retrieve the dataset as a [pandas `DataFrame`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html):
+```python
+dataset.to_pandas()
+```
 
-Here, we use `ThermoMLDataset` objects to access datasets stored in the IUPAC-standard [ThermoML](http://trc.nist.gov/ThermoMLRecommendations.pdf) format, a format for specifying thermodynamic properties in XML format. Essentially, `ThermoMLDataset` provides access to ThermoML format datasets.
+#### ThermoML datasets
 
-Many datasets from ThermoML itself are of interest, so direct access to the [NIST ThermoML Archive](http://trc.nist.gov/ThermoML.html) is supported for obtaining physical property measurements in this format.
+A `ThermoMLDataset` object represents a physical property dataset stored in the IUPAC-standard [ThermoML](http://trc.nist.gov/ThermoMLRecommendations.pdf) for specifying thermodynamic properties in XML format.
+`ThermoMLDataset` is a subclass of `PhysicalPropertyDataset`, and provides the same API interface (in addition to some ThermoML-specfic methods).
+Direct access to the [NIST ThermoML Archive](http://trc.nist.gov/ThermoML.html) is supported for obtaining physical property measurements in this format directly from the NIST TRC repository.
 
-For example, to retrieve [this ThermoML dataset](http://trc.boulder.nist.gov/ThermoML/10.1016/j.jct.2005.03.012) that accompanies [this paper](http://www.sciencedirect.com/science/article/pii/S0021961405000741), we can simply use the DOI `10.1016/j.jct.2005.03.012` as a key for creating a `PhysicalPropertyDataset` subclassed object from the ThermoML Archive:
+For example, to retrieve [the ThermoML dataset](http://trc.boulder.nist.gov/ThermoML/10.1016/j.jct.2005.03.012) that accompanies [this paper](http://www.sciencedirect.com/science/article/pii/S0021961405000741), we can simply use the DOI `10.1016/j.jct.2005.03.012` as a key for creating a `PhysicalPropertyDataset` subclassed object from the ThermoML Archive:
 ```python
 dataset = ThermoMLDataset(keys='10.1016/j.jct.2005.03.012')
 ```
@@ -217,22 +223,34 @@ These can be used to update or correct data uncertainties and discard outliers u
 dataset.applyNISTUncertainties(nist_uncertainties, adjust_uncertainties=True, discard_outliers=True)
 ```
 
+**TODO:**
+* We should merge any other useful parts parts of the [ThermoPyL API](https://github.com/choderalab/thermopyl) in here.
+
+#### Other datasets
+
+In future, we will add interfaces to other online datasets, such as
+* [BindingDB](https://www.bindingdb.org/bind/index.jsp) for retrieving [host-guest binding affinity](https://www.bindingdb.org/bind/HostGuest.jsp) datasets.
+
 ### Estimating properties
 
 The `PropertyEstimator` class creates objects that handle property estimation of all of the properties in a dataset, given a set or sets of parameters.
-The implementation will isolate the user from whatever backend (local machine, HPC cluster, XSEDE resources, Amazon EC2) is being used to compute the properties, as well as whether new simulations are being launched and analyzed or existing simulation data is being reweighted.
+The implementation will isolate the user from whatever backend (local machine, HPC cluster, [XSEDE resources](http://xsede.org), [Amazon EC2](https://aws.amazon.com/ec2)) is being used to compute the properties, as well as whether new simulations are being launched and analyzed or existing simulation data is being reweighted.
 Different backends will take different optional arguments, but here is an example that will launch and use 10 worker processes on a cluster:
 ```python
 estimator = PropertyEstimator(nworkers=10) # NOTE: multiple backends will be supported in the future
 computed_properties = estimator.computeProperties(dataset, parameter_sets)
 ```
-Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameter_sets` is a list containing `SMIRFFParameterSet` objects used to parameterize the physical systems in the dataset. This can be a single parameter set or multiple (usually related) parameter sets.
+Here, `dataset` is a `PhysicalPropertyDataset` or subclass, and `parameter_sets` is a list containing `ForceField` objects used to parameterize the physical systems in the dataset.
+This can be a single parameter set or multiple (usually closely related) parameter sets.
 
 `PropertyEstimator.computeProperties(...)` returns a list of `ComputedPhysicalProperty` objects that provide access to several pieces of information:
 * `property.value` - the computed property value, with appropriate units
 * `property.uncertainty` - the statistical uncertainty in the computed property
 * `property.parameters` - a reference to the parameter set used to compute this property
 * `property.property` - a reference to the corresponding `MeasuredPhysicalProperty` this property was computed for
+
+**TODO**:
+* How should we instruct `computeProperties()` to provide gradients (or components of gradients)?
 
 This API can be extended in the future to provide access to the simulation data used to estimate the property, such as
 ```python
