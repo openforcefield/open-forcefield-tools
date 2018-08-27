@@ -38,7 +38,8 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \setcounter{secnumdepth}{5}
-
+\captionsetup{font=footnotesize}
+\captionsetup{width=0.8\linewidth}
 % Units
 \DeclareSIUnit\Molar{\textsc{m}}
 
@@ -635,7 +636,8 @@ Var(h) = Var\left(\frac{H}{M}\right) = \frac{1}{M^2} Var(H) \sim \frac{\mathcal{
 So, the standard deviation of the molar enthalpy goes as $\mathcal{O} (M^{-\frac{1}{2}})$, meaning that quadrupling the size of the system will cut the uncertainty in half, just as quadrupling $N$ would.  This relationship is shown in figure:
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth-40]{../../figures/enthalpy_stdev_vs_M.png}
+\includegraphics[width=\textwidth-40pt]{../../figures/enthalpy_stdev_vs_number_of_molecules.pdf}
+\caption{Figure shows enthalpy \% uncertainty (calculated as $(\sigma_{h}/h) \times 100 \%$) vs. $M$ for simulations of liquid cyclohexane at 293.15 K, 1.01 bar, calculated via fluctuations. $\mathcal{O} (M^{-\frac{1}{2}})$ on $M$.}
 \end{figure}
 
 Now, we examine the uncertainty behavior of $C_P$, the extensive heat capacity.  Since we know $C_P \sim Var(H)$, it follows that $ Var(C_P) \sim Var(Var(H)) $.  For normally distributed samples, the variance of the variance is given by:
@@ -661,7 +663,8 @@ So, even though estimates of the molar enthalpy $h$ improve as the size of the s
 
 For the volume $V$, the standard deviation also goes as $\mathcal{O}(M^{-\frac{1}{2}}$.  This follows from the information we already know about energy and enthalpy and the relationship between the two.  Since they are related by $H=E+PV$, and the variance of $H$ and $E$ both go as $\mathcal{O}(M)$ due to their relationship with the heat capacities $C_P$ and $C_V$, the variance of $V$ must also go as $\mathcal{O}(M)$.  By similiar analysis to that for the molar enthalpy $h$, it follows that the standard deviation of the molar volume $v$ goes as $\mathcal{O}(M^{-\frac{1}{2}}$, and this claim is supported by experimental data in figure. %INSERT
 \begin{figure}[H]
-\includegraphics[width=\textwidth-40]{../../figures/heat_capacity_stdev_vs_M.png}
+\includegraphics[width=\textwidth-40pt]{../../figures/cp_stdev_vs_number_of_molecules.pdf}
+\caption{Figure shows heat capacity \% uncertainty (calculated as $(\sigma_{C_P}/C_P) \times 100 \%$) vs. $M$ for simulations of liquid cyclohexane at 293.15 K, 1.01 bar, calculated via fluctuations. No dependence on $M$.}
 \end{figure}
 
 For the isothermal compressibility, the variance is easy to calculate once the variance of the volume is known.  From Eq. 23, we can see that with constant temperature, the variance of $\kappa_T$ is as such:
@@ -673,18 +676,20 @@ Var(\kappa_T) \sim \frac{1}{V^2} (Var(V))^2 \sim \frac{\mathcal{O}(M^2)}{\mathca
 \end{equation}
 So, the uncertainty of the compressibility is independent of the number of molecules used to simulate the system.  This claim is supported by experimental data in figure 3:  
 \begin{figure}[H]
-\includegraphics[width=\textwidth-40]{../../figures/kt_stdev_vs_M.png}
+\includegraphics[width=\textwidth-40pt]{../../figures/kt_stdev_vs_number_of_molecules.pdf}
+\caption{Figure shows speed of sound \% uncertainty (calculated as $(\sigma_{\kappa_T}/\kappa_T) \times 100 \%$) vs. $M$ for simulations of liquid cyclohexane at 293.15 K, 1.01 bar, calculated via fluctuations. No dependence on $M$.}
 \end{figure}
 \end{subsubsection}
 \begin{subsubsection}{Speed of Sound}
 For thermophysical properties that are calculated from several other basic properties, such as speed of sound $c=\frac{\gamma}{\rho \kappa_T}$, it is important to examine the relative contributions of the error to determine the overall uncertainty behavior of the property.  For example, $\gamma$ and $\kappa_T$ are both properties with uncertainties that do not depend on $M$, but $\rho$ should have an $\mathcal{O}(N^{-\frac{1}{2}})$ uncertainty behavior, similar to molar volume.  Therefore, one would expect the overall uncertainty behavior to be dependent on $M$, but data from experiment in Figure 4 shows no correlation. 
 \begin{figure}[H]
-\includegraphics[width=\textwidth-40]{../../figures/speed_of_sound_vs_M.png}
+\includegraphics[width=\textwidth-40pt]{../../figures/c_stdev_vs_number_of_molecules.pdf}
+\caption{Figure shows speed of sound \% uncertainty (calculated as $(\sigma_{c}/c) \times 100 \%$) vs. $M$ for simulations of liquid cyclohexane at 293.15 K, 1.01 bar, calculated via fluctuations. No apparent dependence on $M$.} 
 \end{figure}
 
 \end{subsubsection}
 \begin{subsubsection}{Discussion}
-From these analyses, we can see that properties taken from direct averages of timeseries data, ($V$, $E$, $H$) have standard deviation that goes as $\mathcal{O}(M^{\frac{1}{2}}$.  The molar versions of these properties subsequently have standard deviation that goes as $\mathcal{O}(M^{-\frac{1}{2}}$.  However, this does not imply the same for properties calculated via fluctuations.  Fluctuation properties can have standard deviation as $\mathcal{O}(M)$, like $C_P$, or with no dependence on $M$, like $c_P$ or $\kappa_T$.  Additionally, they can have a very weak dependence on $M$, such as speed of sound $c$.  Because of these varying dependencies between quantities, and the extra computational cost of a larger system size, we recommend that additional computational resources be used to collect more equilibrium samples, which has a consistent effect on uncertainty for all properties.  This recommendation comes with the caveat that systems need to be large enough to avoid finite size effects.  When systems are too small, systems may not equilibrate very quickly, amongst other problems.  For a more in-depth discussion of finite size effects, see. %CITE need to find good reference..
+From these analyses, we can see that properties taken from direct averages of timeseries data, ($V$, $E$, $H$) have standard deviation that goes as $\mathcal{O}(M^{\frac{1}{2}})$.  The molar versions of these properties subsequently have standard deviation that goes as $\mathcal{O}(M^{-\frac{1}{2}})$.  However, this does not imply the same for properties calculated via fluctuations.  Fluctuation properties can have standard deviation as $\mathcal{O}(M)$, like $C_P$, or with no dependence on $M$, like $c_P$ or $\kappa_T$.  Additionally, they can have a very weak dependence on $M$, such as speed of sound $c$.  Because of these varying dependencies between quantities, and the extra computational cost of a larger system size, we recommend that additional computational resources be used to collect more equilibrium samples, which has a consistent effect on uncertainty for all properties.  This recommendation comes with the caveat that systems need to be large enough to avoid finite size effects.  When systems are too small, systems may not equilibrate very quickly, amongst other problems.  For a more in-depth discussion of finite size effects, see. %CITE need to find good reference..
 It is also important to remember when modifying the number of molecules in a system that Molecular Dynamics programs report energies in units of energy/mole of box, rather than energy per mole of compound.  For pure compounds, one must divide the "moles of box" value by the number of molecules in order to get a true molar energy.
 
 \end{subsubsection}
@@ -706,15 +711,17 @@ The choice of finite difference is important here, as $\Delta X$ will determine 
 When using MBAR finite differences, the problem is opposite: MBAR estimates are inherently decorrelated, leading to decent uncertainty at small $\Delta X$, but MBAR requires significant phase overlap between the simulated state and the desired state, so estimates become more unreliable as $\Delta X$ increases. However, since MBAR finite differences are stable over a large range of $\Delta X/X$ ($(10^{-6}-10^{-3})$ for heat capacities), this is less of an issue. However, it does make comparisons of direct finite differences and MBAR finite differences difficult, as the minimum $\Delta X$ in direct finite differences that produces uncertainties equivalent to MBAR finite differences is roughly $10^{-2}$ in heat capacity; MBAR estimates are already poor at this point.  In order to quantify the reliability of the MBAR finite difference, the number of effective samples ($N_{eff}$) metric can be used.  This metric quantifies how many of the samples from simulated state A could be drawn from reweighted state B.  Previous use of this metric has shown that a rough minimum of $N_{eff}=50$ is required for statistics to be stable, but for \emph{accurate} finite differences, the percentage of effective samples ($(N_{eff}/N)\times 100 \% $) is a better metric, but may depend on the property being calculated.  For example, MBAR finite differences for $C_P$ agree with fluctuations with roughly 10 \% of effective samples, but is more like 75\% for $\kappa_T$.
 
 \begin{figure}[H]
-\includegraphics[width=\textwidth-40]{../../figures/n_eff_convergence_k_t.png}
+\includegraphics[width=\textwidth-40pt]{../../figures/kt_vs_n_eff.pdf}
+\caption{Percent deviation from fluctuation value as a function of $N_eff$.  Dashed red line indicates minimum requirement of 50 samples.  Error bars indicate bootstrapped 95\% CI}
+%Add similar figure for c_p to show differences 
 \end{figure}
-
 
   Since the number of effective samples is easily adjusted, as a best practice, we recommend a percentage of effective samples of 90 \% or higher.  It is also important to recognize that for properties that require reweighting in multiple variables, such as speed of sound, the number of effective samples for all variables needs to be taken into account (in the example of speed of sound, $T$ and $P$).  In general, comparison with fluctuation calculations is the ultimate metric for accuracy of MBAR finite differences.
 
 To test this, we performed a 10 ns simulation of cyclohexane at 293.15 K and 1.01 bar, as well as several pairs of 5 ns cyclohexane simulations, also at 1.01 bar, but spaced at intervals of 0.5, 1, 2, 5, 7.5, and 10 K apart from 293.15 K. Heat capacity calculations from finite differences were performed via MBAR on the 10 ns simulation, and directly on the pairs of 5 ns simulations. 
 \begin{figure}[H]
-\includegraphics[width=\textwidth-40]{../../figures/direct_sim_vs_mbar_cp.png}
+\includegraphics[width=\textwidth-40pt]{../../figures/cychex_cp_finite_diff.pdf}
+\caption{Comparison of direct finite difference methods and MBAR reweighted finite differences for liquid cyclohexane $C_P$ at 293.15 K, 1.01 bar. Red lines show MBAR estimate and uncertainty, error bars indicate bootstrapped 95 \% CI.} 
 \end{figure}
 
 \subsubsection{Finite differences and fluctuations}
