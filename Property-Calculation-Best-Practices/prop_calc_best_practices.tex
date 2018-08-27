@@ -167,7 +167,7 @@ equilibrium with this bath.  There are a number of quantities that can
 be used to ESTIMATE constants such as $T$ and $P$. For example,
 $\langle \frac{1}{3Nk_B}\sum_i m_i |v_i|^2\rangle$, where $m$ is the
 mass of each particle and $|v_i|$ is the magnitude of the velocity of
-each particle, is an estimate of $T$ (the temperaure of the bath), and
+each particle, is an estimate of $T$ (the temperature of the bath), and
 it's average will be equal to the $T$. But it is not the
 temperature. This quantity fluctuates, but $T$ remains
 constant; otherwise the simulation could not be at constant
@@ -359,7 +359,7 @@ The definition of the isobaric heat capacity is:
 \begin{equation}C_P = \left( \frac{\partial H}{\partial T}\right)_{P,N}\end{equation}
 %MRS: probably easier to take df/dbeta, and then take the temperature derivaive, which can be converted into a second beta derivative by a change of variable, so it's a 2nd derivative of f WRT beta, with some prefactors of beta.
 \begin{equation}C_P =  \frac{\partial \left(\frac{\partial f}{\partial \beta}\right)}{\partial T}_{P,N}\end{equation}
-\begin{equation}C_P = k_B \beta^2 \frac{\partial^2 f}{\partial \beta^2}\end{equation}
+\begin{equation}C_P = -k_B \beta^2 \frac{\partial^2 f}{\partial \beta^2}\end{equation}
 
 This could be computed by finite differences approach or analytical derivation using MBAR\\*
 
@@ -411,6 +411,13 @@ Where $\alpha = \frac{1}{V} \left(\frac{\partial V}{\partial T}\right)_{P} = \le
 Thus our derivation yields:
 \begin{equation}\left(\frac{\partial P}{\partial V}\right)_{S} = \frac{C_P \gamma_V}{C_V V \alpha}\end{equation}\\*
 
+To avoid running an $NVT$ simulation to determine $C_V$, the following relationship between $C_P$ and $C_V$ can be used:
+
+\begin{equation} C_P-C_V = TV\left(\frac{\alpha^2}{\kappa_T}\right)\end{equation}
+
+This yields the following expression:
+
+\begin{equation}\left(\frac{\partial P}{\partial V}\right)_{S} = \left(\frac{C_P}{C_P -TV\frac{\alpha^2}{\kappa_T}}\right)\left(\frac{\gamma_V}{V\alpha}\right)\end{equation}\\*
 Horn et al set out several ways for calculating $\alpha$\cite{horn}:
 
 \paragraph{Analytical derivative of density with respect to temperature}
@@ -425,6 +432,16 @@ The same finite differnces approach as shown for isothermal compressibility can 
 
 Finite differences approximations and/or analytical derivation can also be used to calculate $\gamma_V$ or by note of the relation:
 \begin{equation}\gamma_V = - \frac{\alpha}{\kappa_T}\end{equation}\\*
+
+Substituting Equations (24),(32), and (36), the following easily calculable expression for speed of sound is obtained:
+
+\begin{equation} c^2=\frac{V}{M \kappa_T}\left(\frac{C_P}{C_P -TV\frac{\alpha^2}{\kappa_T}}\right)\end{equation}
+
+Which can also be written in the simplified form:
+
+\begin{equation} c^2= \frac{\gamma}{\rho \kappa_T} \end{equation}
+
+Where $ \gamma=\frac{C_P}{C_V} $.
 
 %----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -584,6 +601,140 @@ As discussed by myself and MRS, we have decided to not initially begin the param
 
 An additional issue is the necessity of having to use gas phase simulation data in order to validate a parametrization process meant for small organic liquids and their mixtures. Following an example of Wang et al. \cite{FF99vdw} we plan to instead use enthalpy of vaporization calculations as an unbiased means of testing the success of the parametrization. If the parametrization procedure is expanded to use enthalpy of vaporization, corrections can be made to the experimental data in order to get a value at STP using the following equation.
 \begin{equation}\Delta H_{vap}(T) = \Delta H_{vap}^{ref} + \int_{T_{ref}}^T \left(C_{P, gas} - C_{P, liq}\right) dT \end{equation}\\*
+
+\section{Numerical Considerations}
+
+\subsection{Quality of Timeseries Data}
+With the finite computing resources that are available today, it is often necessary to make trade-offs between the uncertainty of the result and the amount of time/resources spent.  As a major assumption of Molecular Dynamics simulations is the Ergodic Hypothesis, sampling over a timeseries will only be equivalent in the limit of infinite time. In all other cases, the timeseries generated from MD will function as an \emph{approximation} to phase space sampling. As this is the case, there is an inherent decision to be made in the collection of all timeseries data: how much effort does one need to spend to get a result with the appropriate confidence for the specific problem being addressed? 
+
+For bulk thermophysical properties, there are two major factors that consume computational resources: the length of the simulation, often measured in time units such as nanoseconds or microseconds, and the size of the system that is simulated, measured in number of molecules.  Because timescales vary based on the nature of the system, a more general metric that we will use in this discussion is $N$, the number of uncorrelated equilibrium samples. We will denote the number of molecules as $M$ in this discussion to distinguish the two.
+\begin{subsubsection}{Equilibrium Sampling}
+The relationship between $N$ and uncertainty is straightforward; as one collects more samples of the same system, the standard deviation decreases as $\mathcal{O} (N^{-\frac{1}{2}})$, as would be expected for the standard formula for sample standard deviation.  It is worth noting that while $N$ follows this rule, the length of the simulation will not follow it exactly.  This is because the detection of equilibration and the choice of uncorrelated equilibrium samples will vary between users and systems.  
+\\
+For a timeseries to satisfy the Ergodic Hypothesis and allow for calculation of equilibrium samples, the system needs to have settled into an equilibrium region, following a "burn-in" period in which the system starts at some non-equilibrium configuration and relaxes into an equilibrium configuration.  This portion of a timeseries needs to be removed; the question as to how to do so is slightly trickier.  For users running many simulations of similar systems, often a burn-in time is determined by inspection and then set for all subsequent simulations. However, this can backfire based on the simulation parameters being varied.  For example, systems with small numbers of molecules can equilibrate much slower than larger systems, making the choice of equilibrium for one invalid for another, or discarding valuable equilibrium data.  Another option is an automatic equilibration detection algorithm, like the one proposed by Chodera. %CITE
+In this work, this automatic equilibration algorithm is used in all analysis.  It is important to note, however, that algorithms like this should not be used in a vacuum;  the user should periodically check to make sure that the algorithm is functioning properly, and have a rudimentary understanding of how it works.
+
+Another important factor in the calculation of thermophysical properties is the collection of \emph{uncorrelated} equilibrium samples from an equilibrated timeseries.  Although the system may be at equilibrium constantly after the burn-in period, samples close to each other in time are likely correlated.  Two common methods for obtaining uncorrelated samples are through subsampling and block averaging.  In block averaging, the timeseries is separated into "blocks" of data and observations are taken from the mean of each block.  This requires for a size of block to be chosen, and as the block size increases, the variance of the observable will eventually reach a plateau where samples are uncorrelated.  Another method is subsampling, where the statistical inefficiency $g$ is estimated and then snapshots are chosen based on this parameter, without averaging.  In this work, subsampling is used for all calculations.
+\end{subsubsection}
+\end{section}
+\begin{subsection}{System Size}
+For the number of molecules $M$, relationships with uncertainty are more complicated and vary from property to property.   This can lead to unintuitive results in which a larger $M$ may reduce uncertainty in one physical quantity, but for a \emph{derived} property of said quantity, the same increase in $M$ may not improve estimates.
+\begin{subsubsection}{Enthalpy and Heat Capacity}
+This is best illustrated with the example of energy and heat capacity.  From Eq. 19, %CHECK may need to replace
+the \emph{extensive} heat capacity is directly proportional to the variance in the enthalpy, which is defined as $\langle H^2 \rangle - \langle H \rangle^2$.  For any extensive property, its value has a linear relationship with $M$; as you go from 100 molecules to 200 molecules, the total heat capacity (or enthalpy, or volume, etc.) will double.
+
+Therefore, the heat capacity goes as $C_P \sim \mathcal{O}(M)$, and subsequently, so does the variance of the enthalpy: $ Var(H) \sim C_P \sim \mathcal{O}(M) $.  If we wish to examine the variance of the \emph{molar} enthalpy, an \emph{intensive} quantity, we can make use of this standard formula for variances:
+\begin{equation}
+Var(aX)=a^2Var(X)
+\end{equation}
+
+Since molar enthalpy is defined as $h=\left(\frac{H}{M}\right)$, the variance of the molar enthalpy is given by:
+\begin{equation}
+Var(h) = Var\left(\frac{H}{M}\right) = \frac{1}{M^2} Var(H) \sim \frac{\mathcal{O}(M)}{M^2} \sim \mathcal{O} (1/M)
+\end{equation}
+So, the standard deviation of the molar enthalpy goes as $\mathcal{O} (M^{-\frac{1}{2}})$, meaning that quadrupling the size of the system will cut the uncertainty in half, just as quadrupling $N$ would.  This relationship is shown in figure:
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth-40]{../../figures/enthalpy_stdev_vs_M.png}
+\end{figure}
+
+Now, we examine the uncertainty behavior of $C_P$, the extensive heat capacity.  Since we know $C_P \sim Var(H)$, it follows that $ Var(C_P) \sim Var(Var(H)) $.  For normally distributed samples, the variance of the variance is given by:
+\begin{equation}
+Var(Var(X)) \approx \frac{2(N-1)}{N^2} (Var(X))^2
+\end{equation}
+
+Holding $N$ constant and applying to the enthalpy, we obtain the following:
+
+\begin{equation}
+Var(C_P) \sim Var(Var(H)) \sim (Var(H))^2 \sim \mathcal{O}(M^2)
+\end{equation}
+
+As we examine the \emph{molar} heat capacity $c_P=C_P/M$ and apply the variance formula from above, we obtain:
+\begin{equation}
+Var(c_P) = Var(\frac{C_P}{M}) = \frac{Var(C_P)}{M^2}  \sim \frac{\mathcal{O}(M^2)}{M^2} \sim \mathcal{O}(1)
+\end{equation}
+
+So, even though estimates of the molar enthalpy $h$ improve as the size of the system increases, estimates of the molar heat capacity $c_P$, which is alternatively defined as the derivative of $h$ with respect to $T$, do not.  Note that while this derivation is for NPT systems, a similar derivation follows for NVT systems, replacing $H$ with $E$ and $C_P$ with $C_V$.
+\end{subsubsection}
+
+\begin{subsubsection}{Volume and compressibility}
+
+For the volume $V$, the standard deviation also goes as $\mathcal{O}(M^{-\frac{1}{2}}$.  This follows from the information we already know about energy and enthalpy and the relationship between the two.  Since they are related by $H=E+PV$, and the variance of $H$ and $E$ both go as $\mathcal{O}(M)$ due to their relationship with the heat capacities $C_P$ and $C_V$, the variance of $V$ must also go as $\mathcal{O}(M)$.  By similiar analysis to that for the molar enthalpy $h$, it follows that the standard deviation of the molar volume $v$ goes as $\mathcal{O}(M^{-\frac{1}{2}}$, and this claim is supported by experimental data in figure. %INSERT
+\begin{figure}[H]
+\includegraphics[width=\textwidth-40]{../../figures/heat_capacity_stdev_vs_M.png}
+\end{figure}
+
+For the isothermal compressibility, the variance is easy to calculate once the variance of the volume is known.  From Eq. 23, we can see that with constant temperature, the variance of $\kappa_T$ is as such:
+\begin{equation}
+Var(\kappa_T) \sim Var \left( \frac{Var(V)}{V}\right) = \frac{1}{V^2}Var(Var(V))
+\end{equation}
+\begin{equation}
+Var(\kappa_T) \sim \frac{1}{V^2} (Var(V))^2 \sim \frac{\mathcal{O}(M^2)}{\mathcal{O}(M^2)} \sim \mathcal{O}(1)
+\end{equation}
+So, the uncertainty of the compressibility is independent of the number of molecules used to simulate the system.  This claim is supported by experimental data in figure 3:  
+\begin{figure}[H]
+\includegraphics[width=\textwidth-40]{../../figures/kt_stdev_vs_M.png}
+\end{figure}
+\end{subsubsection}
+\begin{subsubsection}{Speed of Sound}
+For thermophysical properties that are calculated from several other basic properties, such as speed of sound $c=\frac{\gamma}{\rho \kappa_T}$, it is important to examine the relative contributions of the error to determine the overall uncertainty behavior of the property.  For example, $\gamma$ and $\kappa_T$ are both properties with uncertainties that do not depend on $M$, but $\rho$ should have an $\mathcal{O}(N^{-\frac{1}{2}})$ uncertainty behavior, similar to molar volume.  Therefore, one would expect the overall uncertainty behavior to be dependent on $M$, but data from experiment in Figure 4 shows no correlation. 
+\begin{figure}[H]
+\includegraphics[width=\textwidth-40]{../../figures/speed_of_sound_vs_M.png}
+\end{figure}
+
+\end{subsubsection}
+\begin{subsubsection}{Discussion}
+From these analyses, we can see that properties taken from direct averages of timeseries data, ($V$, $E$, $H$) have standard deviation that goes as $\mathcal{O}(M^{\frac{1}{2}}$.  The molar versions of these properties subsequently have standard deviation that goes as $\mathcal{O}(M^{-\frac{1}{2}}$.  However, this does not imply the same for properties calculated via fluctuations.  Fluctuation properties can have standard deviation as $\mathcal{O}(M)$, like $C_P$, or with no dependence on $M$, like $c_P$ or $\kappa_T$.  Additionally, they can have a very weak dependence on $M$, such as speed of sound $c$.  Because of these varying dependencies between quantities, and the extra computational cost of a larger system size, we recommend that additional computational resources be used to collect more equilibrium samples, which has a consistent effect on uncertainty for all properties.  This recommendation comes with the caveat that systems need to be large enough to avoid finite size effects.  When systems are too small, systems may not equilibrate very quickly, amongst other problems.  For a more in-depth discussion of finite size effects, see. %CITE need to find good reference..
+It is also important to remember when modifying the number of molecules in a system that Molecular Dynamics programs report energies in units of energy/mole of box, rather than energy per mole of compound.  For pure compounds, one must divide the "moles of box" value by the number of molecules in order to get a true molar energy.
+
+\end{subsubsection}
+
+
+\end{subsection}
+
+
+\begin{subsection}{Comparison of Calculation Methods}
+
+For the properties discussed in this paper, the methods of calculation generally fall into one of two categories: derivatives via finite differences or calculations from fluctuation properties. Therefore, it is worth investigating whether these all methods are equivalent, or if there are differences in methods which may make them more or less attractive, depending on the situation.  
+
+\subsubsection{Comparison of MBAR finite differences and direct finite differences}
+Suppose we are interested in calculating a thermodynamic property $B$ at state $X$, defined as $B=\mathrm{d}A/\mathrm{d}X$.
+When calculating this property from timeseries data via centered finite difference (such as in Eq. 10,21), the simplest and most nature choice is to choose a finite difference $\Delta X$, perform simulations at $X-\Delta X$ and $X+\Delta X$, take the expectations $\langle A(X-\Delta X) \rangle$ and $\langle A(X+\Delta X)\rangle $, and then calculate the finite difference from these two values ("Direct Finite Differences").
+  Another possibility is take a simulation at $X$, and use reweighting via the MBAR method \cite{MBAR} to estimate $A$ at $X-\Delta X$ and $X+\Delta X$, then calculate the finite difference from these estimates ("MBAR Finite Differences").  
+The choice of finite difference is important here, as $\Delta X$ will determine the accuracy of the calculation. Theoretically, we would like the smallest finite difference possible to minimize potential bias in the calculation.  For direct finite differences, however, a small $\Delta X $ will provide unreliable estimates, as timeseries data at very similar state points are highly correlated, leading to high uncertainty.  As $ \Delta X $ increases, the timeseries data becomes less correlated and uncertainty goes down, but there is potential for bias, which depends on the behavior of the function.
+
+When using MBAR finite differences, the problem is opposite: MBAR estimates are inherently decorrelated, leading to decent uncertainty at small $\Delta X$, but MBAR requires significant phase overlap between the simulated state and the desired state, so estimates become more unreliable as $\Delta X$ increases. However, since MBAR finite differences are stable over a large range of $\Delta X/X$ ($(10^{-6}-10^{-3})$ for heat capacities), this is less of an issue. However, it does make comparisons of direct finite differences and MBAR finite differences difficult, as the minimum $\Delta X$ in direct finite differences that produces uncertainties equivalent to MBAR finite differences is roughly $10^{-2}$ in heat capacity; MBAR estimates are already poor at this point.  In order to quantify the reliability of the MBAR finite difference, the number of effective samples ($N_{eff}$) metric can be used.  This metric quantifies how many of the samples from simulated state A could be drawn from reweighted state B.  Previous use of this metric has shown that a rough minimum of $N_{eff}=50$ is required for statistics to be stable, but for \emph{accurate} finite differences, the percentage of effective samples ($(N_{eff}/N)\times 100 \% $) is a better metric, but may depend on the property being calculated.  For example, MBAR finite differences for $C_P$ agree with fluctuations with roughly 10 \% of effective samples, but is more like 75\% for $\kappa_T$.
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth-40]{../../figures/n_eff_convergence_k_t.png}
+\end{figure}
+
+
+  Since the number of effective samples is easily adjusted, as a best practice, we recommend a percentage of effective samples of 90 \% or higher.  It is also important to recognize that for properties that require reweighting in multiple variables, such as speed of sound, the number of effective samples for all variables needs to be taken into account (in the example of speed of sound, $T$ and $P$).  In general, comparison with fluctuation calculations is the ultimate metric for accuracy of MBAR finite differences.
+
+To test this, we performed a 10 ns simulation of cyclohexane at 293.15 K and 1.01 bar, as well as several pairs of 5 ns cyclohexane simulations, also at 1.01 bar, but spaced at intervals of 0.5, 1, 2, 5, 7.5, and 10 K apart from 293.15 K. Heat capacity calculations from finite differences were performed via MBAR on the 10 ns simulation, and directly on the pairs of 5 ns simulations. 
+\begin{figure}[H]
+\includegraphics[width=\textwidth-40]{../../figures/direct_sim_vs_mbar_cp.png}
+\end{figure}
+
+\subsubsection{Finite differences and fluctuations}
+
+For properties that can be calculated via finite differences or fluctuations, such as $\kappa_T$ (Eq. 21, 23), $C_P$ (Eq. 16, 19), or $\alpha$ (Eq. 33,35), the two methods should be theoretically equivalent, as fluctuation formulas are derived by substituting statistical mechanical expressions for energy, enthalpy, or volume into derivative formulas and evaluating the derivative.  In the limit of infinitely small finite differences and infinitely long timeseries, this will be exactly true; however, since neither condition can be met, it is important to understand if these methods are approximately equivalent under normal conditions.
+
+Because of the large number of particles and the chaotic nature of the interactions between them, replicate timeseries are often slightly different, and will provide substantially different sets of uncorrelated equilibrium samples.  Therefore, agreement between finite differences and fluctuation methods are not based on agreement to some "grand truth" but agreement between the data used to compute the derivative and the fluctuations. This point is illustrated with the following relation:
+
+\begin{equation}
+\frac{H(T_2)-H(T_1)}{T_2-T_1} \approx \left(\frac{\partial H}{\partial T}\right)_P = \left(\frac{Var(H)}{RT^2}\right)_{\infty} \approx \left(\frac{Var(H)}{RT^2}\right)
+\end{equation}
+
+As fluctuation calculations and finite differences are both approximations to the "grand truth" of true derivatives and true fluctuations, they will not agree unless they come from the same data source.  For direct finite differences, since simulations are taken at different conditions than the simulation used for the fluctuation calculation ($X+\Delta X$ and $X-\Delta X$ instead of $X$), the agreement between fluctuations and finite differences is significant.  In the case of MBAR finite differences, the same data can be used to calculate the finite differences and the fluctuations, so these two methods should agree, up to numerical error caused by the finite difference size chosen for MBAR.  In this way, MBAR finite differences and fluctuations are a good sanity check, as they should be almost identical if implemented correctly.
+\end{subsubsection}
+%\begin{subsubsection}{Second derivative methods}
+%When using finite differences, either via MBAR or directly, properties such as the heat capacity and the isothermal compressibility can be calculated using either approximations to first derivatives, or to %second derivatives.
+%\end{subsection}
+\end{section}
+%May need to update these equation/include more
+
 
 
 
