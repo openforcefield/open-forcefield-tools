@@ -703,11 +703,18 @@ When calculating this property from timeseries data via centered finite differen
   Another possibility is take a simulation at $X$, and use reweighting via the MBAR method \cite{MBAR} to estimate $A$ at $X-\Delta X$ and $X+\Delta X$, then calculate the finite difference from these estimates ("MBAR Finite Differences").  
 The choice of finite difference is important here, as $\Delta X$ will determine the accuracy of the calculation. Theoretically, we would like the smallest finite difference possible to minimize potential bias in the calculation.  For direct finite differences, however, a small $\Delta X $ will provide unreliable estimates, as timeseries data at very similar state points are highly correlated, leading to high uncertainty.  As $ \Delta X $ increases, the timeseries data becomes less correlated and uncertainty goes down, but there is potential for bias, which depends on the behavior of the function.
 
-When using MBAR finite differences, the problem is opposite: MBAR estimates are inherently decorrelated, leading to decent uncertainty at small $\Delta X$, but MBAR requires significant phase overlap between the simulated state and the desired state, so estimates become more unreliable as $\Delta X$ increases. However, since MBAR finite differences are stable over a large range of $\Delta X/X$ ($(10^{-6}-10^{-3})$ for heat capacities), this is less of an issue. However, it does make comparisons of direct finite differences and MBAR finite differences difficult, as the minimum $\Delta X$ in direct finite differences that produces uncertainties equivalent to MBAR finite differences is roughly $10^{-2}$ in heat capacity; MBAR estimates are already poor at this point.
+When using MBAR finite differences, the problem is opposite: MBAR estimates are inherently decorrelated, leading to decent uncertainty at small $\Delta X$, but MBAR requires significant phase overlap between the simulated state and the desired state, so estimates become more unreliable as $\Delta X$ increases. However, since MBAR finite differences are stable over a large range of $\Delta X/X$ ($(10^{-6}-10^{-3})$ for heat capacities), this is less of an issue. However, it does make comparisons of direct finite differences and MBAR finite differences difficult, as the minimum $\Delta X$ in direct finite differences that produces uncertainties equivalent to MBAR finite differences is roughly $10^{-2}$ in heat capacity; MBAR estimates are already poor at this point.  In order to quantify the reliability of the MBAR finite difference, the number of effective samples ($N_{eff}$) metric can be used.  This metric quantifies how many of the samples from simulated state A could be drawn from reweighted state B.  Previous use of this metric has shown that a rough minimum of $N_{eff}=50$ is required for statistics to be stable, but for \emph{accurate} finite differences, the percentage of effective samples ($(N_{eff}/N)\times 100 \% $) is a better metric, but may depend on the property being calculated.  For example, MBAR finite differences for $C_P$ agree with fluctuations with roughly 10 \% of effective samples, but is more like 75\% for $\kappa_T$.
+
+\begin{figure}[H]
+\includegraphics[width=\textwidth-40]{../../figures/n_eff_convergence_k_t.png}
+\end{figure}
+
+
+  Since the number of effective samples is easily adjusted, as a best practice, we recommend a percentage of effective samples of 90 \% or higher.  It is also important to recognize that for properties that require reweighting in multiple variables, such as speed of sound, the number of effective samples for all variables needs to be taken into account (in the example of speed of sound, $T$ and $P$).  In general, comparison with fluctuation calculations is the ultimate metric for accuracy of MBAR finite differences.
 
 To test this, we performed a 10 ns simulation of cyclohexane at 293.15 K and 1.01 bar, as well as several pairs of 5 ns cyclohexane simulations, also at 1.01 bar, but spaced at intervals of 0.5, 1, 2, 5, 7.5, and 10 K apart from 293.15 K. Heat capacity calculations from finite differences were performed via MBAR on the 10 ns simulation, and directly on the pairs of 5 ns simulations. 
 \begin{figure}[H]
-\includegraphics[width=\textwidth-20]{../../figures/direct_sim_vs_mbar_cp.png}
+\includegraphics[width=\textwidth-40]{../../figures/direct_sim_vs_mbar_cp.png}
 \end{figure}
 
 \subsubsection{Finite differences and fluctuations}
@@ -722,9 +729,9 @@ Because of the large number of particles and the chaotic nature of the interacti
 
 As fluctuation calculations and finite differences are both approximations to the "grand truth" of true derivatives and true fluctuations, they will not agree unless they come from the same data source.  For direct finite differences, since simulations are taken at different conditions than the simulation used for the fluctuation calculation ($X+\Delta X$ and $X-\Delta X$ instead of $X$), the agreement between fluctuations and finite differences is significant.  In the case of MBAR finite differences, the same data can be used to calculate the finite differences and the fluctuations, so these two methods should agree, up to numerical error caused by the finite difference size chosen for MBAR.  In this way, MBAR finite differences and fluctuations are a good sanity check, as they should be almost identical if implemented correctly.
 \end{subsubsection}
-\begin{subsubsection}{Second derivative methods}
-When using finite differences, either via MBAR or directly, properties such as the heat capacity and the isothermal compressibility can be calculated using either approximations to first derivatives, or to second derivatives.
-\end{subsection}
+%\begin{subsubsection}{Second derivative methods}
+%When using finite differences, either via MBAR or directly, properties such as the heat capacity and the isothermal compressibility can be calculated using either approximations to first derivatives, or to %second derivatives.
+%\end{subsection}
 \end{section}
 %May need to update these equation/include more
 
